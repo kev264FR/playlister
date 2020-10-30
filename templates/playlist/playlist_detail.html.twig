@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<h1 class="text-center">{{playlist.title}}</h1>
+<hr>
+<iframe src="https://www.youtube.com/embed/lr3Rw2wcugI"></iframe>
+
+
+{% for content in playlist.contents %}
+<div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+        <h6 class="card-text">
+            {{content.title}}
+        </h6>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+
+    <script>
+        $("#carousel").carousel({
+            interval: false
+        })
+    </script>
+{% endblock %}

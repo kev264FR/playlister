@@ -47,4 +47,20 @@ class PlaylistRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllPublic(){
+        return $this->createQueryBuilder("p")
+                    ->andWhere("p.public = 1")
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    public function getAllPublicNamed($titre){
+        return $this->createQueryBuilder("p")
+                    ->andWhere("p.public = 1")
+                    ->andWhere("p.title LIKE :titre")
+                    ->setParameter("titre", "%".$titre."%")
+                    ->getQuery()
+                    ->getResult();
+    }
 }

@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+{{form_start(form, {attr: {class: "user-form"}})}}
+    {{form_row(form.title)}}
+
+    {% if edit %}
+        <input class="btn btn-success" type="submit" value="Modifier">
+    {% else %}
+        <input class="btn btn-success" type="submit" value="Ajouter">
+    {% endif %}
+{{form_end(form)}}
+
+{% endblock %}

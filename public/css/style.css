@@ -1,0 +1,12 @@
+.navbar{
+    min-height: 90px;
+}
+
+.card{
+    margin: 5px auto;
+}
+
+.user-form{
+    max-width: 200px;
+    margin: auto;
+}

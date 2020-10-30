@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<h1 class="text-center">Les Playlistes</h1>
+{% if app.user %}
+<a class="btn btn-primary btn-lg" href="{{path("playlist_new")}}">Ajouter un playlist</a>
+{% endif %}
+<hr>
+
+{% for playlist in playlists %}
+<div class="card mb-3" style="max-width: 700px;">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="..." class="card-img" alt="...">
+        </div>
+        <div class="col-md-4">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
+                    <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
+                        E
+                    </a>
+                </h2>
+                <p class="card-text">
+                    <a href="#" class="btn btn-sm btn-primary">
+                        Likes : {{playlist.likers.count}}
+                    </a>
+                    <a href="#" class="btn btn-sm btn-primary">
+                        abo
+                    </a>
+                    <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                        delete
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card-body small">
+                <p class="card-text">
+                    Ajouté par : {{playlist.user.username}}
+                </p>
+                <p class="card-text">
+                    Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
+                </p>
+                {% if playlist.lastUpdate != null %}
+                    <p class="card-text text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

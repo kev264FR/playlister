@@ -30,7 +30,7 @@ class PlaylistController extends AbstractController
         
         return $this->render('playlist/index.html.twig', [
             "playlists"=>$playlists,
-            "finder"=> $this->generateUrl("playlists")
+            "search"=>$search
         ]);
     }
 
@@ -69,7 +69,6 @@ class PlaylistController extends AbstractController
         return $this->render("playlist/playlist_form.html.twig", [
             "form"=>$form->createView(),
             "edit"=>$edit,
-            "finder"=> $this->generateUrl("playlists")
         ]);
     }
 
@@ -101,7 +100,6 @@ class PlaylistController extends AbstractController
         }
         return $this->render("playlist/playlist_detail.html.twig", [
             "playlist"=>$playlist,
-            "finder"=> $this->generateUrl("playlists")
         ]);
     }
 }

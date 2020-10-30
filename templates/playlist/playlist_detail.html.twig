@@ -2,13 +2,19 @@
 
 {% block body %}
 <h1 class="text-center">{{playlist.title}}</h1>
+
+{% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
+
+<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}">Ajouter item</a>
+
+{% endif %}
+
 <hr>
-<iframe src="https://www.youtube.com/embed/lr3Rw2wcugI"></iframe>
 
 
 {% for content in playlist.contents %}
 <div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
+    <img src="https://img.youtube.com/vi/{{content.contentId}}/hqdefault.jpg" class="card-img-top">
     <div class="card-body">
         <h6 class="card-text">
             {{content.title}}

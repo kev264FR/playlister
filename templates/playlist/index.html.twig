@@ -4,9 +4,17 @@
 {% block body %}
 
 <h1 class="text-center">Les Playlistes</h1>
-{% if app.user %}
-<a class="btn btn-primary btn-lg" href="{{path("playlist_new")}}">Ajouter un playlist</a>
+
+{% if search != null %}
+<h4 class="text-center">
+    Résultats de la recherche : <strong>{{search}}</strong>
+</h4>
 {% endif %}
+
+{% if app.user %}
+<a class="btn btn-primary btn-lg" href="{{path("playlist_new")}}">Ajouter une playlist</a>
+{% endif %}
+
 <hr>
 
 {% for playlist in playlists %}

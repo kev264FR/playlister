@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+<h1>Ajouter du contenu</h1>
+
+{{form_start(form)}}
+
+    {{form_row(form.title)}}
+    {{form_row(form.url)}}
+
+<input type="submit" value="OK">
+{{form_end(form)}}
+
+{% endblock %}

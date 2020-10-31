@@ -39,6 +39,11 @@ class Platform
      */
     private $contents;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imgUrl;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
@@ -111,6 +116,18 @@ class Platform
                 $content->setPlatform(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImgUrl(): ?string
+    {
+        return $this->imgUrl;
+    }
+
+    public function setImgUrl(?string $imgUrl): self
+    {
+        $this->imgUrl = $imgUrl;
 
         return $this;
     }

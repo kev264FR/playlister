@@ -11,25 +11,26 @@
 
 <hr>
 
+<div class="card player">
+    <iframe src="https://www.youtube.com/embed/lr3Rw2wcugI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.</p>
+    </div>
+</div>
 
 {% for content in playlist.contents %}
 <div class="card" style="width: 18rem;">
-    <img src="https://img.youtube.com/vi/{{content.contentId}}/hqdefault.jpg" class="card-img-top">
+    <img src="{{content.platform.imgUrl | replace({"_content_id_": content.contentId})}}" class="card-img-top">
     <div class="card-body">
-        <h6 class="card-text">
+        <h6>
             {{content.title}}
         </h6>
+        <p class="card-text small text-muted">
+            ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
+        </p>
     </div>
 </div>
 {% endfor %}
-{% endblock %}
-
-{% block javascripts %}
-    {{parent()}}
-
-    <script>
-        $("#carousel").carousel({
-            interval: false
-        })
-    </script>
 {% endblock %}

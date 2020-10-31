@@ -35,7 +35,7 @@ class ContentController extends AbstractController
                             ->getRepository(Platform::class)
                             ->findAll();
             foreach ($platforms as $platform) {
-                if (strpos($url, $platform->getBaseUrl()) === 0) {
+                if (strpos($url, $platform->getBaseUrl()) !== false) {
                     $content->setContentId(str_replace($platform->getBaseUrl(), "", $url));
                     $content->setPlatform($platform);
                     $content->setPlaylist($playlist);

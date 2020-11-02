@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h1 class="text-center">
+    Liste des plateformes
+</h1>
+<a class="btn btn-primary btn-lg" href="{{path("platform_add")}}">Ajouter une plateforme</a>
+<hr>
+
+{% for platform in platforms %}
+<div class="card" style="width: 40rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{platform.name}}</h5>
+        <div class="card-text">
+            <ul>
+                <li>
+                    Base url : {{platform.baseUrl}}
+                </li>
+                <li>
+                    Target url : {{platform.targetUrl}}
+                </li>
+                <li>
+                    Image url : {{platform.imgUrl}}
+                </li>
+            </ul>
+        </div>
+        <a href="{{path("platform_delete", {id: platform.id})}}" class="card-link btn btn-danger">delete</a>
+        <a href="{{path("platform_edit", {id: platform.id})}}" class="card-link btn btn-warning">edit</a>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

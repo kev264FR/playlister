@@ -27,16 +27,16 @@
                 </h2>
                 <p class="card-text">
                     <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary">
-                        Likes : {{playlist.likers.count}}
+                        {{playlist.likers.count}} <i class="fas fa-thumbs-up"></i>
                     </a>
                     <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary">
-                        abo
+                        <i class="fas fa-plus-square"></i>
                     </a>
                     <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
-                        delete
+                        <i class="fas fa-trash-alt"></i>
                     </a>
                     <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
-                        E
+                        <i class="fas fa-edit"></i>
                     </a>
                 </p>
             </div>

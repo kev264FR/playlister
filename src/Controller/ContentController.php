@@ -33,7 +33,8 @@ class ContentController extends AbstractController
             $url = $form->get("url")->getData();
             $platforms = $this->getDoctrine()
                             ->getRepository(Platform::class)
-                            ->findAll();
+                            ->getAll();
+            
             foreach ($platforms as $platform) {
                 if (strpos($url, $platform->getBaseUrl()) !== false) {
                     $content->setContentId(str_replace($platform->getBaseUrl(), "", $url));

@@ -48,12 +48,10 @@ class PlatformRepository extends ServiceEntityRepository
     }
     */
 
-    public function getUrlPlatform($url){
+    public function getAll(){
         return $this->createQueryBuilder("p")
-                    ->select("p.id, p.baseUrl")
-                    ->andWhere("p.baseUrl LIKE :url")
-                    ->setParameter("url", "%".$url."%")
+                    ->select("p.id, p.name, p.baseUrl, p.targetUrl, p.imgUrl")
                     ->getQuery()
-                    ->getOneOrNullResult();
+                    ->getResult();
     }
 }

@@ -7,6 +7,12 @@
 
 <a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}">Ajouter item</a>
 
+{% if playlist.public %}
+        <a class="btn btn-primary btn-lg" href="{{path("playlist_make_private", {id: playlist.id})}}">Rendre privée</a>
+    {% else %}   
+        <a class="btn btn-primary btn-lg" href="{{path("playlist_make_public", {id: playlist.id})}}">Rendre public</a>
+{% endif %}
+
 {% endif %}
 
 <hr>
@@ -24,7 +30,7 @@
 <div class="d-flex flex-wrap">
 {% for content in playlist.contents %}
 <div class="card" style="width: 18rem;">
-    <img src="{{content.platform.imgUrl | replace({"_content_id_": content.contentId})}}" class="card-img-top">
+    <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
     <div class="card-body">
         <h6>
             {{content.title}}
@@ -34,6 +40,12 @@
         </p>
     </div>
     <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick()">Lancer la lecture</a>
+    {% if app.user %}
+        {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
+            <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">delete</a>
+        {% endif %}
+    {% endif %}
+    
 </div>
 {% endfor %}
 </div>

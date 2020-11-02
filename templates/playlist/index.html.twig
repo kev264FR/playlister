@@ -18,33 +18,30 @@
 <hr>
 
 {% for playlist in playlists %}
-<div class="card mb-3" style="max-width: 700px;">
+<div class="card mb-3" style="max-width: 500px;">
     <div class="row no-gutters">
-        <div class="col-md-4">
-            <img src="..." class="card-img" alt="...">
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card-body">
-                <h2 class="card-title">
+                <h2 class="card-title text-center">
                     <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
-                    <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
-                        E
-                    </a>
                 </h2>
                 <p class="card-text">
-                    <a href="#" class="btn btn-sm btn-primary">
+                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary">
                         Likes : {{playlist.likers.count}}
                     </a>
-                    <a href="#" class="btn btn-sm btn-primary">
+                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary">
                         abo
                     </a>
                     <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
                         delete
                     </a>
+                    <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
+                        E
+                    </a>
                 </p>
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card-body small">
                 <p class="card-text">
                     Ajouté par : {{playlist.user.username}}

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+<h1 class="text-center">
+    Bonjour {{app.user.username}}
+</h1>
+<hr>
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <h2 class="text-center">
+            Mes Playlistes
+        </h2>
+        <hr>
+        {% for playlist in app.user.myPlaylists %}
+          <div class="card mb-3" style="max-width: 500px;">
+              <div class="row no-gutters">
+                  <div class="col-md-6">
+                      <div class="card-body">
+                          <h2 class="card-title text-center">
+                              <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
+                          </h2>
+                          <p class="card-text">
+                              <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                                  delete
+                              </a>
+                              <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
+                                  E
+                              </a>
+                          </p>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card-body small">
+                          <p class="card-text">
+                              Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
+                          </p>
+                          {% if playlist.lastUpdate != null %}
+                              <p class="card-text text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
+                          {% endif %}
+                          <p>
+                              Likes : {{playlist.likers.count()}}
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </div>   
+      {% endfor %}
+      </div>
+      <div class="col-md-6">
+        <h2 class="text-center">
+            Playlist suivies
+        </h2>
+        <hr>
+      {% for playlist in app.user.followedPlaylists %}
+          <div class="card mb-3" style="max-width: 500px;">
+              <div class="row no-gutters">
+                  <div class="col-md-6">
+                      <div class="card-body">
+                          <h2 class="card-title text-center">
+                              <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
+                          </h2>
+                          <p class="card-text">
+                              <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary">
+                                  Likes : {{playlist.likers.count}}
+                              </a>
+                              <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary">
+                                  abo
+                              </a>
+                          </p>
+                      </div>
+                  </div>
+                  <div class="col-md-6">
+                      <div class="card-body small">
+                          <p class="card-text">
+                              Ajouté par : {{playlist.user.username}}
+                          </p>
+                          <p class="card-text">
+                              Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
+                          </p>
+                          {% if playlist.lastUpdate != null %}
+                              <p class="card-text text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
+                          {% endif %}
+                      </div>
+                  </div>
+              </div>
+          </div>   
+      {% endfor %}
+    </div>
+    </div>
+  </div>
+{% endblock %}

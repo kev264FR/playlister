@@ -40,6 +40,7 @@ class ContentController extends AbstractController
                     $content->setPlatform($platform);
                     $content->setPlaylist($playlist);
                     $content->setCreatedAt(new \DateTime());
+                    $playlist->setLastUpdate($content->getCreatedAt());
 
                     $manager->persist($content);
                     $manager->flush();
@@ -53,6 +54,28 @@ class ContentController extends AbstractController
         }
         return $this->render('content/content_form.html.twig', [
             "form"=>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id}", name="delete_content")
+     */
+    public function removeContent(Content $content = null){
+        if ($content == null) {
+            $this->addFlash("error", "Contenu non trouvé");
+            return $this->redirectToRoute("playlists");
+        }
+        if ($content->getPlaylist()->getUser() != $this->getUser()) {
+            $this->addFlash("error", "Vous ne pouvez pas modifier cette playlist");
+            return $this->redirectToRoute("playlists");
+        }
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($content);
+        $manager->flush();
+
+        return $this->redirectToRoute("playlist_detail", [
+            "id"=>$content->getPlaylist()->getId()
         ]);
     }
 }

@@ -63,7 +63,10 @@ class PlaylistController extends AbstractController
             $manager->persist($playlist);
             $manager->flush();
 
-            return $this->redirectToRoute("playlists");
+            $this->addFlash("success", "Playlist ajouté");
+            return $this->redirectToRoute("playlist_detail", [
+                "id"=>$playlist->getId()
+            ]);
         }
 
         return $this->render("playlist/playlist_form.html.twig", [
@@ -94,12 +97,38 @@ class PlaylistController extends AbstractController
      */
     public function detailPlaylist(Playlist $playlist = null){
 
-        if (!$playlist || !$playlist->getPublic()) {
-            $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
+        if (in_array("ROLE_ADMIN", $this->getUser()->getRoles()) || $this->getUser() == $playlist->getUser()) {
+            return $this->render("playlist/playlist_detail.html.twig", [
+                "playlist"=>$playlist,
+            ]);
+        }
+
+        $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
+        return $this->redirectToRoute("playlists");
+        
+    }
+
+    /**
+     * @Route("/playlist/public/{id}", name="playlist_make_public")
+     * @Route("/playlist/private/{id}", name="playlist_make_private")
+     */
+    public function switchPublicPrivate(Playlist $playlist = null){
+        $manager = $this->getDoctrine()->getManager();
+        if ($playlist == null) {
+            $this->addFlash("error", "Cette playlist n'existe pas");
             return $this->redirectToRoute("playlists");
         }
-        return $this->render("playlist/playlist_detail.html.twig", [
-            "playlist"=>$playlist,
+        if ($playlist->getPublic()) {
+            $playlist->setPublic(false);
+            $this->addFlash("success", "La playlist <strong>".$playlist->getTitle()."</strong> a été mise en privée");
+        }else{
+            $playlist->setPublic(true);
+            $this->addFlash("success", "La playlist <strong>".$playlist->getTitle()."</strong> a été mise en public");
+        }
+
+        $manager->flush();
+        return $this->redirectToRoute("playlist_detail", [
+            "id"=>$playlist->getId()
         ]);
     }
 }

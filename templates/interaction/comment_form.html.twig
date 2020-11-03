@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello InteractionController!{% endblock %}
+
+{% block body %}
+
+{{form_start(form)}}
+
+    {{form_row(form.text)}}
+    <input type="submit" value="OK">
+{{form_end(form)}}
+
+{% endblock %}

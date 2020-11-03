@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Playlist;
+use App\Form\CommentType;
 use App\Form\PlaylistType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,8 +26,7 @@ class PlaylistController extends AbstractController
         }else{
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
-                        ->findAll();
-                        // ->getAllPublic();
+                        ->getAllPublic();
         }
         
         return $this->render('playlist/index.html.twig', [
@@ -97,14 +98,14 @@ class PlaylistController extends AbstractController
      */
     public function detailPlaylist(Playlist $playlist = null){
 
-        if (in_array("ROLE_ADMIN", $this->getUser()->getRoles()) || $this->getUser() == $playlist->getUser()) {
-            return $this->render("playlist/playlist_detail.html.twig", [
-                "playlist"=>$playlist,
-            ]);
+        if (!$playlist) {
+            $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
+            return $this->redirectToRoute("playlists");
         }
 
-        $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
-        return $this->redirectToRoute("playlists");
+        return $this->render("playlist/playlist_detail.html.twig", [
+                "playlist"=>$playlist,
+        ]);
         
     }
 

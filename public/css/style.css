@@ -7,9 +7,10 @@
 }
 
 .user-form{
-    max-width: 200px;
+    max-width: 300px;
     margin: auto;
 }
+
 #embed{
     display: none;
 }

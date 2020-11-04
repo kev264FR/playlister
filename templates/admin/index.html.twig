@@ -7,13 +7,10 @@
 </h1>
 <hr>
 
-<p>
-    Qu'allons nous faire ?
-</p>
-<ul>
-    <li>
-        <a class="btn btn-primary btn-lg" href="{{path("platforms_list")}}">Voir les plateformes</a>
-    </li>
-</ul>
+<div class="list-group list-group-horizontal admin-list">
+        <a href="{{path("platforms_list")}}" class="list-group-item list-group-item-action text-primary" >Voir les plateformes</a>
+        <a href="{{path("playlists_admin")}}" class="list-group-item list-group-item-action text-primary">Toutes les playlistes</a>
+</div>
+
 
 {% endblock %}

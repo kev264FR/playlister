@@ -32,12 +32,14 @@
                     <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary">
                         <i class="fas fa-plus-square"></i>
                     </a>
-                    <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
+                    {% if app.user and is_granted("ROLE_ADMIN") or app.user and app.user == playlist.user %}
                     <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
                         <i class="fas fa-edit"></i>
                     </a>
+                    <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    {% endif %}
                 </p>
             </div>
         </div>

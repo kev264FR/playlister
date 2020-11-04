@@ -105,7 +105,11 @@ class InteractionController extends AbstractController
             $comment->setUser($this->getUser());
 
             if ($parentComment) {
-                $comment->setAnswerFor($parentComment);
+                $initialComment = $parentComment;
+                while ($initialComment->getAnswerFor() != null) {
+                    $initialComment = $initialComment->getAnswerFor();
+                }
+                $comment->setAnswerFor($initialComment);
             }
 
             $manager->persist($comment);

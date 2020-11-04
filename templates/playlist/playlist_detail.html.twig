@@ -21,7 +21,7 @@
     <div class="card-header text-center">
         <h5 class="card-title">Lecteur</h5>
     </div>
-    <div class="embed-responsive embed-responsive-16by9">
+    <div id="embed" class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="" frameborder="0"
             allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
@@ -54,12 +54,15 @@
     <h3 class="text-center">
         Espace commentaire
     </h3>
+    <a class="btn btn-primary btn-lg" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+        <i class="fas fa-comment-dots"></i> Posté un comentaire <i class="fas fa-comment-dots"></i>
+    </a>
     {% for comment in playlist.comments %}
     {% if comment.answerFor == null %}
-    <hr>
+    <hr class="bg-dark">
     <div>
         <div class="card">
-            <div class="card-header small text-muted">
+            <div class="card-header small bg-info text-white">
                 <i class="fas fa-minus"></i> {{comment.user.username}}
             </div>
             <div class="card-body">
@@ -70,13 +73,13 @@
                     <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
                 </blockquote>
                 <a class="btn btn-primary" href="{{path("answer_comment", {comment_id: comment.id})}}">
-                    <i class="fas fa-comment-dots"></i>
+                    <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
                 </a>
             </div>
         </div>
         {% for answer in comment.answers %}
-            <div class="card">
-                <div class="card-header small text-muted">
+            <div class="card mr-0" style="max-width: 65rem;">
+                <div class="card-header small text-dark">
                     <i class="fas fa-minus"></i>
                      <i class="fas fa-minus"></i>
                      {{answer.user.username}}                    
@@ -88,18 +91,12 @@
                         </p>
                         <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
-                    <a class="btn btn-primary" href="{{path("answer_comment", {comment_id: comment.id})}}">
-                        <i class="fas fa-comment-dots"></i>
-                    </a>
                 </div>    
             </div>
     </div>
         {% endfor %}
     {% endif %}
     {% endfor %}
-        <a class="btn btn-primary btn-lg" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
-            <i class="fas fa-comment-dots"></i>
-        </a>
 </div>
 
 {% endblock %}
@@ -111,7 +108,8 @@
             event.preventDefault()
             let player = $(".player iframe")
             let url = $(event.target).data("url")
-            player.attr("src", url)
+            player.attr("src", url)  
+            $("#embed").slideDown("slow")
         }
     </script>
 {% endblock %}

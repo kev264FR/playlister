@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Platform;
+use App\Entity\Playlist;
 use App\Form\PlatformType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/admin")
@@ -32,7 +33,8 @@ class AdminController extends AbstractController
                         ->getRepository(Platform::class)
                         ->getAll();
         return $this->render("admin/platforms_list.html.twig", [
-            "platforms"=>$platforms
+            "platforms"=>$platforms,
+            "finder"=>$this->generateUrl("playlists_admin")
         ]);
     }
 
@@ -60,7 +62,8 @@ class AdminController extends AbstractController
         }
         return $this->render("admin/platform_form.html.twig", [
             "form"=>$form->createView(),
-            "edit"=>$edit
+            "edit"=>$edit,
+            "finder"=>$this->generateUrl("playlists_admin")
         ]);
     }
 
@@ -83,5 +86,27 @@ class AdminController extends AbstractController
 
         $this->addFlash("error", "Suppression impossible");
         return $this->redirectToRoute("platforms_list");
+    }
+
+    /**
+     * @Route("/playlists", name="playlists_admin")
+     */
+    public function listAllPlaylists(Request $request){
+        $search = $request->get("search");
+        if ($search) {
+            $playlists = $this->getDoctrine()
+                            ->getRepository(Playlist::class)
+                            ->getAllNamed($search);
+        }else{
+            $playlists = $this->getDoctrine()
+                        ->getRepository(Playlist::class)
+                        ->findAll();
+        }
+        
+        return $this->render('playlist/index.html.twig', [
+            "playlists"=>$playlists,
+            "search"=>$search,
+            "finder"=>$this->generateUrl("playlists_admin")
+        ]);
     }
 }

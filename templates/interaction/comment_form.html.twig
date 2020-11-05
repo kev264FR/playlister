@@ -1,13 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello InteractionController!{% endblock %}
-
 {% block body %}
 
-{{form_start(form)}}
+<h1 class="text-center">
+    Page temporaire de commentaire
+</h1>
 
+<hr>
+
+{{form_start(form)}}
     {{form_row(form.text)}}
-    <input type="submit" value="OK">
+    <input class="btn btn-success" type="submit" value="Commenté">
 {{form_end(form)}}
 
 {% endblock %}

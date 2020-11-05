@@ -7,7 +7,6 @@ use App\Entity\Comment;
 use App\Entity\Playlist;
 use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -23,19 +22,25 @@ class InteractionController extends AbstractController
     /**
      * @Route("/like/{id}", name="user_like")
      */
-    public function likePlaylist(Playlist $playlist = null){
+    public function likePlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
-        if ($playlist == null) {
-            $this->addFlash("error", "Cette playlist n'existe pas");
+        if ($request->headers->get("referer")) {
+            $referer = $request->headers->get("referer");
+        }else{
+            $this->addFlash("error", "Erreur réessaillez");
             return $this->redirectToRoute("playlists");
         }
+
+        if ($playlist == null || !$playlist->getPublic()) {
+            $this->addFlash("error", "Cette playliste est privée ou n'existe pas");
+            return $this->redirectToRoute("playlists");
+        }
+
         if ($this->getUser() == $playlist->getUser()) {
             $this->addFlash("error", "Vous ne pouvez pas liker votre propre playlist");
-            return $this->redirectToRoute("playlist_detail", [
-                "id"=>$playlist->getId()
-            ]);
+            return $this->redirect($referer);
         }
         if ($user->getLikedPlaylists()->contains($playlist)) {
             $user->removeLikedPlaylist($playlist);
@@ -45,28 +50,33 @@ class InteractionController extends AbstractController
 
         $manager->persist($user);
         $manager->flush();
-        return $this->redirectToRoute("playlist_detail", [
-            "id"=>$playlist->getId()
-        ]);   
+
+        return $this->redirect($referer);
+        
     }
 
     /**
      * @Route("/follow/{id}", name="user_follow_playlist")
      */
-    public function followPlaylist(Playlist $playlist){
+    public function followPlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
-        if ($playlist == null) {
-            $this->addFlash("error", "Cette playlist n'existe pas");
+        if ($request->headers->get("referer")) {
+            $referer = $request->headers->get("referer");
+        }else{
+            $this->addFlash("error", "Erreur réessaillez");
+            return $this->redirectToRoute("playlists");
+        }
+        
+        if ($playlist == null || !$playlist->getPublic()) {
+            $this->addFlash("error", "Cette playliste est privée ou n'existe pas");
             return $this->redirectToRoute("playlists");
         }
 
         if ($this->getUser() == $playlist->getUser()) {
             $this->addFlash("error", "Vous ne pouvez pas follow votre propre playlist");
-            return $this->redirectToRoute("playlist_detail", [
-                "id"=>$playlist->getId()
-            ]);
+            return $this->redirect($referer);
         }
 
         if ($user->getFollowedPlaylists()->contains($playlist)) {
@@ -78,9 +88,7 @@ class InteractionController extends AbstractController
         $manager->persist($user);
         $manager->flush();
 
-        return $this->redirectToRoute("playlist_detail", [
-            "id"=>$playlist->getId()
-        ]);   
+        return $this->redirect($referer); 
     }
 
     /**
@@ -90,13 +98,25 @@ class InteractionController extends AbstractController
      * @ParamConverter("parentComment", options={"id" = "comment_id"})
      */
     public function postComment(Request $request, Playlist $playlist = null , Comment $parentComment = null){
-        $manager = $this->getDoctrine()->getManager();
+        
 
+        if ($playlist == null) {
+            $this->addFlash("error", "Cette playliste n'existe pas");
+            return $this->redirectToRoute("playlists");
+        }
+        if (!$playlist->getPublic()) {
+            $this->addFlash("error", "Cette playliste est privée, les commentaires sont désactivés");
+            return $this->redirectToRoute("playlist_detail", [
+                "id"=>$playlist->getId()
+            ]);
+        }
+        
         $comment = new Comment();
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
             if (!$playlist) {
                 $playlist = $parentComment->getPlaylist();
             }
@@ -116,12 +136,37 @@ class InteractionController extends AbstractController
             $manager->flush();
 
             return $this->redirectToRoute("playlist_detail", [
-                "id"=>$comment->getPlaylist()->getId()
+                "id"=>$comment->getPlaylist()->getId(),
+                "_fragment"=>$comment->getId()
             ]);
 
         }   
         return $this->render("interaction/comment_form.html.twig", [
             "form"=>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/comment/delete/{id}", name="comment_delete")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function deleteComment(Comment $comment = null){
+        if (!$comment) {
+            $this->addFlash("error", "Ce commentaire n'existe pas");
+            return $this->redirectToRoute("playlists");
+        }
+        $manager = $this->getDoctrine()->getManager();
+
+        if ($comment->getAnswers()->count() > 0) {
+            foreach ($comment->getAnswers() as $answer) {
+                $manager->remove($answer);
+            }
+        }
+        $manager->remove($comment);
+        $manager->flush();
+
+        return $this->redirectToRoute("playlist_detail", [
+                    "id"=>$comment->getPlaylist()->getId()
         ]);
     }
 }

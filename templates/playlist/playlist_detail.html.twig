@@ -5,7 +5,7 @@
 
 {% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
 
-<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}">Ajouter item</a>
+<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}">Ajouter du contenu</a>
 
 {% if playlist.public %}
         <a class="btn btn-primary btn-lg" href="{{path("playlist_make_private", {id: playlist.id})}}">Rendre privée</a>
@@ -23,7 +23,9 @@
     </div>
     <div id="embed" class="embed-responsive embed-responsive-16by9">
         <iframe class="embed-responsive-item" src="" frameborder="0"
-            allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        </iframe>
     </div>
 </div>
 
@@ -42,7 +44,9 @@
             <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick()">Lancer la lecture</a>
             {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
-                    <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">delete</a>
+                    <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
                 {% endif %}
             {% endif %}
             
@@ -61,7 +65,7 @@
     {% if comment.answerFor == null %}
     <hr class="bg-dark">
     <div>
-        <div class="card">
+        <div id="{{comment.id}}" class="card">
             <div class="card-header small bg-info text-white">
                 <i class="fas fa-minus"></i> {{comment.user.username}}
             </div>
@@ -75,10 +79,15 @@
                 <a class="btn btn-primary" href="{{path("answer_comment", {comment_id: comment.id})}}">
                     <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
                 </a>
+                {% if app.user and is_granted("ROLE_ADMIN") %}
+                <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+                {% endif %}
             </div>
         </div>
         {% for answer in comment.answers %}
-            <div class="card mr-0" style="max-width: 65rem;">
+            <div id="{{answer.id}}" class="card mr-0" style="max-width: 65rem;">
                 <div class="card-header small text-dark">
                     <i class="fas fa-minus"></i>
                      <i class="fas fa-minus"></i>
@@ -91,6 +100,11 @@
                         </p>
                         <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
+                    {% if app.user and is_granted("ROLE_ADMIN") %}
+                        <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    {% endif %}
                 </div>    
             </div>
     </div>
@@ -98,7 +112,6 @@
     {% endif %}
     {% endfor %}
 </div>
-
 {% endblock %}
 
 {% block javascripts %}
@@ -111,5 +124,25 @@
             player.attr("src", url)  
             $("#embed").slideDown("slow")
         }
+        $(".btn-danger").confirm({
+            title: 'Confirmation',
+            content: 'Etes vous sûr de vouloir supprimer ?',
+            theme: 'supervan',
+            type: 'green',
+            buttons: {  
+                ok: {
+                    text: "Continuer",
+                    action: function(){
+                        location.href = this.$target.attr('href');
+                    }
+                },
+                cancel: {
+                    text: "Retour",
+                    action:  function(){
+                        console.log('the user clicked cancel');
+                    }
+                }
+            }
+        })
     </script>
 {% endblock %}

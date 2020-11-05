@@ -14,3 +14,9 @@
 #embed{
     display: none;
 }
+
+#comment-form {
+    z-index: 1;
+    background-color: black;
+    border: 1px solid black;
+}

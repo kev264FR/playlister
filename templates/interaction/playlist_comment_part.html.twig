@@ -1,0 +1,54 @@
+<a class="btn btn-primary btn-lg" onclick="generateForm()" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+    <i class="fas fa-comment-dots"></i> Posté un comentaire <i class="fas fa-comment-dots"></i>
+</a>
+<div id="comment-form"></div>
+{% for comment in playlist.comments %}
+{% if comment.answerFor == null %}
+<hr class="bg-dark">
+<div>
+    <div id="{{comment.id}}" class="card">
+        <div class="card-header small bg-info text-white">
+            <i class="fas fa-minus"></i> {{comment.user.username}}
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>
+                    {{comment.text}}
+                </p>
+                <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
+            </blockquote>
+            <a class="btn btn-primary" onclick="generateForm()" href="{{path("answer_comment", {comment_id: comment.id})}}">
+                <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
+            </a>
+            {% if app.user and is_granted("ROLE_ADMIN") %}
+            <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% for answer in comment.answers %}
+        <div id="{{answer.id}}" class="card mr-0" style="max-width: 65rem;">
+            <div class="card-header small text-dark">
+                <i class="fas fa-minus"></i>
+                 <i class="fas fa-minus"></i>
+                 {{answer.user.username}}                    
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>
+                        {{answer.text}}
+                    </p>
+                    <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
+                </blockquote>
+                {% if app.user and is_granted("ROLE_ADMIN") %}
+                    <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                {% endif %}
+            </div>    
+        </div>
+</div>
+    {% endfor %}
+{% endif %}
+{% endfor %}

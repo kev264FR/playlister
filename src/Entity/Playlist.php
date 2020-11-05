@@ -41,7 +41,7 @@ class Playlist
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="myPlaylists")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 

@@ -1,6 +1,4 @@
-{% extends 'base.html.twig' %}
 
-{% block body %}
 
 <h1 class="text-center">
     Page temporaire de commentaire
@@ -8,9 +6,7 @@
 
 <hr>
 
-{{form_start(form)}}
+{{form_start(form, {attr: {id: "comment_form"}})}}
     {{form_row(form.text)}}
-    <input class="btn btn-success" type="submit" value="Commenté">
+    <input class="btn btn-success" onclick="submitComment()" type="submit" value="Commenté">
 {{form_end(form)}}
-
-{% endblock %}

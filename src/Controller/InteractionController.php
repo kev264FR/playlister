@@ -99,16 +99,9 @@ class InteractionController extends AbstractController
      */
     public function postComment(Request $request, Playlist $playlist = null , Comment $parentComment = null){
         
-
-        if ($playlist == null) {
-            $this->addFlash("error", "Cette playliste n'existe pas");
+        if (!$playlist && !$parentComment) {
+            $this->addFlash("error", "Erreur");
             return $this->redirectToRoute("playlists");
-        }
-        if (!$playlist->getPublic()) {
-            $this->addFlash("error", "Cette playliste est privée, les commentaires sont désactivés");
-            return $this->redirectToRoute("playlist_detail", [
-                "id"=>$playlist->getId()
-            ]);
         }
         
         $comment = new Comment();
@@ -132,18 +125,26 @@ class InteractionController extends AbstractController
                 $comment->setAnswerFor($initialComment);
             }
 
+            if (!$playlist->getPublic()) {
+                $this->addFlash("error", "Cette playliste est privée, les commentaires sont désactivés");
+                return $this->redirectToRoute("playlist_detail", [
+                    "id"=>$playlist->getId()
+                ]);
+            }
+
             $manager->persist($comment);
             $manager->flush();
 
-            return $this->redirectToRoute("playlist_detail", [
-                "id"=>$comment->getPlaylist()->getId(),
-                "_fragment"=>$comment->getId()
+            $data = $this->renderView("interaction/playlist_comment_part.html.twig", [
+                "playlist"=>$playlist
             ]);
+            return $this->json($data);
 
-        }   
-        return $this->render("interaction/comment_form.html.twig", [
+        }
+        $data = $this->renderView("interaction/comment_form.html.twig", [
             "form"=>$form->createView()
-        ]);
+        ]); 
+        return $this->json($data);
     }
 
     /**

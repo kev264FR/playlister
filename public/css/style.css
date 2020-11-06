@@ -15,8 +15,10 @@
     display: none;
 }
 
-#comment-form {
-    z-index: 1;
-    background-color: black;
-    border: 1px solid black;
+#comment-form-holder{
+    position: fixed;
+    left: 100;
+    top: 50vh;
+    width: max-content;
+    z-index: 10;
 }

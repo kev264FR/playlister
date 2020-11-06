@@ -102,7 +102,7 @@ class PlaylistController extends AbstractController
             $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
             return $this->redirectToRoute("playlists");
         }
-
+        
         return $this->render("playlist/playlist_detail.html.twig", [
                 "playlist"=>$playlist,
         ]);

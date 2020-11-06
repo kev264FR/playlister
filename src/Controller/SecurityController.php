@@ -25,8 +25,14 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         if ($error) {
-            $this->addFlash("error", "Email ou mot de passe invalide");
+            if($error->getMessage() == "invalide") {
+                $this->addFlash("error", "Email ou mot de passe invalide");
+            }
+            if ($error->getMessage() == "banned") {
+                $this->addFlash("error", "<strong>Votre compte a été banni</strong>");
+            }
         }
+        
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername

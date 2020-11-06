@@ -71,8 +71,13 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
         if (!$user) {
             // fail authentication with a custom error
-            throw new CustomUserMessageAuthenticationException('Email ou mot de passe invalide');
+            throw new CustomUserMessageAuthenticationException('invalide');
         }
+
+        if (in_array("ROLE_BANNED", $user->getRoles())) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('banned');
+        }        
 
         return $user;
     }

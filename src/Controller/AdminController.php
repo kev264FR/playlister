@@ -32,6 +32,7 @@ class AdminController extends AbstractController
         $platforms = $this->getDoctrine()
                         ->getRepository(Platform::class)
                         ->getAll();
+                        
         return $this->render("admin/platforms_list.html.twig", [
             "platforms"=>$platforms,
             "finder"=>$this->generateUrl("playlists_admin")

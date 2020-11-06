@@ -1,12 +1,17 @@
-
-
-<h1 class="text-center">
-    Page temporaire de commentaire
-</h1>
-
-<hr>
-
-{{form_start(form, {attr: {id: "comment_form"}})}}
-    {{form_row(form.text)}}
-    <input class="btn btn-success" onclick="submitComment()" type="submit" value="Commenté">
-{{form_end(form)}}
+<div id="comment-form" class="card" style="width: 20rem;">
+    <div class="car-header text-center bg-primary text-white">
+        <h4>
+            Déplace moi
+        </h4>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Posté un commentaire</h5>
+        <div class="card-text">
+            {{form_start(form, {attr: {id: "comment_form"}})}}
+            {{form_row(form.text)}}
+            <input class="btn btn-success" onclick="submitComment()" type="submit" value="Commenté">
+            <a href="#" onclick="cancelComment()" class="btn btn-danger">Fermer</i></a>
+            {{form_end(form)}}
+        </div>
+    </div>
+</div>

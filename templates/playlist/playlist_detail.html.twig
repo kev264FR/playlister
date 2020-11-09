@@ -41,7 +41,7 @@
                     ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
                 </p>
             </div>
-            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick()">Lancer la lecture</a>
+            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lancer la lecture</a>
             {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
                     <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
@@ -59,9 +59,12 @@
         Espace commentaire
     </h3>
     <div id="comment-part">
-        <a class="btn btn-primary btn-lg" onclick="generateForm()" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
-            <i class="fas fa-comment-dots"></i> Posté un comentaire <i class="fas fa-comment-dots"></i>
+        {% if app.user %}
+        <a class="btn btn-primary btn-lg" onclick="generateForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+            <i class="fas fa-comment-dots"></i> Poster un commentaire <i class="fas fa-comment-dots"></i>
         </a>
+        {% endif %}
+        
         <div id="comment-form-holder"></div>
         {% for comment in playlist.comments %}
         {% if comment.answerFor == null %}
@@ -78,9 +81,12 @@
                         </p>
                         <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
-                    <a class="btn btn-primary" onclick="generateForm()" href="{{path("answer_comment", {comment_id: comment.id})}}">
+                    {% if app.user %}
+                    <a class="btn btn-primary" onclick="generateForm(event)" href="{{path("answer_comment", {comment_id: comment.id})}}">
                         <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
                     </a>
+                    {% endif %}
+                    
                     {% if app.user and is_granted("ROLE_ADMIN") %}
                     <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger">
                         <i class="fas fa-trash-alt"></i>

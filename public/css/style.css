@@ -17,7 +17,6 @@
 
 #comment-form-holder{
     position: fixed;
-    left: 100;
     top: 50vh;
     width: max-content;
     z-index: 10;

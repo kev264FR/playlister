@@ -18,11 +18,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/", name="profile")
+     * @Route("/{id}", name="public_profile")
+     * @Route("/", name="my_profile")
      */
-    public function index(): Response
+    public function index(User $user = null): Response
     {
-        return $this->render('profile/index.html.twig');
+        if (!$user) {
+            return $this->render('profile/my_profile.html.twig');
+        }
+        return $this->render('profile/public_profile.html.twig', [
+            "user"=>$user
+        ]);
     }
 
     /**

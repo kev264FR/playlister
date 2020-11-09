@@ -9,8 +9,8 @@
         <div class="card-text">
             {{form_start(form, {attr: {id: "comment_form"}})}}
             {{form_row(form.text)}}
-            <input class="btn btn-success" onclick="submitComment()" type="submit" value="Commenté">
-            <a href="#" onclick="cancelComment()" class="btn btn-danger">Fermer</i></a>
+            <input class="btn btn-success" onclick="submitComment(event)" type="submit" value="Commenté">
+            <a href="#" onclick="cancelComment(event)" class="btn btn-danger">Fermer</i></a>
             {{form_end(form)}}
         </div>
     </div>

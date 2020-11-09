@@ -8,9 +8,9 @@ let commentFormHolder = $("#comment-form-holder")
 let commentUrl
 
 // Generation du formulaire de post de commentaire
-function generateForm() {
-    event.preventDefault()
-    let button = $(event.target)
+function generateForm(e) {
+    e.preventDefault()
+    let button = $(e.currentTarget)
     commentUrl = button.attr("href")
 
     fetch(commentUrl)
@@ -25,8 +25,8 @@ function generateForm() {
 }
 
 // Envoi les données du formulaire 
-function submitComment() {
-    event.preventDefault()
+function submitComment(e) {
+    e.preventDefault()
     fetch(commentUrl, {
         method: "POST",
         body: new FormData(document.getElementById("comment_form"))
@@ -41,8 +41,8 @@ function submitComment() {
 }
 
 // Ferme la fenertre de formulaire
-function cancelComment() {
-    event.preventDefault()
+function cancelComment(e) {
+    e.preventDefault()
     commentFormHolder.html("")
     commentFormHolder.removeAttr("style")
 }
@@ -50,10 +50,10 @@ function cancelComment() {
 
 
 // -------------- GESTION MODAL IFRAME --------------
-function handleClick() {
-    event.preventDefault()
+function handleClick(e) {
+    e.preventDefault()
     let player = $(".player iframe")
-    player.attr("src", $(event.target).data("url"))
+    player.attr("src", $(e.currentTarget).data("url"))
     $("#embed").slideDown("slow")
 }
 // -------------- GESTION MODAL IFRAME --------------
@@ -68,7 +68,7 @@ $(".btn-danger").confirm({
         ok: {
             text: "Continuer",
             action: function () {
-                location.href = this.$target.attr('href');
+                location.href = this.currentTarget.attr('href');
             }
         },
         cancel: {

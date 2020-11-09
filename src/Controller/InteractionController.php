@@ -20,75 +20,66 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class InteractionController extends AbstractController
 {
     /**
-     * @Route("/like/{id}", name="user_like")
+     * @Route("/playlist/like/{id}", name="user_like")
      */
-    public function likePlaylist(Request $request, Playlist $playlist = null){
+    public function likePlaylist(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-
-        if ($request->headers->get("referer")) {
-            $referer = $request->headers->get("referer");
-        }else{
-            $this->addFlash("error", "Erreur réessaillez");
-            return $this->redirectToRoute("playlists");
-        }
+        $status = null;
 
         if ($playlist == null || !$playlist->getPublic()) {
-            $this->addFlash("error", "Cette playliste est privée ou n'existe pas");
-            return $this->redirectToRoute("playlists");
+            return $this->json($status);
         }
 
         if ($this->getUser() == $playlist->getUser()) {
-            $this->addFlash("error", "Vous ne pouvez pas liker votre propre playlist");
-            return $this->redirect($referer);
+            return $this->json($status);
         }
+
+        
         if ($user->getLikedPlaylists()->contains($playlist)) {
             $user->removeLikedPlaylist($playlist);
+            $status = false;
         }else{
             $user->addLikedPlaylist($playlist);
+            $status = true;
         }
 
         $manager->persist($user);
         $manager->flush();
 
-        return $this->redirect($referer);
+        // return $this->redirect($referer);
+        return $this->json($status);
         
     }
 
     /**
-     * @Route("/follow/{id}", name="user_follow_playlist")
+     * @Route("/playlist/follow/{id}", name="user_follow_playlist")
      */
-    public function followPlaylist(Request $request, Playlist $playlist = null){
+    public function followPlaylist(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         $user = $this->getUser();
-
-        if ($request->headers->get("referer")) {
-            $referer = $request->headers->get("referer");
-        }else{
-            $this->addFlash("error", "Erreur réessaillez");
-            return $this->redirectToRoute("playlists");
-        }
+        $status = null;
         
         if ($playlist == null || !$playlist->getPublic()) {
-            $this->addFlash("error", "Cette playliste est privée ou n'existe pas");
-            return $this->redirectToRoute("playlists");
+            return $this->json($status);
         }
 
         if ($this->getUser() == $playlist->getUser()) {
-            $this->addFlash("error", "Vous ne pouvez pas follow votre propre playlist");
-            return $this->redirect($referer);
+            return $this->json($status);
         }
 
         if ($user->getFollowedPlaylists()->contains($playlist)) {
             $user->removeFollowedPlaylist($playlist);
+            $status = false;
         }else{
             $user->addFollowedPlaylist($playlist);
+            $status = true;
         }
 
         $manager->persist($user);
         $manager->flush();
 
-        return $this->redirect($referer); 
+        return $this->json($status);
     }
 
     /**

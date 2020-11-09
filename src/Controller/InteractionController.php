@@ -15,7 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * @Route("/interaction")
- * @IsGranted("ROLE_USER")
  */
 class InteractionController extends AbstractController
 {
@@ -24,7 +23,14 @@ class InteractionController extends AbstractController
      */
     public function likePlaylist(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
+
+        if ($this->getUser()) {
+            $user = $this->getUser();
+        }else{
+            return $this->json($this->generateUrl("app_login"));
+            // redirection vers le login en ajax si pas de user trouvé
+        }
+        
         $status = null;
 
         if ($playlist == null || !$playlist->getPublic()) {
@@ -47,7 +53,6 @@ class InteractionController extends AbstractController
         $manager->persist($user);
         $manager->flush();
 
-        // return $this->redirect($referer);
         return $this->json($status);
         
     }
@@ -57,14 +62,21 @@ class InteractionController extends AbstractController
      */
     public function followPlaylist(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
-        $user = $this->getUser();
+        
+        if ($this->getUser()) {
+            $user = $this->getUser();
+        }else{
+            return $this->json($this->generateUrl("app_login"));
+            // redirection vers le login en ajax si pas de user trouvé
+        }
+
         $status = null;
         
         if ($playlist == null || !$playlist->getPublic()) {
             return $this->json($status);
         }
 
-        if ($this->getUser() == $playlist->getUser()) {
+        if ($user == $playlist->getUser()) {
             return $this->json($status);
         }
 
@@ -73,6 +85,39 @@ class InteractionController extends AbstractController
             $status = false;
         }else{
             $user->addFollowedPlaylist($playlist);
+            $status = true;
+        }
+
+        $manager->persist($user);
+        $manager->flush();
+
+        return $this->json($status);
+    }
+
+    /**
+     * @Route("/user/follow/{id}", name="user_follow_user")
+     */
+    public function followUser(User $target = null){
+        $manager = $this->getDoctrine()->getManager();
+        
+        if ($this->getUser()) {
+            $user = $this->getUser();
+        }else{
+            return $this->json($this->generateUrl("app_login"));
+            // redirection vers le login en ajax si pas de user trouvé
+        }
+
+        $status = null;
+        
+        if ($user == $target) {
+            return $this->json($status);
+        }
+
+        if ($user->getFollowedUsers()->contains($target)) {
+            $user->removeFollowedUser($target);
+            $status = false;
+        }else{
+            $user->addFollowedUser($target);
             $status = true;
         }
 
@@ -93,6 +138,11 @@ class InteractionController extends AbstractController
         if (!$playlist && !$parentComment) {
             $this->addFlash("error", "Erreur");
             return $this->redirectToRoute("playlists");
+        }
+
+        if (!$this->getUser()) {
+            return $this->json($this->generateUrl("app_login"));
+            // redirection vers le login en ajax si pas de user trouvé
         }
         
         $comment = new Comment();

@@ -10,8 +10,7 @@ let commentUrl
 // Generation du formulaire de post de commentaire
 function generateForm(e) {
     e.preventDefault()
-    let button = $(e.currentTarget)
-    commentUrl = button.attr("href")
+    commentUrl = $(e.currentTarget).attr("href")
 
     fetch(commentUrl)
         .then(res => res.json())

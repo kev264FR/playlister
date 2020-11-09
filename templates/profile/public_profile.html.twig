@@ -13,9 +13,7 @@
             <h2 class="text-center">
                 Playlistes de cette utilisateur
             </h2>
-            <div class="test">
-                <a href="#" class="btn btn-primary">Follow user</a>
-            </div>
+                <a href="{{path("user_follow_user", {id: user.id})}}" class="btn btn-primary" onclick="handleFollowUser(event)">Follow user</a>
             <hr>
             {% for playlist in user.myPlaylists %}
             <div class="card mb-3" style="max-width: 500px;">
@@ -54,9 +52,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{parent()}}
-    <script src="{{asset("js/interactions.js")}}"></script>
 {% endblock %}

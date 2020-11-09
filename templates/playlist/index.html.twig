@@ -26,11 +26,11 @@
                     <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
                 </h2>
                 <p class="card-text">
-                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary">
-                        {{playlist.likers.count}} <i class="fas fa-thumbs-up"></i>
+                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary" onclick="handleLike(event)">
+                        <i class="fas fa-thumbs-up"></i> {{playlist.likers.count}} 
                     </a>
-                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-plus-square"></i>
+                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary" onclick="handleFollowPlaylist(event)">
+                        <i class="fas fa-plus-square"></i> <span>{{playlist.followers.count}}</span>
                     </a>
                     {% if app.user and is_granted("ROLE_ADMIN") or app.user and app.user == playlist.user %}
                     <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">

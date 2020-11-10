@@ -18,9 +18,19 @@
 <hr>
 
 {% for playlist in playlists %}
-<div class="card mb-3" style="max-width: 500px;">
+<div class="card mb-3" style="max-width: 700px;">
     <div class="row no-gutters">
-        <div class="col-md-6">
+        <div class="col-md-3">
+            {% if playlist.contents.count > 0 %}
+                {% set lastElement = playlist.contents.last %}
+                <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img">
+
+                {% else %}
+                <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
+            {% endif %}
+            
+          </div>
+        <div class="col-md-4">
             <div class="card-body">
                 <h2 class="card-title text-center">
                     <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
@@ -43,7 +53,7 @@
                 </p>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card-body small">
                 <p class="card-text">
                     Ajouté par : {{playlist.user.username}}

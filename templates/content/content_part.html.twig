@@ -1,0 +1,21 @@
+{% for content in playlist.contents %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
+            <div class="card-body">
+                <h6>
+                    {{content.title}}
+                </h6>
+                <p class="card-text small text-muted">
+                    ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
+                </p>
+            </div>
+            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lancer la lecture</a>
+            {% if app.user %}
+                {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
+                    <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+{% endfor %}

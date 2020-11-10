@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/content")
- * @IsGranted("ROLE_USER")
  */
 class ContentController extends AbstractController
 {
@@ -23,6 +22,24 @@ class ContentController extends AbstractController
      */
     public function contentForm(Request $request, Playlist $playlist): Response
     {
+        $status = [
+            "status"=>false,
+            "data"=>null
+        ];
+
+        if (!$this->getUser()) {
+            return $this->redirectToRoute("app_login");
+        }
+
+        if ($this->getUser() != $playlist->getUser()) {
+            $status["data"] = "error playlist";
+            return $this->json($status);
+        }
+
+        if (!$playlist) {
+            return $this->json($status);
+        }
+
         $manager = $this->getDoctrine()->getManager();
 
         $content = new Content();
@@ -46,20 +63,32 @@ class ContentController extends AbstractController
                     $manager->persist($content);
                     $manager->flush();
 
-                    return $this->redirectToRoute("playlist_detail", [
-                        "id"=>$playlist->getId()
-                    ]);
+                    $status = [
+                        "status"=>"add",
+                        "data"=> $this->renderView("content/content_part.html.twig", [
+                                    "playlist"=>$playlist
+                                ])
+                    ];
+
+                    return $this->json($status);
                 }
             }
             
         }
-        return $this->render('content/content_form.html.twig', [
-            "form"=>$form->createView()
-        ]);
+
+        $status = [
+            "status"=>"form",
+            "data"=> $this->renderView('content/content_form.html.twig', [
+                        "form"=>$form->createView()
+                    ])
+        ];
+
+        return $this->json($status);
     }
 
     /**
      * @Route("/delete/{id}", name="delete_content")
+     * @IsGranted("ROLE_USER")
      */
     public function removeContent(Content $content = null){
         if ($content == null) {

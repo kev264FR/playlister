@@ -8,7 +8,7 @@ let commentFormHolder = $("#comment-form-holder")
 let commentUrl
 
 // Generation du formulaire de post de commentaire
-function generateForm(e) {
+function generateCommentForm(e) {
     e.preventDefault()
     commentUrl = $(e.currentTarget).attr("href")
 
@@ -47,6 +47,59 @@ function cancelComment(e) {
 }
 // ----------- GESTION POST NOUVEAU COMMENTAIRE ------------------
 
+// ----------- GESTION AJOUT CONTENT -------------------------
+let contentFormHolder = $("#content-form-holder")
+let contentUrl;
+
+function generateContentForm(e) {
+    e.preventDefault()
+    contentUrl = $(e.currentTarget).attr("href")
+
+    fetch(contentUrl)
+        .then(res => res.json())
+        .then(res => {
+            switch (res.status) {
+                case "form":  $(contentFormHolder).html(res.data)
+                    break;
+                
+                case false: console.log(res.data)
+                    break;
+            }
+        })
+        .catch(function (err) {
+            console.log(err)
+        })
+}
+
+function submitContent(e) {
+    e.preventDefault()
+
+    fetch(contentUrl, {
+        method: "POST",
+        body: new FormData(document.getElementById("content_form"))
+    })
+        .then(res => res.json())
+        .then(res => {
+            switch (res.status) {
+                
+                case "form":  
+                            $(contentFormHolder).html(res.data)
+                    break;
+                
+                case "add": 
+                            $("#content-part").html(res.data)
+                            $(contentFormHolder).html("")
+                    break;
+                
+                case false: console.log(res.data)
+                    break;
+            }
+        })
+        .catch(function (err) {
+            console.log(err)
+        })
+}
+
 
 // -------------- GESTION MODAL IFRAME --------------
 function handleClick(e) {
@@ -67,7 +120,7 @@ $(".btn-danger").confirm({
         ok: {
             text: "Continuer",
             action: function () {
-                location.href = this.currentTarget.attr('href');
+                location.href = this.$target.attr('href');
             }
         },
         cancel: {

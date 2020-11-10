@@ -5,7 +5,7 @@
 
 {% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
 
-<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}">Ajouter du contenu</a>
+<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}" onclick="generateContentForm(event)">Ajouter du contenu</a>
 
 {% if playlist.public %}
         <a class="btn btn-primary btn-lg" href="{{path("playlist_make_private", {id: playlist.id})}}">Rendre privée</a>
@@ -28,8 +28,8 @@
         </iframe>
     </div>
 </div>
-
-<div class="d-flex flex-wrap">
+<div id="content-form-holder"></div>
+<div id="content-part" class="d-flex flex-wrap">
     {% for content in playlist.contents %}
         <div class="card" style="width: 18rem;">
             <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
@@ -49,7 +49,6 @@
                     </a>
                 {% endif %}
             {% endif %}
-            
         </div>
     {% endfor %}
 </div>
@@ -60,7 +59,7 @@
     </h3>
     <div id="comment-part">
         {% if app.user %}
-        <a class="btn btn-primary btn-lg" onclick="generateForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+        <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
             <i class="fas fa-comment-dots"></i> Poster un commentaire <i class="fas fa-comment-dots"></i>
         </a>
         {% endif %}
@@ -82,7 +81,7 @@
                         <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
                     {% if app.user %}
-                    <a class="btn btn-primary" onclick="generateForm(event)" href="{{path("answer_comment", {comment_id: comment.id})}}">
+                    <a class="btn btn-primary" onclick="generateCommentForm(event)" href="{{path("answer_comment", {comment_id: comment.id})}}">
                         <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
                     </a>
                     {% endif %}

@@ -40,10 +40,10 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if (password_verify($form->get("oldPassword")->getData(), $this->getUser()->getPassword())) {
-                $ok = $this->getDoctrine()
-                            ->getRepository(User::class)
-                            ->upgradePassword($this->getUser(), $encoder->encodePassword($this->getUser(), $form->get("newPassword")->getData() ));
-                dump($ok);
+                $this->getDoctrine()
+                        ->getRepository(User::class)
+                        ->upgradePassword($this->getUser(), $encoder->encodePassword($this->getUser(), $form->get("newPassword")->getData() ));
+
                 return $this->redirectToRoute("app_logout");
             }else{
                 $this->addFlash("error", "Mauvais mot de passe");

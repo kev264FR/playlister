@@ -1,16 +1,12 @@
-{% extends 'base.html.twig' %}
-
-
-{% block body %}
 
 <h1>Ajouter du contenu</h1>
+<hr>
 
-{{form_start(form)}}
+{{form_start(form, {attr: {id: "content_form"}})}}
 
     {{form_row(form.title)}}
     {{form_row(form.url)}}
 
-<input type="submit" value="OK">
+<input type="submit" onclick="submitContent(event)" value="OK">
 {{form_end(form)}}
 
-{% endblock %}

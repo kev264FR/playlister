@@ -11,9 +11,9 @@
             Profil de {{user.username}}
     {% endif %}
 </h1>
-{% if app.user and is_granted("ROLE_ADMIN") %}
-<a href="#" class="btn btn-warning">switch admin</a>
-<a href="#" class="btn btn-success">switch ban</a>
+{% if app.user and is_granted("ROLE_ADMIN") and app.user != user %}
+<a href="{{path("admin_switch", {id: user.id})}}" class="btn btn-warning">switch admin</a>
+<a href="{{path("ban_switch", {id: user.id})}}" class="btn btn-success">switch ban</a>
 {% endif %}
 <hr>
 <div class="container">

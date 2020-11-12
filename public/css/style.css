@@ -21,3 +21,11 @@
     width: max-content;
     z-index: 10;
 }
+
+.table-bordered, .table-bordered td, .table-bordered th{
+    border: 2px solid black;
+}
+
+.table thead th{
+    border-bottom: none;
+}

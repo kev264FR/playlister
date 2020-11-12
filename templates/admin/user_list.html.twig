@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{parent()}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
 {% endblock %}
 
 {% block body %}
 <h1 class="text-center">Liste des users</h1>
 <hr>
 <div class="jumbotron">
-    <table id="table"  class="table table-responsive-md">
+    <table id="table"  class="table table-responsive-lg table-bordered text-center">
         <thead>
             <tr>
                 <th>
@@ -26,11 +26,24 @@
                 <th>
                     Commentaires
                 </th>
+                <th>
+                    Admin
+                </th>
+                <th>
+                    Banned
+                </th>
             </tr>
         </thead>
         <tbody>
             {% for user in users %}
-                <tr>
+
+            {% if "ROLE_ADMIN" in user.roles %}
+                <tr class="table-success">
+                {% elseif "ROLE_BANNED" in user.roles %}
+                <tr class="table-danger">
+                {% else %}
+                    <tr class="table-info">
+            {% endif %}
                     <td>
                         
                         <a href="{{path("public_profile", {id:user.id})}}">
@@ -54,6 +67,16 @@
                     </td>
                     <td>
                         {{user.comments.count}}
+                    </td>
+                    <td>
+                        {% if "ROLE_ADMIN" in user.roles %}
+                            <i class="fas fa-check text-success"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if "ROLE_BANNED" in user.roles %}
+                            <i class="fas fa-check text-danger"></i>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

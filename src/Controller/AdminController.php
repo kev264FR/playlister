@@ -124,4 +124,48 @@ class AdminController extends AbstractController
             "users"=>$users
         ]);
     }
+
+    /**
+     * @Route("/toggle/admin/{id}", name="admin_switch")
+     */
+    public function adminSwitch(User $user = null){
+        if (!$user) {
+            $this->addFlash("error", "User not found");
+            return $this->redirectToRoute("users_admin");
+        }
+        $manager = $this->getDoctrine()->getManager();
+
+        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+            $user->setRoles([]);
+        }else{
+            $user->setRoles(["ROLE_ADMIN"]);
+        }
+        $manager->flush();
+
+        return $this->redirectToRoute("public_profile", [
+            "id"=>$user->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/toggle/ban/{id}", name="ban_switch")
+     */
+    public function banSwitch(User $user = null){
+        if (!$user) {
+            $this->addFlash("error", "User not found");
+            return $this->redirectToRoute("users_admin");
+        }
+        $manager = $this->getDoctrine()->getManager();
+
+        if (in_array("ROLE_BANNED", $user->getRoles())) {
+            $user->setRoles([]);
+        }else{
+            $user->setRoles(["ROLE_BANNED"]);
+        }
+        $manager->flush();
+
+        return $this->redirectToRoute("public_profile", [
+            "id"=>$user->getId()
+        ]);
+    }
 }

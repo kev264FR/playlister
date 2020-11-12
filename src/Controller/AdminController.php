@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Platform;
 use App\Entity\Playlist;
+use App\Entity\User;
 use App\Form\PlatformType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -108,6 +109,19 @@ class AdminController extends AbstractController
             "playlists"=>$playlists,
             "search"=>$search,
             "finder"=>$this->generateUrl("playlists_admin")
+        ]);
+    }
+
+    /**
+     * @Route("/users", name="users_admin")
+     */
+    public function usersList(){
+        $users = $this->getDoctrine()
+                        ->getRepository(User::class)
+                        ->findAll();
+
+        return $this->render("admin/user_list.html.twig", [
+            "users"=>$users
         ]);
     }
 }

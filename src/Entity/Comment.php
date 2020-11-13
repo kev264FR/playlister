@@ -103,9 +103,9 @@ class Comment
         return $this->answerFor;
     }
 
-    public function setAnswerFor(?self $AnswerFor): self
+    public function setAnswerFor(?self $answerFor): self
     {
-        $this->answerFor = $AnswerFor;
+        $this->answerFor = $answerFor;
 
         return $this;
     }
@@ -118,22 +118,22 @@ class Comment
         return $this->answers;
     }
 
-    public function addAnswer(Comment $Answer): self
+    public function addAnswer(Comment $answer): self
     {
-        if (!$this->answers->contains($Answer)) {
-            $this->answers[] = $Answer;
-            $Answer->setAnswerFor($this);
+        if (!$this->answers->contains($answer)) {
+            $this->answers[] = $answer;
+            $answer->setAnswerFor($this);
         }
 
         return $this;
     }
 
-    public function removeAnswer(Comment $Answer): self
+    public function removeAnswer(Comment $answer): self
     {
-        if ($this->answers->removeElement($Answer)) {
+        if ($this->answers->removeElement($answer)) {
             // set the owning side to null (unless already changed)
-            if ($Answer->getAnswerFor() === $this) {
-                $Answer->setAnswerFor(null);
+            if ($answer->getAnswerFor() === $this) {
+                $answer->setAnswerFor(null);
             }
         }
 

@@ -11,7 +11,7 @@
     margin: auto;
 }
 
-#embed{
+.hide{
     display: none;
 }
 
@@ -30,6 +30,6 @@
     border-bottom: none;
 }
 
-.content-form{
+.bg-grey{
     background-color: #bdbfc1;
 }

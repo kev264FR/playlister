@@ -59,7 +59,9 @@ function generateContentForm(e) {
         .then(res => res.json())
         .then(res => {
             switch (res.status) {
-                case "form":  $(contentFormHolder).html(res.data)
+                case "form":  
+                            $(contentFormHolder).html(res.data)
+                            $(contentFormHolder).slideDown("slow")
                     break;
                 
                 case false: console.log(res.data)
@@ -84,14 +86,18 @@ function submitContent(e) {
                 
                 case "form":  
                             $(contentFormHolder).html(res.data)
+                            $(contentFormHolder).slideDown("slow")
                     break;
                 
                 case "add": 
                             $("#content-part").html(res.data)
-                            $(contentFormHolder).html("")
+                            $(contentFormHolder).slideUp("slow", function(){
+                                $(contentFormHolder).html("")
+                            })
                     break;
                 
-                case false: console.log(res.data)
+                case false: 
+                            console.log(res.data)
                     break;
             }
         })

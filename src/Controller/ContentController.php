@@ -71,6 +71,9 @@ class ContentController extends AbstractController
                     ];
 
                     return $this->json($status);
+                }else{
+                    $status["data"] = "error, platform not found";
+                    return $this->json($status);
                 }
             }
             

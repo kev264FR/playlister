@@ -14,7 +14,7 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('text', null, [
-                "label"=>false
+                'label'=>false
             ])
         ;
     }

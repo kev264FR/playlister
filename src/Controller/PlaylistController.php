@@ -18,7 +18,7 @@ class PlaylistController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $search = $request->get("search");
+        $search = $request->get('search');
         if ($search) {
             $playlists = $this->getDoctrine()
                             ->getRepository(Playlist::class)
@@ -30,8 +30,8 @@ class PlaylistController extends AbstractController
         }
         
         return $this->render('playlist/index.html.twig', [
-            "playlists"=>$playlists,
-            "search"=>$search
+            'playlists'=>$playlists,
+            'search'=>$search
         ]);
     }
 
@@ -64,15 +64,15 @@ class PlaylistController extends AbstractController
             $manager->persist($playlist);
             $manager->flush();
 
-            $this->addFlash("success", "Playlist ajouté");
-            return $this->redirectToRoute("playlist_detail", [
-                "id"=>$playlist->getId()
+            $this->addFlash('success', 'Playlist ajouté');
+            return $this->redirectToRoute('playlist_detail', [
+                'id'=>$playlist->getId()
             ]);
         }
 
-        return $this->render("playlist/playlist_form.html.twig", [
-            "form"=>$form->createView(),
-            "edit"=>$edit,
+        return $this->render('playlist/playlist_form.html.twig', [
+            'form'=>$form->createView(),
+            'edit'=>$edit,
         ]);
     }
 
@@ -85,12 +85,12 @@ class PlaylistController extends AbstractController
             $manager->remove($playlist);
             $manager->flush();
 
-            $this->addFlash("success", "La playlist <strong>".$playlist->getTitle()."</strong> a été supprimé");
-            return $this->redirectToRoute("playlists");
+            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
+            return $this->redirectToRoute('playlists');
         }
 
-        $this->addFlash("error", "Suppression impossible");
-        return $this->redirectToRoute("playlists");
+        $this->addFlash('error', 'Suppression impossible');
+        return $this->redirectToRoute('playlists');
     }
 
     /**
@@ -99,12 +99,12 @@ class PlaylistController extends AbstractController
     public function detailPlaylist(Playlist $playlist = null){
 
         if (!$playlist) {
-            $this->addFlash("error", "Cette playlist est privée ou n'existe pas");
-            return $this->redirectToRoute("playlists");
+            $this->addFlash('error', 'Cette playlist est privée ou n\'existe pas');
+            return $this->redirectToRoute('playlists');
         }
         
-        return $this->render("playlist/playlist_detail.html.twig", [
-                "playlist"=>$playlist,
+        return $this->render('playlist/playlist_detail.html.twig', [
+                'playlist'=>$playlist,
         ]);
         
     }
@@ -116,20 +116,20 @@ class PlaylistController extends AbstractController
     public function switchPublicPrivate(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         if ($playlist == null) {
-            $this->addFlash("error", "Cette playlist n'existe pas");
-            return $this->redirectToRoute("playlists");
+            $this->addFlash('error', 'Cette playlist n\'existe pas');
+            return $this->redirectToRoute('playlists');
         }
         if ($playlist->getPublic()) {
             $playlist->setPublic(false);
-            $this->addFlash("success", "La playlist <strong>".$playlist->getTitle()."</strong> a été mise en privée");
+            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été mise en privée');
         }else{
             $playlist->setPublic(true);
-            $this->addFlash("success", "La playlist <strong>".$playlist->getTitle()."</strong> a été mise en public");
+            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été mise en public');
         }
 
         $manager->flush();
-        return $this->redirectToRoute("playlist_detail", [
-            "id"=>$playlist->getId()
+        return $this->redirectToRoute('playlist_detail', [
+            'id'=>$playlist->getId()
         ]);
     }
 }

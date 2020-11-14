@@ -15,7 +15,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            $this->addFlash("error", "Vous ètes déjà connecté en tant que <strong>".$this->getUser()->getUsername()."</strong>");
+            $this->addFlash('error', 'Vous ètes déjà connecté en tant que <strong>'.$this->getUser()->getUsername().'</strong>');
             return $this->redirectToRoute('playlists');
         }
 
@@ -25,11 +25,11 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         if ($error) {
-            if($error->getMessage() == "invalide") {
-                $this->addFlash("error", "Email ou mot de passe invalide");
+            if($error->getMessage() == 'invalide') {
+                $this->addFlash('error', 'Email ou mot de passe invalide');
             }
-            if ($error->getMessage() == "banned") {
-                $this->addFlash("error", "<strong>Votre compte a été banni</strong>");
+            if ($error->getMessage() == 'banned') {
+                $this->addFlash('error', '<strong>Votre compte a été banni</strong>');
             }
         }
         

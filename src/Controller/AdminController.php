@@ -34,9 +34,9 @@ class AdminController extends AbstractController
                         ->getRepository(Platform::class)
                         ->getAll();
                         
-        return $this->render("admin/platforms_list.html.twig", [
-            "platforms"=>$platforms,
-            "finder"=>$this->generateUrl("playlists_admin")
+        return $this->render('admin/platforms_list.html.twig', [
+            'platforms'=>$platforms,
+            'finder'=>$this->generateUrl('playlists_admin')
         ]);
     }
 
@@ -60,12 +60,12 @@ class AdminController extends AbstractController
             $manager->persist($platform);
             $manager->flush();
 
-            return $this->redirectToRoute("platforms_list");
+            return $this->redirectToRoute('platforms_list');
         }
-        return $this->render("admin/platform_form.html.twig", [
-            "form"=>$form->createView(),
-            "edit"=>$edit,
-            "finder"=>$this->generateUrl("playlists_admin")
+        return $this->render('admin/platform_form.html.twig', [
+            'form'=>$form->createView(),
+            'edit'=>$edit,
+            'finder'=>$this->generateUrl('playlists_admin')
         ]);
     }
 
@@ -74,8 +74,8 @@ class AdminController extends AbstractController
      */
     public function deletePlatform(Platform $platform = null){
         if (!$platform) {
-            $this->addFlash("error", "Cette plateforme n'existe pas");
-            return $this->redirectToRoute("platforms_list");
+            $this->addFlash('error', 'Cette plateforme n\'existe pas');
+            return $this->redirectToRoute('platforms_list');
         }
 
         if ($platform->getContents()->count() == 0) {
@@ -83,18 +83,18 @@ class AdminController extends AbstractController
             $manager->remove($platform);
             $manager->flush();
 
-            return $this->redirectToRoute("platforms_list");
+            return $this->redirectToRoute('platforms_list');
         }
 
-        $this->addFlash("error", "Suppression impossible");
-        return $this->redirectToRoute("platforms_list");
+        $this->addFlash('error', 'Suppression impossible');
+        return $this->redirectToRoute('platforms_list');
     }
 
     /**
      * @Route("/playlists", name="playlists_admin")
      */
     public function listAllPlaylists(Request $request){
-        $search = $request->get("search");
+        $search = $request->get('search');
         if ($search) {
             $playlists = $this->getDoctrine()
                             ->getRepository(Playlist::class)
@@ -106,9 +106,9 @@ class AdminController extends AbstractController
         }
         
         return $this->render('playlist/index.html.twig', [
-            "playlists"=>$playlists,
-            "search"=>$search,
-            "finder"=>$this->generateUrl("playlists_admin")
+            'playlists'=>$playlists,
+            'search'=>$search,
+            'finder'=>$this->generateUrl('playlists_admin')
         ]);
     }
 
@@ -120,8 +120,8 @@ class AdminController extends AbstractController
                         ->getRepository(User::class)
                         ->findAll();
 
-        return $this->render("admin/user_list.html.twig", [
-            "users"=>$users
+        return $this->render('admin/user_list.html.twig', [
+            'users'=>$users
         ]);
     }
 
@@ -130,20 +130,20 @@ class AdminController extends AbstractController
      */
     public function adminSwitch(User $user = null){
         if (!$user) {
-            $this->addFlash("error", "User not found");
-            return $this->redirectToRoute("users_admin");
+            $this->addFlash('error', 'User not found');
+            return $this->redirectToRoute('users_admin');
         }
         $manager = $this->getDoctrine()->getManager();
 
-        if (in_array("ROLE_ADMIN", $user->getRoles())) {
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
             $user->setRoles([]);
         }else{
-            $user->setRoles(["ROLE_ADMIN"]);
+            $user->setRoles(['ROLE_ADMIN']);
         }
         $manager->flush();
 
-        return $this->redirectToRoute("public_profile", [
-            "id"=>$user->getId()
+        return $this->redirectToRoute('public_profile', [
+            'id'=>$user->getId()
         ]);
     }
 
@@ -152,20 +152,20 @@ class AdminController extends AbstractController
      */
     public function banSwitch(User $user = null){
         if (!$user) {
-            $this->addFlash("error", "User not found");
-            return $this->redirectToRoute("users_admin");
+            $this->addFlash('error', 'User not found');
+            return $this->redirectToRoute('users_admin');
         }
         $manager = $this->getDoctrine()->getManager();
 
-        if (in_array("ROLE_BANNED", $user->getRoles())) {
+        if (in_array('ROLE_BANNED', $user->getRoles())) {
             $user->setRoles([]);
         }else{
-            $user->setRoles(["ROLE_BANNED"]);
+            $user->setRoles(['ROLE_BANNED']);
         }
         $manager->flush();
 
-        return $this->redirectToRoute("public_profile", [
-            "id"=>$user->getId()
+        return $this->redirectToRoute('public_profile', [
+            'id'=>$user->getId()
         ]);
     }
 }

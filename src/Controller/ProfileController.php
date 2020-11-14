@@ -27,7 +27,7 @@ class ProfileController extends AbstractController
             return $this->render('profile/my_profile.html.twig');
         }
         return $this->render('profile/public_profile.html.twig', [
-            "user"=>$user
+            'user'=>$user
         ]);
     }
 
@@ -39,19 +39,19 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (password_verify($form->get("oldPassword")->getData(), $this->getUser()->getPassword())) {
+            if (password_verify($form->get('oldPassword')->getData(), $this->getUser()->getPassword())) {
                 $this->getDoctrine()
                         ->getRepository(User::class)
-                        ->upgradePassword($this->getUser(), $encoder->encodePassword($this->getUser(), $form->get("newPassword")->getData() ));
+                        ->upgradePassword($this->getUser(), $encoder->encodePassword($this->getUser(), $form->get('newPassword')->getData() ));
 
-                return $this->redirectToRoute("app_logout");
+                return $this->redirectToRoute('app_logout');
             }else{
-                $this->addFlash("error", "Mauvais mot de passe");
-                return $this->redirectToRoute("change_password");
+                $this->addFlash('error', 'Mauvais mot de passe');
+                return $this->redirectToRoute('change_password');
             }
         }
-        return $this->render("profile/change_password.html.twig", [
-            "form"=>$form->createView()
+        return $this->render('profile/change_password.html.twig', [
+            'form'=>$form->createView()
         ]);
     }
 }

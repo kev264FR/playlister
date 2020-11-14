@@ -14,8 +14,8 @@ class PlaylistType extends AbstractType
     {
         $builder
             ->add('title', null, [
-                "label"=> "Titre de la playlist :" ,
-                "constraints"=>[
+                'label'=> 'Titre de la playlist :' ,
+                'constraints'=>[
                     new Length([
                         'min' => 1,
                         'maxMessage' => 'Le titre de la playlist peux contenir au maximum {{ limit }} characters',

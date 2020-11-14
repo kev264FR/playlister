@@ -13,8 +13,8 @@ class ContentType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add("url", null, [
-                "mapped"=>false
+            ->add('url', null, [
+                'mapped'=>false
             ])
         ;
     }

@@ -27,7 +27,7 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl("app_login"));
+            return $this->json($this->generateUrl('app_login'));
             // redirection vers le login en ajax si pas de user trouvé
         }
         
@@ -66,7 +66,7 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl("app_login"));
+            return $this->json($this->generateUrl('app_login'));
             // redirection vers le login en ajax si pas de user trouvé
         }
 
@@ -103,7 +103,7 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl("app_login"));
+            return $this->json($this->generateUrl('app_login'));
             // redirection vers le login en ajax si pas de user trouvé
         }
 
@@ -136,12 +136,12 @@ class InteractionController extends AbstractController
     public function postComment(Request $request, Playlist $playlist = null , Comment $parentComment = null){
         
         if (!$playlist && !$parentComment) {
-            $this->addFlash("error", "Erreur");
-            return $this->redirectToRoute("playlists");
+            $this->addFlash('error', 'Erreur');
+            return $this->redirectToRoute('playlists');
         }
 
         if (!$this->getUser()) {
-            return $this->json($this->generateUrl("app_login"));
+            return $this->json($this->generateUrl('app_login'));
             // redirection vers le login en ajax si pas de user trouvé
         }
         
@@ -167,23 +167,23 @@ class InteractionController extends AbstractController
             }
 
             if (!$playlist->getPublic()) {
-                $this->addFlash("error", "Cette playliste est privée, les commentaires sont désactivés");
-                return $this->redirectToRoute("playlist_detail", [
-                    "id"=>$playlist->getId()
+                $this->addFlash('error', 'Cette playliste est privée, les commentaires sont désactivés');
+                return $this->redirectToRoute('playlist_detail', [
+                    'id'=>$playlist->getId()
                 ]);
             }
 
             $manager->persist($comment);
             $manager->flush();
 
-            $data = $this->renderView("interaction/playlist_comment_part.html.twig", [
-                "playlist"=>$playlist
+            $data = $this->renderView('interaction/playlist_comment_part.html.twig', [
+                'playlist'=>$playlist
             ]);
             return $this->json($data);
 
         }
-        $data = $this->renderView("interaction/comment_form.html.twig", [
-            "form"=>$form->createView()
+        $data = $this->renderView('interaction/comment_form.html.twig', [
+            'form'=>$form->createView()
         ]); 
         return $this->json($data);
     }
@@ -194,8 +194,8 @@ class InteractionController extends AbstractController
      */
     public function deleteComment(Comment $comment = null){
         if (!$comment) {
-            $this->addFlash("error", "Ce commentaire n'existe pas");
-            return $this->redirectToRoute("playlists");
+            $this->addFlash('error', 'Ce commentaire n\'existe pas');
+            return $this->redirectToRoute('playlists');
         }
         $manager = $this->getDoctrine()->getManager();
 
@@ -207,8 +207,8 @@ class InteractionController extends AbstractController
         $manager->remove($comment);
         $manager->flush();
 
-        return $this->redirectToRoute("playlist_detail", [
-                    "id"=>$comment->getPlaylist()->getId()
+        return $this->redirectToRoute('playlist_detail', [
+                    'id'=>$comment->getPlaylist()->getId()
         ]);
     }
 }

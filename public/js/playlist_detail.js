@@ -1,21 +1,54 @@
 
 // ----------- GESTION POST NOUVEAU COMMENTAIRE ------------------
-let commentFormHolder = $("#comment-form-holder")
-    
-// Permet de rendre le formulaire draggable
-    commentFormHolder.draggable() 
-
+let commentFormHolder
+let commentFormStatus = 0
 let commentUrl
 
 // Generation du formulaire de post de commentaire
 function generateCommentForm(e) {
     e.preventDefault()
+
+    if (!commentFormStatus) {
+        if ($(e.currentTarget).data("collection")) {
+            commentFormHolder = $("#comment-form-holder-"+$(e.currentTarget).data("collection"))
+        }else{
+            commentFormHolder = $("#comment-form-holder")
+        }
+    }else{
+        $("#alert-container").html(
+            "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                "Un seul commentaire a la fois"+
+                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                    "<span aria-hidden='true'>&times;</span>"+
+                "</button>"+
+            "</div>"
+        )
+        return;
+    }
+    
     commentUrl = $(e.currentTarget).attr("href")
 
     fetch(commentUrl)
         .then(res => res.json())
         .then(res => {
-            commentFormHolder.html(res)
+            switch (res.status) {
+                case 'success': 
+                                
+                                $(commentFormHolder).html(res.data)
+                                commentFormStatus = 1
+                    break;
+                
+                case 'error':
+                        $("#alert-container").html(
+                            "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                res.data+
+                                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                    "<span aria-hidden='true'>&times;</span>"+
+                                "</button>"+
+                            "</div>"
+                        )
+                    break;
+            }
 
         })
         .catch(function (err) {
@@ -26,13 +59,30 @@ function generateCommentForm(e) {
 // Envoi les données du formulaire 
 function submitComment(e) {
     e.preventDefault()
+    
     fetch(commentUrl, {
         method: "POST",
         body: new FormData(document.getElementById("comment_form"))
     })
         .then(res => res.json())
         .then(res => {
-            $("#comment-part").html(res)
+            switch (res.status) {
+                case 'success': 
+                                $("#comment-part").html(res.data)
+                                commentFormStatus = 0
+                    break;
+                
+                case 'error':
+                        $("#alert-container").html(
+                            "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                res.data+
+                                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                    "<span aria-hidden='true'>&times;</span>"+
+                                "</button>"+
+                            "</div>"
+                        )
+                    break;
+            }
         })
         .catch(function (err) {
             console.log(err)
@@ -43,7 +93,7 @@ function submitComment(e) {
 function cancelComment(e) {
     e.preventDefault()
     commentFormHolder.html("")
-    commentFormHolder.removeAttr("style")
+    commentFormStatus = 0
 }
 // ----------- GESTION POST NOUVEAU COMMENTAIRE ------------------
 
@@ -59,12 +109,20 @@ function generateContentForm(e) {
         .then(res => res.json())
         .then(res => {
             switch (res.status) {
-                case "form":  
-                            $(contentFormHolder).html(res.data)
-                            $(contentFormHolder).slideDown("slow")
+                case 'success':  
+                                $(contentFormHolder).html(res.data)
+                                $(contentFormHolder).slideDown("slow")
                     break;
                 
-                case false: console.log(res.data)
+                case 'error':
+                        $("#alert-container").html(
+                            "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                res.data+
+                                "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                    "<span aria-hidden='true'>&times;</span>"+
+                                "</button>"+
+                            "</div>"
+                        )
                     break;
             }
         })
@@ -83,27 +141,33 @@ function submitContent(e) {
         .then(res => res.json())
         .then(res => {
             switch (res.status) {
-                
-                case "form":  
-                            $(contentFormHolder).html(res.data)
-                            $(contentFormHolder).slideDown("slow")
+                case 'success': 
+                                $("#content-part").html(res.data)
+                                $(contentFormHolder).slideUp("slow", function(){
+                                    $(contentFormHolder).html("")
+                                })
                     break;
                 
-                case "add": 
-                            $("#content-part").html(res.data)
-                            $(contentFormHolder).slideUp("slow", function(){
-                                $(contentFormHolder).html("")
-                            })
-                    break;
-                
-                case false: 
-                            console.log(res.data)
+                case 'error':
+                                $("#alert-container").html(
+                                    "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                        res.data+
+                                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                            "<span aria-hidden='true'>&times;</span>"+
+                                        "</button>"+
+                                    "</div>"
+                                )
                     break;
             }
         })
         .catch(function (err) {
             console.log(err)
         })
+}
+
+function cancelContentForm(e) {
+    e.preventDefault()
+    contentFormHolder.html("")
 }
 
 

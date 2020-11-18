@@ -15,13 +15,6 @@
     display: none;
 }
 
-#comment-form-holder{
-    position: fixed;
-    top: 50vh;
-    width: max-content;
-    z-index: 10;
-}
-
 .table-bordered, .table-bordered td, .table-bordered th{
     border: 2px solid black;
 }

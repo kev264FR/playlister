@@ -20,24 +20,27 @@ class ContentController extends AbstractController
     /**
      * @Route("/add/{id}", name="content_add")
      */
-    public function contentForm(Request $request, Playlist $playlist): Response
+    public function contentForm(Request $request, Playlist $playlist = null): Response
     {
-        $status = [
-            'status'=>false,
-            'data'=>null
-        ];
-
         if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        if ($this->getUser() != $playlist->getUser()) {
-            $status['data'] = 'error playlist';
-            return $this->json($status);
+            return $this->json([
+                'status'=>'error',
+                'data'=>'Vous devez ètre connecté'
+            ]);
         }
 
         if (!$playlist) {
-            return $this->json($status);
+            return $this->json([
+                'status'=>'error',
+                'data'=>'Playlist non existante'
+            ]);
+        }
+
+        if ($this->getUser() != $playlist->getUser()) {
+            return $this->json([
+                'status'=>'error',
+                'data'=>'Cette playliste n\'est pas a vous'
+            ]);
         }
 
         $manager = $this->getDoctrine()->getManager();
@@ -48,6 +51,13 @@ class ContentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $form->get('url')->getData();
+            if (!$content->getTitle() || !$url) {
+                return $this->json([
+                    'status'=>'error',
+                    'data'=>'Formulaire non complet'
+                ]);
+            }
+            
             $platforms = $this->getDoctrine()
                             ->getRepository(Platform::class)
                             ->findAll();
@@ -63,30 +73,29 @@ class ContentController extends AbstractController
                     $manager->persist($content);
                     $manager->flush();
 
-                    $status = [
-                        'status'=>'add',
+                    return $this->json([
+                        'status'=>'success',
                         'data'=> $this->renderView('content/content_part.html.twig', [
-                                    'playlist'=>$playlist
-                                ])
-                    ];
+                                'playlist'=>$playlist
+                        ])
+                    ]);
 
-                    return $this->json($status);
                 }else{
-                    $status['data'] = 'error, platform not found';
-                    return $this->json($status);
+                    return $this->json([
+                        'status'=>'error',
+                        'data'=>'Plateforme non prise en charge'
+                    ]);
                 }
             }
             
         }
 
-        $status = [
-            'status'=>'form',
+        return $this->json([
+            'status'=>'success',
             'data'=> $this->renderView('content/content_form.html.twig', [
                         'form'=>$form->createView()
-                    ])
-        ];
-
-        return $this->json($status);
+            ])
+        ]);
     }
 
     /**

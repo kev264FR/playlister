@@ -58,18 +58,21 @@
     <h3 class="text-center">
         Espace commentaire
     </h3>
+    
+    {% if app.user %}
+    <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+        <i class="fas fa-comment-dots"></i> Poster un commentaire <i class="fas fa-comment-dots"></i>
+    </a>
+    {% endif %}
+
+
+    
     <div id="comment-part">
-        {% if app.user %}
-        <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
-            <i class="fas fa-comment-dots"></i> Poster un commentaire <i class="fas fa-comment-dots"></i>
-        </a>
-        {% endif %}
-        
-        <div id="comment-form-holder"></div>
         {% for comment in playlist.comments %}
         {% if comment.answerFor == null %}
+        <div id="comment-form-holder"></div>
         <hr class="bg-dark">
-        <div>
+        <div id="collection-{{comment.id}}">
             <div id="{{comment.id}}" class="card">
                 <div class="card-header small bg-info text-white">
                     <i class="fas fa-minus"></i> {{comment.user.username}}
@@ -82,7 +85,7 @@
                         <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
                     {% if app.user %}
-                    <a class="btn btn-primary" onclick="generateCommentForm(event)" href="{{path("answer_comment", {comment_id: comment.id})}}">
+                    <a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}" href="{{path("answer_comment", {comment_id: comment.id})}}">
                         <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
                     </a>
                     {% endif %}
@@ -115,8 +118,9 @@
                         {% endif %}
                     </div>    
                 </div>
-        </div>
             {% endfor %}
+        </div>
+        <div id="comment-form-holder-{{comment.id}}"></div> 
         {% endif %}
         {% endfor %}
     </div>

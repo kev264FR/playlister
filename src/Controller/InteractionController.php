@@ -27,27 +27,39 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl('app_login'));
-            // redirection vers le login en ajax si pas de user trouvé
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous devez ètre connecté'
+            ]);
         }
-        
-        $status = null;
 
         if ($playlist == null || !$playlist->getPublic()) {
-            return $this->json($status);
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Playliste privée ou non existente'
+            ]);
         }
 
         if ($this->getUser() == $playlist->getUser()) {
-            return $this->json($status);
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous ne pouvez pas liker votre propre playliste'
+            ]);
         }
 
         
         if ($user->getLikedPlaylists()->contains($playlist)) {
             $user->removeLikedPlaylist($playlist);
-            $status = false;
+            $status = [
+                "status"=>'success',
+                "data"=>'dislike'
+            ];
         }else{
             $user->addLikedPlaylist($playlist);
-            $status = true;
+            $status = [
+                "status"=>'success',
+                "data"=>'like'
+            ];
         }
 
         $manager->persist($user);
@@ -66,26 +78,38 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl('app_login'));
-            // redirection vers le login en ajax si pas de user trouvé
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous devez ètre connecté'
+            ]);
         }
-
-        $status = null;
         
         if ($playlist == null || !$playlist->getPublic()) {
-            return $this->json($status);
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Playliste privée ou non existante'
+            ]);
         }
 
         if ($user == $playlist->getUser()) {
-            return $this->json($status);
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous ne pouvez pas follow votre propre playliste'
+            ]);
         }
 
         if ($user->getFollowedPlaylists()->contains($playlist)) {
             $user->removeFollowedPlaylist($playlist);
-            $status = false;
+            $status = [
+                "status"=>'success',
+                "data"=>'unfollow'
+            ];
         }else{
             $user->addFollowedPlaylist($playlist);
-            $status = true;
+            $status = [
+                "status"=>'success',
+                "data"=>'follow'
+            ];
         }
 
         $manager->persist($user);
@@ -103,22 +127,31 @@ class InteractionController extends AbstractController
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
-            return $this->json($this->generateUrl('app_login'));
-            // redirection vers le login en ajax si pas de user trouvé
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous devez ètre connecté'
+            ]);
         }
-
-        $status = null;
         
         if ($user == $target) {
-            return $this->json($status);
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous ne pouvez pas vous follow'
+            ]);
         }
 
         if ($user->getFollowedUsers()->contains($target)) {
             $user->removeFollowedUser($target);
-            $status = false;
+            $status = [
+                "status"=>'success',
+                "data"=>'unfollow'
+            ];
         }else{
             $user->addFollowedUser($target);
-            $status = true;
+            $status = [
+                "status"=>'success',
+                "data"=>'follow'
+            ];
         }
 
         $manager->persist($user);
@@ -136,13 +169,17 @@ class InteractionController extends AbstractController
     public function postComment(Request $request, Playlist $playlist = null , Comment $parentComment = null){
         
         if (!$playlist && !$parentComment) {
-            $this->addFlash('error', 'Erreur');
-            return $this->redirectToRoute('playlists');
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Erreur'
+            ]);
         }
 
         if (!$this->getUser()) {
-            return $this->json($this->generateUrl('app_login'));
-            // redirection vers le login en ajax si pas de user trouvé
+            return $this->json([
+                "status"=>'error',
+                "data"=>'Vous devez ètre connecté'
+            ]);
         }
         
         $comment = new Comment();
@@ -167,25 +204,30 @@ class InteractionController extends AbstractController
             }
 
             if (!$playlist->getPublic()) {
-                $this->addFlash('error', 'Cette playliste est privée, les commentaires sont désactivés');
-                return $this->redirectToRoute('playlist_detail', [
-                    'id'=>$playlist->getId()
+                return $this->json([
+                    "status"=>'error',
+                    "data"=>'Playliste privée'
                 ]);
             }
 
             $manager->persist($comment);
             $manager->flush();
 
-            $data = $this->renderView('interaction/playlist_comment_part.html.twig', [
-                'playlist'=>$playlist
+            return $this->json([
+                "status"=>'success',
+                "data"=>$this->renderView('interaction/playlist_comment_part.html.twig', [
+                    'playlist'=>$playlist
+                ])
             ]);
-            return $this->json($data);
 
         }
-        $data = $this->renderView('interaction/comment_form.html.twig', [
-            'form'=>$form->createView()
-        ]); 
-        return $this->json($data);
+        
+        return $this->json([
+            'status'=>'success',
+            'data'=>$this->renderView('interaction/comment_form.html.twig', [
+                'form'=>$form->createView()
+            ])
+        ]);
     }
 
     /**

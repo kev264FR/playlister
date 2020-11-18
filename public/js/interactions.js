@@ -5,17 +5,24 @@ function handleLike(e) {
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
-            switch (res) {
-                case null: console.log("error")
+            switch (res.status) {
+                case 'success': 
+                                if (res.data == 'like') {
+                                    $(counter).html(+counter.html()+1)
+                                }else{
+                                    $(counter).html(+counter.html()-1)
+                                }
                     break;
-
-                case true: $(counter).html(+counter.html()+1)
-                    break;
-
-                case false: $(counter).html(+counter.html()-1)
-                    break;
-            
-                default: location.href = res
+                    
+                case 'error': 
+                                $("#alert-container").html(
+                                    "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                        res.data+
+                                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                            "<span aria-hidden='true'>&times;</span>"+
+                                        "</button>"+
+                                    "</div>"
+                                )
                     break;
             }
         })
@@ -31,17 +38,24 @@ function handleFollowPlaylist(e) {
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
-            switch (res) {
-                case null: console.log("error")
+            switch (res.status) {
+                case 'success': 
+                                if (res.data == 'follow') {
+                                    $(counter).html(+counter.html()+1)
+                                }else{
+                                    $(counter).html(+counter.html()-1)
+                                }
                     break;
-
-                case true: $(counter).html(+counter.html()+1)
-                    break;
-
-                case false: $(counter).html(+counter.html()-1)
-                    break;
-            
-                default: location.href = res
+                    
+                case 'error': 
+                                $("#alert-container").html(
+                                    "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                        res.data+
+                                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                            "<span aria-hidden='true'>&times;</span>"+
+                                        "</button>"+
+                                    "</div>"
+                                )
                     break;
             }
         })
@@ -52,22 +66,28 @@ function handleFollowPlaylist(e) {
 
 function handleFollowUser(e) {
     e.preventDefault()
-    console.log(e.currentTarget)
     
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
-            switch (res) {
-                case null: console.log("error")
-                    break;
-
-                case true: console.log("added")
-                    break;
-
-                case false: console.log("removed")
-                    break;
-            
-                default: location.href = res
+            switch (res.status) {
+                // case 'success': 
+                //                 if (res.data == 'follow') {
+                //                     $(counter).html(+counter.html()+1)
+                //                 }else{
+                //                     $(counter).html(+counter.html()-1)
+                //                 }
+                //     break;
+                    
+                case 'error': 
+                                $("#alert-container").html(
+                                    "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>"+
+                                        res.data+
+                                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>"+
+                                            "<span aria-hidden='true'>&times;</span>"+
+                                        "</button>"+
+                                    "</div>"
+                                )
                     break;
             }
         })

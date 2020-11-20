@@ -71,13 +71,14 @@ function handleFollowUser(e) {
         .then(res => res.json())
         .then(res => {
             switch (res.status) {
-                // case 'success': 
-                //                 if (res.data == 'follow') {
-                //                     $(counter).html(+counter.html()+1)
-                //                 }else{
-                //                     $(counter).html(+counter.html()-1)
-                //                 }
-                //     break;
+                case 'success': 
+                        if (res.data == "follow") {
+                            $(e.target).text('Ne plus suivre')
+                        }else{
+                            $(e.target).text('Follow user')
+                        }
+                                
+                    break;
                     
                 case 'error': 
                                 $("#alert-container").html(

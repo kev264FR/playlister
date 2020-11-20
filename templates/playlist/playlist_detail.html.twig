@@ -32,7 +32,7 @@
 
 <div id="content-part" class="d-flex flex-wrap">
     {% for content in playlist.contents %}
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 10rem;">
             <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
             <div class="card-body">
                 <h6>
@@ -42,7 +42,7 @@
                     ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
                 </p>
             </div>
-            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lancer la lecture</a>
+            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lecteur</a>
             {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
                     <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
@@ -75,7 +75,15 @@
         <div id="collection-{{comment.id}}">
             <div id="{{comment.id}}" class="card">
                 <div class="card-header small bg-info text-white">
-                    <i class="fas fa-minus"></i> {{comment.user.username}}
+                    <i class="fas fa-minus"></i>
+                    {% if comment.user %}
+                       <a class="text-white font-italic" href="{{path("public_profile", {id: comment.user.id})}}">
+                           {{comment.user.username}}
+                        </a>
+                    {% else %}
+                        deleted user
+                    {% endif %}
+                    
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
@@ -102,7 +110,14 @@
                     <div class="card-header small text-dark">
                         <i class="fas fa-minus"></i>
                         <i class="fas fa-minus"></i>
-                        {{answer.user.username}}                    
+                        {% if answer.user %}
+                            <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
+                                {{answer.user.username}}
+                            </a>
+                        {% else %}
+                            deleted user
+                        {% endif %}
+                                           
                     </div>
                     <div class="card-body">
                         <blockquote class="blockquote mb-0">

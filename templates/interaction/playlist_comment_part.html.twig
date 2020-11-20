@@ -5,7 +5,14 @@
 <div id="collection-{{comment.id}}">
     <div id="{{comment.id}}" class="card">
         <div class="card-header small bg-info text-white">
-            <i class="fas fa-minus"></i> {{comment.user.username}}
+            <i class="fas fa-minus"></i>
+            {% if comment.user %}
+            <a class="text-white font-italic" href="{{path("public_profile", {id: comment.user.id})}}">
+                {{comment.user.username}}
+            </a>
+            {% else %}
+            deleted user
+            {% endif %}
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
@@ -33,7 +40,14 @@
         <div class="card-header small text-dark">
             <i class="fas fa-minus"></i>
             <i class="fas fa-minus"></i>
-            {{answer.user.username}}
+            {% if answer.user %}
+            <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
+                {{answer.user.username}}
+            </a>
+            {% else %}
+            deleted user
+            {% endif %}
+
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
@@ -54,4 +68,3 @@
 <div id="comment-form-holder-{{comment.id}}"></div>
 {% endif %}
 {% endfor %}
-</div>

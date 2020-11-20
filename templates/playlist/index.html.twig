@@ -24,12 +24,10 @@
             {% if playlist.contents.count > 0 %}
                 {% set lastElement = playlist.contents.last %}
                 <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img">
-
                 {% else %}
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
             {% endif %}
-            
-          </div>
+        </div>
         <div class="col-md-4">
             <div class="card-body">
                 <h2 class="card-title text-center">
@@ -40,7 +38,7 @@
                         <i class="fas fa-thumbs-up"></i> {{playlist.likers.count}} 
                     </a>
                     <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary" onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-plus-square"></i> <span>{{playlist.followers.count}}</span>
+                        <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
                     </a>
                     {% if app.user and is_granted("ROLE_ADMIN") or app.user and app.user == playlist.user %}
                     <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
@@ -55,9 +53,18 @@
         </div>
         <div class="col-md-4">
             <div class="card-body small">
+                {% if playlist.user %}
                 <p class="card-text">
-                    Ajouté par : {{playlist.user.username}}
+                    Ajouté par : 
+                    <a class="font-italic" href="{{path("public_profile", {id: playlist.user.id})}}">
+                        {{playlist.user.username}}
+                     </a>
                 </p>
+                {% else %}
+                <p class="card-text">
+                    Ajouté par : deleted user
+                </p>
+                {% endif %}
                 <p class="card-text">
                     Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
                 </p>

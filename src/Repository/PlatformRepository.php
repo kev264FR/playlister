@@ -54,4 +54,12 @@ class PlatformRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult();
     }
+
+    public function findWhereUrl($url){
+        return $this->createQueryBuilder('p')
+                    ->andWhere("LOCATE(p.baseUrl, :url) = 1")
+                    ->setParameter('url', $url)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
 }

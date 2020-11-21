@@ -58,34 +58,32 @@ class ContentController extends AbstractController
                 ]);
             }
             
-            $platforms = $this->getDoctrine()
+            $platform = $this->getDoctrine()
                             ->getRepository(Platform::class)
-                            ->findAll();
+                            ->findWhereUrl($url);
 
-            foreach ($platforms as $platform) {
-                if (strpos($url, $platform->getBaseUrl()) !== false) {
-                    $content->setContentId(str_replace($platform->getBaseUrl(), '', $url));
-                    $content->setPlatform($platform);
-                    $content->setPlaylist($playlist);
-                    $content->setCreatedAt(new \DateTime());
-                    $playlist->setLastUpdate($content->getCreatedAt());
+            if ($platform) {
+                $content->setContentId(str_replace($platform->getBaseUrl(), '', $url));
+                $content->setPlatform($platform);
+                $content->setPlaylist($playlist);
+                $content->setCreatedAt(new \DateTime());
+                $playlist->setLastUpdate($content->getCreatedAt());
 
-                    $manager->persist($content);
-                    $manager->flush();
+                $manager->persist($content);
+                $manager->flush();
 
-                    return $this->json([
-                        'status'=>'success',
-                        'data'=> $this->renderView('content/content_part.html.twig', [
-                                'playlist'=>$playlist
-                        ])
-                    ]);
+                return $this->json([
+                    'status'=>'success',
+                    'data'=> $this->renderView('content/content_part.html.twig', [
+                            'playlist'=>$playlist
+                    ])
+                ]);
 
-                }else{
-                    return $this->json([
-                        'status'=>'error',
-                        'data'=>'Plateforme non prise en charge'
-                    ]);
-                }
+            }else{
+                return $this->json([
+                    'status'=>'error',
+                    'data'=>'Plateforme non prise en charge'
+                ]);
             }
             
         }
@@ -96,6 +94,9 @@ class ContentController extends AbstractController
                         'form'=>$form->createView()
             ])
         ]);
+        // return $this->render('content/content_form.html.twig', [
+        //     'form'=>$form->createView()
+        // ]);
     }
 
     /**

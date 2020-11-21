@@ -1,5 +1,5 @@
 {% for content in playlist.contents %}
-        <div class="card" style="width: 18rem;">
+        <div class="card" style="width: 10rem;">
             <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
             <div class="card-body">
                 <h6>
@@ -9,7 +9,7 @@
                     ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
                 </p>
             </div>
-            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lancer la lecture</a>
+            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lecteur</a>
             {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
                     <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
@@ -18,4 +18,27 @@
                 {% endif %}
             {% endif %}
         </div>
-{% endfor %}
+    {% endfor %}
+
+<script>
+        $(".btn-danger").confirm({
+            title: 'Confirmation',
+            content: 'Etes vous sûr de vouloir supprimer ?',
+            theme: 'supervan',
+            type: 'green',
+            buttons: {
+                ok: {
+                    text: "Continuer",
+                    action: function () {
+                        location.href = this.$target.attr('href');
+                    }
+                },
+                cancel: {
+                    text: "Retour",
+                    action: function () {
+                        console.log('the user clicked cancel');
+                    }
+                }
+            }
+        })
+    </script>

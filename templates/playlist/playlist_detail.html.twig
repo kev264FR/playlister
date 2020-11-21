@@ -3,9 +3,25 @@
 {% block body %}
 <h1 class="text-center">{{playlist.title}}</h1>
 
+{% if app.user != playlist.user %}
+<a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-lg btn-primary" onclick="handleLike(event)">
+    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+</a>
+<a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-lg btn-primary" onclick="handleFollowPlaylist(event)">
+    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+</a>
+{% endif %}
+
 {% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
 
 <a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}" onclick="generateContentForm(event)">Ajouter du contenu</a>
+
+<a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-lg btn-warning">
+    <i class="fas fa-edit"></i>
+</a>
+<a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-lg btn-danger">
+    <i class="fas fa-trash-alt"></i>
+</a>
 
 {% if playlist.public %}
         <a class="btn btn-primary btn-lg" href="{{path("playlist_make_private", {id: playlist.id})}}">Rendre privée</a>
@@ -15,7 +31,7 @@
 
 {% endif %}
 
-<hr id="player">
+<hr class="mt-1">
 <div id="content-form-holder" class="jumbotron bg-grey hide"></div>
 
 <div class="card player">
@@ -66,7 +82,6 @@
     {% endif %}
 
 
-    
     <div id="comment-part">
         {% for comment in playlist.comments %}
         {% if comment.answerFor == null %}

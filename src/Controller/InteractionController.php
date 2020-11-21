@@ -47,7 +47,6 @@ class InteractionController extends AbstractController
             ]);
         }
 
-        
         if ($user->getLikedPlaylists()->contains($playlist)) {
             $user->removeLikedPlaylist($playlist);
             $status = [
@@ -61,7 +60,7 @@ class InteractionController extends AbstractController
                 "data"=>'like'
             ];
         }
-
+        
         $manager->persist($user);
         $manager->flush();
 
@@ -102,13 +101,15 @@ class InteractionController extends AbstractController
             $user->removeFollowedPlaylist($playlist);
             $status = [
                 "status"=>'success',
-                "data"=>'unfollow'
+                "data"=>'unfollow',
+                "id"=>$playlist->getId()
             ];
         }else{
             $user->addFollowedPlaylist($playlist);
             $status = [
                 "status"=>'success',
-                "data"=>'follow'
+                "data"=>'follow',
+                "id"=>$playlist->getId()
             ];
         }
 
@@ -144,13 +145,15 @@ class InteractionController extends AbstractController
             $user->removeFollowedUser($target);
             $status = [
                 "status"=>'success',
-                "data"=>'unfollow'
+                "data"=>'unfollow',
+                "id"=>$target->getId()
             ];
         }else{
             $user->addFollowedUser($target);
             $status = [
                 "status"=>'success',
-                "data"=>'follow'
+                "data"=>'follow',
+                "id"=>$target->getId()
             ];
         }
 

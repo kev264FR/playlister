@@ -177,6 +177,7 @@ function handleClick(e) {
     let player = $(".player iframe")
     player.attr("src", $(e.currentTarget).data("url"))
     $("#embed").slideDown("slow")
+    $('html').animate({scrollTop: 100}, 'slow');
 }
 // -------------- GESTION MODAL IFRAME --------------
 

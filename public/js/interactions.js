@@ -44,6 +44,7 @@ function handleFollowPlaylist(e) {
                                     $(counter).html(+counter.html()+1)
                                 }else{
                                     $(counter).html(+counter.html()-1)
+                                    $('#followed-playlist-'+res.id).hide()
                                 }
                     break;
                     
@@ -74,10 +75,11 @@ function handleFollowUser(e) {
                 case 'success': 
                         if (res.data == "follow") {
                             $(e.target).text('Ne plus suivre')
+                            console.log(res.id)
                         }else{
                             $(e.target).text('Follow user')
-                        }
-                                
+                            $('#followed-user-'+res.id).hide()
+                        }        
                     break;
                     
                 case 'error': 

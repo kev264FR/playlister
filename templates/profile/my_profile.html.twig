@@ -16,7 +16,7 @@
         </h2>
         <hr>
         {% for playlist in app.user.followedPlaylists %}
-            <div class="card mb-3" style="max-width: 700px;">
+            <div id="followed-playlist-{{playlist.id}}" class="card mb-3" style="max-width: 700px;">
                 <div class="row no-gutters">
                     <div class="col-md-3">
                         {% if playlist.contents.count > 0 %}
@@ -44,7 +44,10 @@
                     <div class="col-md-4">
                         <div class="card-body small">
                             <p class="card-text">
-                                Ajouté par : {{playlist.user.username}}
+                                Ajouté par : 
+                                <a class="font-italic" href="{{path("public_profile", {id: playlist.user.id})}}">
+                                    {{playlist.user.username}}
+                                </a>
                             </p>
                             <p class="card-text">
                                 Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
@@ -64,7 +67,7 @@
         </h2>
         <hr>
         {% for user in app.user.followedUsers %}
-        <div class="card text-center">
+        <div id="followed-user-{{user.id}}" class="card text-center">
             <div class="row no-gutters">
                 <div class="col-md-4">
                     <i class="fas fa-user-circle fa-4x"></i>
@@ -80,7 +83,7 @@
                 </div>
                 <div class="col-md-4">
                     <p class="card-text">
-                        <a href="{{path("user_follow_user", {id: user.id})}}" class="btn btn-primary mt-1" onclick="handleFollowUser(event)">Ne plus suivre</a>
+                        <a href="{{path("user_follow_user", {id: user.id})}}" class="btn btn-primary mt-2" onclick="handleFollowUser(event)">Ne plus suivre</a>
                     </p>
                 </div>
             </div>

@@ -7,6 +7,7 @@
     Bonjour {{app.user.username}}
 </h1>
 <a class="btn btn-primary btn-lg" href="{{path("change_password")}}">Changer de mot de passe</a>
+<a class="btn btn-danger btn-lg" href="{{path("delete_account", {id: app.user.id})}}">Supprimer mon compte</a>
 <hr>
 
 <div class="row">

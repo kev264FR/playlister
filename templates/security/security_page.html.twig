@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+<h1 class="text-center">Verification de vote compte</h1>
+<hr>
+    {{form_start(form, {attr: {class: "user-form"}})}}
+
+        {{form_row(form.email)}}
+
+        {{form_row(form.password)}}
+
+
+        <input class="btn btn-danger" type="submit" value="Supprimer mon compte">
+    {{form_end(form)}}
+
+{% endblock %}

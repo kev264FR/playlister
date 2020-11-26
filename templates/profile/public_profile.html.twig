@@ -24,6 +24,8 @@
     <a href="{{path("ban_switch", {id: user.id})}}" class="btn btn-success">Ban</a>
     {% endif %}
 
+    <a href="{{path('delete_account', {id: user.id})}}" class="btn btn-danger">Supprimer le compte</a>
+
 {% endif %}
 
 {% if app.user and app.user == user %}

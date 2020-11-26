@@ -62,16 +62,8 @@ class ProfileController extends AbstractController
      */
     public function deleteAccount(Request $request, User $user = null){
         $manager = $this->getDoctrine()->getManager();
-        $form = $this->createForm(SecurityType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($user != $this->getUser() || $form->get('email')->getData() != $this->getUser()->getEmail() || !password_verify($form->get('password')->getData(), $this->getUser()->getPassword()) ) 
-            {
-                $this->addFlash('error', 'Email ou mot de passe invalide');
-                return $this->redirectToRoute('my_profile');
-            }
-            $this->get('security.token_storage')->setToken(null);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            
             foreach ($user->getFollowedUsers() as $followedUser) {
                 $user->removeFollowedUser($followedUser);
             }
@@ -93,13 +85,55 @@ class ProfileController extends AbstractController
             $manager->remove($user);
             $manager->flush();
 
-            $this->addFlash('success','Votre compte a bien été supprimé');
-            return $this->redirectToRoute('playlists');
+            $this->addFlash('success', 'Le compte utilisateur a été supprimé de la base de données');
+            return $this->redirectToRoute('users_admin');
+
+        }else {
+
+            $form = $this->createForm(SecurityType::class);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                if (
+                    $user != $this->getUser() || $form->get('email')->getData() != $this->getUser()->getEmail() 
+                    ||!password_verify($form->get('password')->getData(), $this->getUser()->getPassword())
+                ) 
+                {
+                    $this->addFlash('error', 'Email ou mot de passe invalide');
+                    return $this->redirectToRoute('my_profile');
+                }
+                
+                
+                $this->get('security.token_storage')->setToken(null);
+                foreach ($user->getFollowedUsers() as $followedUser) {
+                    $user->removeFollowedUser($followedUser);
+                }
+                foreach ($user->getFollowers() as $follower) {
+                    $user->removeFollower($follower);
+                }
+                foreach ($user->getMyPlaylists() as $myPlaylist) {
+                    $myPlaylist->setUser(null);
+                }
+                foreach ($user->getFollowedPlaylists() as $followedPlaylist) {
+                    $user->removeFollowedPlaylist($followedPlaylist);
+                }
+                foreach ($user->getLikedPlaylists() as $likedPlaylist) {
+                    $user->removeLikedPlaylist($likedPlaylist);
+                }
+                foreach ($user->getComments() as $comment) {
+                    $comment->setUser(null);
+                }
+                $manager->remove($user);
+                $manager->flush();
+
+                $this->addFlash('success','Votre compte a bien été supprimé');
+                return $this->redirectToRoute('playlists');
+                
+            }
             
+            return $this->render('security/security_page.html.twig', [
+                'form'=>$form->createView()
+            ]);
         }
-        
-        return $this->render('security/security_page.html.twig', [
-            'form'=>$form->createView()
-        ]);
     }
 }

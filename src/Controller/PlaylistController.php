@@ -79,18 +79,37 @@ class PlaylistController extends AbstractController
     /**
      * @Route("/playlist/delete/{id}", name="playlist_delete")
      */
-    public function deletePlaylist(Playlist $playlist = null){
+    public function deletePlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
-        if ($playlist->getContents()->count() == 0) {
-            $manager->remove($playlist);
-            $manager->flush();
 
-            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
-            return $this->redirectToRoute('playlists');
+        if ($request->headers->get('referer')) {
+            $redirect = $request->headers->get('referer');
+        }else{
+            $redirect = $this->generateUrl('playlists');
         }
 
-        $this->addFlash('error', 'Suppression impossible');
-        return $this->redirectToRoute('playlists');
+        if (!$playlist) {
+            $this->addFlash('error', 'Cette playliste n\'existe pas');
+            return $this->redirect($redirect);
+        }
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if ($this->getUser() != $playlist->getUser()) {
+                $this->addFlash('error', 'Suppression impossible, c\'ette playliste ne vous appartient pas');
+                return $this->redirect($redirect);
+            }
+        }
+        
+        if ($playlist->getContents()->count() != 0) {
+            $this->addFlash('error', 'Suppression impossible');
+            return $this->redirect($redirect);
+        }
+        
+        $manager->remove($playlist);
+        $manager->flush();
+
+        $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
+        return $this->redirect($redirect);
+
     }
 
     /**

@@ -27,11 +27,22 @@ class PlaylistController extends AbstractController
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAllPublic();
+            
+            foreach ($playlists as $playlist) {
+                if ($playlist->getLikers()->count() >= (isset($mostLiked)? $mostLiked->getLikers()->count(): 0) ) {
+                    $mostLiked = $playlist;
+                }
+                if ($playlist->getLikers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
+                    $mostFollowed = $playlist;
+                }
+            }
         }
-        
+
         return $this->render('playlist/index.html.twig', [
             'playlists'=>$playlists,
-            'search'=>$search
+            'search'=>$search,
+            'mostLiked'=>$mostLiked,
+            'mostFollowed'=>$mostFollowed
         ]);
     }
 

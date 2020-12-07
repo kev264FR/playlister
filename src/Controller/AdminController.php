@@ -109,7 +109,7 @@ class AdminController extends AbstractController
         }else{
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
-                        ->findAll();
+                        ->getAll();
         }
         
         return $this->render('playlist/index.html.twig', [

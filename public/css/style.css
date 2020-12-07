@@ -42,3 +42,11 @@
 .blockquote{
     font-size: initial;
 }
+
+.gold {
+    background-color:rgba(166, 124, 0, 0.62);
+}
+
+.d-flex{
+    justify-content: center;
+}

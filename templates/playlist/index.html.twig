@@ -3,7 +3,7 @@
 
 {% block body %}
 
-<h1 class="text-center">Les Playlistes</h1>
+<h1 class="text-center">Playlister</h1>
 
 {% if search != null %}
 <h4 class="text-center">
@@ -16,6 +16,158 @@
 {% endif %}
 
 <hr>
+{% if mostLiked is defined and mostFollowed is defined %}
+<div class="row jumbotron gold">
+    <div class="col">
+        <h2 class="text-center">
+            La plus liké
+        </h2>
+        <div class="card" style="width: 18rem;">
+            {% if mostLiked.contents.count > 0 %}
+            {% set lastElement = mostLiked.contents.last %}
+            <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img-top">
+            {% else %}
+            <img src="{{asset("img/no-image-available.png")}}" class="card-img-top" alt="Pas d'image disponible">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a href="{{path("playlist_detail", {id: mostLiked.id})}}">{{mostLiked.title}}</a>
+                </h4>
+                <div class="card-text">
+                    <div class="small">
+                        {% if mostLiked.user %}
+                        <p class="card-text">
+                            Ajouté par :
+                            <a class="font-italic" href="{{path("public_profile", {id: mostLiked.user.id})}}">
+                                {{mostLiked.user.username}}
+                            </a>
+                        </p>
+                        {% else %}
+                        <p class="card-text">
+                            Ajouté par : deleted user
+                        </p>
+                        {% endif %}
+                        <p>
+                            Ajouté le : {{mostLiked.createdAt | date("d/m/Y H:i")}}
+                        </p>
+                        {% if mostLiked.lastUpdate != null %}
+                        <p class="text-muted">Mise a jour le : {{mostLiked.lastUpdate | date("d/m/Y H:i")}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="py-1">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{{path("user_like", {id: mostLiked.id})}}" class="btn btn-sm btn-primary"
+                                    onclick="handleLike(event)">
+                                    <i class="fas fa-thumbs-up"></i> <span>{{mostLiked.likers.count}}</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{path("user_follow_playlist", {id: mostLiked.id})}}" class="btn btn-sm btn-primary"
+                                    onclick="handleFollowPlaylist(event)">
+                                    <i class="fas fa-user"></i> <span>{{mostLiked.followers.count}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if app.user and is_granted("ROLE_ADMIN") or app.user and app.user == mostLiked.user %}
+                    <div class="py-1">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{{path("playlist_edit", {id: mostLiked.id})}}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{path("playlist_delete", {id: mostLiked.id})}}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h2 class="text-center">
+            La plus suivie
+        </h2>
+        <div class="card" style="width: 18rem;">
+            {% if mostFollowed.contents.count > 0 %}
+            {% set lastElement = mostFollowed.contents.last %}
+            <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img-top">
+            {% else %}
+            <img src="{{asset("img/no-image-available.png")}}" class="card-img-top" alt="Pas d'image disponible">
+            {% endif %}
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a href="{{path("playlist_detail", {id: mostFollowed.id})}}">{{mostFollowed.title}}</a>
+                </h4>
+                <div class="card-text">
+                    <div class="small">
+                        {% if mostFollowed.user %}
+                        <p>
+                            Ajouté par :
+                            <a class="font-italic" href="{{path("public_profile", {id: mostFollowed.user.id})}}">
+                                {{mostFollowed.user.username}}
+                            </a>
+                        </p>
+                        {% else %}
+                        <p>
+                            Ajouté par : deleted user
+                        </p>
+                        {% endif %}
+                        <p>
+                            Ajouté le : {{mostFollowed.createdAt | date("d/m/Y H:i")}}
+                        </p>
+                        {% if mostFollowed.lastUpdate != null %}
+                        <p class="text-muted">Mise a jour le : {{mostFollowed.lastUpdate | date("d/m/Y H:i")}}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <div class="py-1">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{{path("user_like", {id: mostFollowed.id})}}" class="btn btn-sm btn-primary"
+                                    onclick="handleLike(event)">
+                                    <i class="fas fa-thumbs-up"></i> <span>{{mostFollowed.likers.count}}</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{path("user_follow_playlist", {id: mostFollowed.id})}}" class="btn btn-sm btn-primary"
+                                    onclick="handleFollowPlaylist(event)">
+                                    <i class="fas fa-user"></i> <span>{{mostFollowed.followers.count}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% if app.user and is_granted("ROLE_ADMIN") or app.user and app.user == mostFollowed.user %}
+                    <div class="py-1">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <a href="{{path("playlist_edit", {id: mostFollowed.id})}}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item">
+                                <a href="{{path("playlist_delete", {id: mostFollowed.id})}}" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% for playlist in playlists %}
 <div class="card mb-3">
@@ -32,27 +184,27 @@
             <h4 class="card-title">
                 <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
             </h4>
-            <div class="small">
+            <div class="card-text small">
                 {% if playlist.user %}
-                <p class="card-text">
+                <p>
                     Ajouté par :
                     <a class="font-italic" href="{{path("public_profile", {id: playlist.user.id})}}">
                         {{playlist.user.username}}
                     </a>
                 </p>
                 {% else %}
-                <p class="card-text">
+                <p>
                     Ajouté par : deleted user
                 </p>
                 {% endif %}
             </div>
         </div>
-        <div class="col-md-3 card-body small p-3">
-            <p class="card-text">
+        <div class="col-md-3 card-body small p-3 card-text">
+            <p>
                 Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
             </p>
             {% if playlist.lastUpdate != null %}
-            <p class="card-text text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
+            <p class="text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
             {% endif %}
         </div>
         <div class="col-md-2 card-body d-flex">

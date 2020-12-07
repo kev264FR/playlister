@@ -44,6 +44,11 @@ class Platform
      */
     private $imgUrl;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $api;
+
     public function __construct()
     {
         $this->contents = new ArrayCollection();
@@ -128,6 +133,18 @@ class Platform
     public function setImgUrl(?string $imgUrl): self
     {
         $this->imgUrl = $imgUrl;
+
+        return $this;
+    }
+
+    public function getApi(): ?string
+    {
+        return $this->api;
+    }
+
+    public function setApi(?string $api): self
+    {
+        $this->api = $api;
 
         return $this;
     }

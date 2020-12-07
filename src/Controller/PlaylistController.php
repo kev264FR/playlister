@@ -73,6 +73,7 @@ class PlaylistController extends AbstractController
         return $this->render('playlist/playlist_form.html.twig', [
             'form'=>$form->createView(),
             'edit'=>$edit,
+            'playlist'=>$playlist
         ]);
     }
 
@@ -100,15 +101,31 @@ class PlaylistController extends AbstractController
         }
         
         if ($playlist->getContents()->count() != 0) {
-            $this->addFlash('error', 'Suppression impossible');
+            $this->addFlash('error', 'Suppression impossible, videz la playliste avant de la supprimer');
             return $this->redirect($redirect);
         }
+
+        foreach ($playlist->getLikers() as $liker) {
+            $liker->removeLikedPlaylist($playlist);
+        }
+
+        foreach ($playlist->getFollowers() as $follower) {
+            $follower->removeFollowedPlaylist($playlist);
+        }
+
+        foreach ($playlist->getComments() as $comment) {
+            foreach ($comment->getAnswers() as $answer) {
+                $manager->remove($answer);
+            }
+            $manager->remove($comment);
+        }
+        
         
         $manager->remove($playlist);
         $manager->flush();
 
         $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
-        return $this->redirect($redirect);
+        return $this->redirectToRoute('playlists');
 
     }
 
@@ -121,6 +138,16 @@ class PlaylistController extends AbstractController
             $this->addFlash('error', 'Cette playlist est privée ou n\'existe pas');
             return $this->redirectToRoute('playlists');
         }
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if (!$playlist->getPublic()) {
+                if ($playlist->getUser() != $this->getUser()) {
+                    $this->addFlash('error', 'Cette playlist est privée ou n\'existe pas');
+                    return $this->redirectToRoute('playlists');
+                }
+            }
+        }
+        
         
         return $this->render('playlist/playlist_detail.html.twig', [
                 'playlist'=>$playlist,
@@ -137,6 +164,10 @@ class PlaylistController extends AbstractController
         if ($playlist == null) {
             $this->addFlash('error', 'Cette playlist n\'existe pas');
             return $this->redirectToRoute('playlists');
+        }
+        if ($playlist->getContents()->count() == 0) {
+            $this->addFlash('error', 'Cette playlist est vide, vous ne pouvez pas changer sa visibilité');
+            return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
         }
         if ($playlist->getPublic()) {
             $playlist->setPublic(false);

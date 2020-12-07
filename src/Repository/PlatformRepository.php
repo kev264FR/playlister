@@ -50,7 +50,7 @@ class PlatformRepository extends ServiceEntityRepository
 
     public function getAll(){
         return $this->createQueryBuilder('p')
-                    ->select('p.id, p.name, p.baseUrl, p.targetUrl, p.imgUrl')
+                    ->select('p.id, p.name, p.baseUrl, p.targetUrl, p.imgUrl, p.api')
                     ->getQuery()
                     ->getResult();
     }

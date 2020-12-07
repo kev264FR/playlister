@@ -51,34 +51,72 @@ class ContentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $form->get('url')->getData();
-            if (!$content->getTitle() || !$url) {
+            if (!$url) {
                 return $this->json([
                     'status'=>'error',
                     'data'=>'Formulaire non complet'
                 ]);
-            }
+            }            
             
             $platform = $this->getDoctrine()
                             ->getRepository(Platform::class)
                             ->findWhereUrl($url);
 
             if ($platform) {
-                $content->setContentId(str_replace($platform->getBaseUrl(), '', $url));
-                $content->setPlatform($platform);
-                $content->setPlaylist($playlist);
-                $content->setCreatedAt(new \DateTime());
-                $playlist->setLastUpdate($content->getCreatedAt());
 
-                $manager->persist($content);
-                $manager->flush();
+                $videoId = str_replace($platform->getBaseUrl(), '', $url);
+                $curl = curl_init(str_replace('_content_', $videoId, $platform->getApi()));
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); //Return data instead printing directly in Browser
+                    $result = curl_exec($curl);
+                curl_close($curl);
+                $result = json_decode($result, true);
+                
+                switch ($platform->getName()) {
+                    case 'youtube':
+                            if (array_key_exists(0, $result['items'])) {
+                                $title = $result['items'][0]['snippet']['title'];
+                            }else $title = null;
+                        break;
 
-                return $this->json([
-                    'status'=>'success',
-                    'data'=> $this->renderView('content/content_part.html.twig', [
-                            'playlist'=>$playlist
-                    ])
-                ]);
+                    case 'dailymotion':
+                            if (array_key_exists('title', $result)) {
+                                $title = $result['title'];
+                                
+                            }else $title = null;
+                        break;
 
+                    default:
+                            $title = null;
+                        break;
+                }
+                
+                
+                
+                if ($title) {
+                    $content->setContentId($videoId);
+                    $content->setTitle($title);
+                    $content->setPlatform($platform);
+                    $content->setPlaylist($playlist);
+                    $content->setCreatedAt(new \DateTime());
+                    $playlist->setLastUpdate($content->getCreatedAt());
+
+
+                    $manager->persist($content);
+                    $manager->flush();
+                    
+
+                    return $this->json([
+                        'status'=>'success',
+                        'data'=> $this->renderView('content/content_part.html.twig', [
+                                'playlist'=>$playlist
+                        ])
+                    ]);
+                }else{
+                    return $this->json([
+                        'status'=>'error',
+                        'data'=>'Vidéo non trouvé'
+                    ]);
+                }
             }else{
                 return $this->json([
                     'status'=>'error',
@@ -94,9 +132,6 @@ class ContentController extends AbstractController
                         'form'=>$form->createView()
             ])
         ]);
-        // return $this->render('content/content_form.html.twig', [
-        //     'form'=>$form->createView()
-        // ]);
     }
 
     /**
@@ -108,9 +143,15 @@ class ContentController extends AbstractController
             $this->addFlash('error', 'Contenu non trouvé');
             return $this->redirectToRoute('playlists');
         }
-        if ($content->getPlaylist()->getUser() != $this->getUser()) {
+        $playlist = $content->getPlaylist();
+        if ($playlist->getUser() != $this->getUser()) {
             $this->addFlash('error', 'Vous ne pouvez pas modifier cette playlist');
             return $this->redirectToRoute('playlists');
+        }
+
+        
+        if ($playlist->getContents()->count() == 1) {
+            $playlist->setPublic(false);
         }
 
         $manager = $this->getDoctrine()->getManager();
@@ -118,7 +159,7 @@ class ContentController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('playlist_detail', [
-            'id'=>$content->getPlaylist()->getId()
+            'id'=>$playlist->getId()
         ]);
     }
 }

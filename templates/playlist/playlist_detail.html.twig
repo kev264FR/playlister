@@ -69,6 +69,7 @@
         </div>
     {% endfor %}
 </div>
+{% if playlist.public %}
 <div>
     <hr>
     <h3 class="text-center">
@@ -83,9 +84,9 @@
 
 
     <div id="comment-part">
+        <div id="comment-form-holder"></div>
         {% for comment in playlist.comments %}
         {% if comment.answerFor == null %}
-        <div id="comment-form-holder"></div>
         <hr class="bg-dark">
         <div id="collection-{{comment.id}}">
             <div id="{{comment.id}}" class="card">
@@ -122,7 +123,7 @@
             </div>
             {% for answer in comment.answers %}
                 <div id="{{answer.id}}" class="card mr-0" style="max-width: 65rem;">
-                    <div class="card-header small text-dark">
+                    <div class="card-header small text-dark bg-answer">
                         <i class="fas fa-minus"></i>
                         <i class="fas fa-minus"></i>
                         {% if answer.user %}
@@ -155,6 +156,15 @@
         {% endfor %}
     </div>
 </div>
+{% else %}
+    
+<div>
+    <hr>
+    <h3 class="text-center">
+        Espace commentaire désactivé
+    </h3>
+</div>
+{% endif %}
 
 {% endblock %}
 

@@ -23,7 +23,14 @@ class AdminController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig');
+        $playlists = $this->getDoctrine()
+                            ->getRepository(Playlist::class)
+                            ->getLastCreated();
+
+
+        return $this->render('admin/index.html.twig', [
+            'playlists'=>$playlists
+        ]);
     }
 
     /**

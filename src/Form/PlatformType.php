@@ -16,6 +16,7 @@ class PlatformType extends AbstractType
             ->add('baseUrl')
             ->add('targetUrl')
             ->add('imgUrl')
+            ->add('api')
         ;
     }
 

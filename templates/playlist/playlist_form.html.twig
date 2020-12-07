@@ -1,6 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+{% if edit %}
+<h1 class="text-center">
+    Modification du titre de la playliste {{playlist.title}}
+</h1>
+{% else %}
+<h1 class="text-center">
+    Création d'une playliste
+</h1>
+{% endif %}
+<hr>
 
 {{form_start(form, {attr: {class: "user-form"}})}}
     {{form_row(form.title)}}

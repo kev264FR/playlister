@@ -12,7 +12,6 @@ class ContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title')
             ->add('url', null, [
                 'mapped'=>false
             ])

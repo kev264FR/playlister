@@ -1,6 +1,6 @@
+<div id="comment-form-holder"></div>
 {% for comment in playlist.comments %}
 {% if comment.answerFor == null %}
-<div id="comment-form-holder"></div>
 <hr class="bg-dark">
 <div id="collection-{{comment.id}}">
     <div id="{{comment.id}}" class="card">

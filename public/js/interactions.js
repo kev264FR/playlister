@@ -100,6 +100,7 @@ function handleFollowUser(e) {
 }
 
 
-function goBack() {
-  window.history.back()
+function goBack(e) {
+    e.preventDefault()
+    window.history.back()
 }

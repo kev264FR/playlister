@@ -61,7 +61,7 @@
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="#" title="Retour" class="nav-link text-info" onclick="goBack()"><i class="fas fa-chevron-left"></i> Retour</a>
+                    <a href="#" title="Retour" class="nav-link text-info" onclick="goBack(event)"><i class="fas fa-chevron-left"></i> Retour</a>
                 </li>
                 {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") %}

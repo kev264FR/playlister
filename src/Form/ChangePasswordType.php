@@ -23,7 +23,7 @@ class ChangePasswordType extends AbstractType
 
             ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'The password fields must match.',
+                'invalid_message' => 'Les mots de passe ne correspondent pas',
                 'required' => true,
                 'first_options'  => ['label' => 'Nouveau mot de passe :'],
                 'second_options' => ['label' => 'Repeter le nouveau mot de passe :'],

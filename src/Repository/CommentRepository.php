@@ -47,4 +47,13 @@ class CommentRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllForPlaylist($id){
+        return $this->createQueryBuilder('c')
+                    ->andWhere('c.playlist = :playlist')
+                    ->setParameter('playlist', $id)
+                    ->orderBy('c.createdAt', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+    }
 }

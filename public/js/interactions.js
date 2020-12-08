@@ -98,3 +98,8 @@ function handleFollowUser(e) {
             console.log(err)
         })
 }
+
+
+function goBack() {
+  window.history.back()
+}

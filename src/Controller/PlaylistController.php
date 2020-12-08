@@ -18,6 +18,9 @@ class PlaylistController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $mostLiked = null;
+        $mostFollowed = null;
+
         $search = $request->get('search');
         if ($search) {
             $playlists = $this->getDoctrine()
@@ -32,7 +35,7 @@ class PlaylistController extends AbstractController
                 if ($playlist->getLikers()->count() >= (isset($mostLiked)? $mostLiked->getLikers()->count(): 0) ) {
                     $mostLiked = $playlist;
                 }
-                if ($playlist->getLikers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
+                if ($playlist->getFollowers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
                     $mostFollowed = $playlist;
                 }
             }
@@ -159,9 +162,13 @@ class PlaylistController extends AbstractController
             }
         }
         
+        $comments = $this->getDoctrine()
+                            ->getRepository(Comment::class)
+                            ->getAllForPlaylist($playlist->getId());
         
         return $this->render('playlist/playlist_detail.html.twig', [
                 'playlist'=>$playlist,
+                'comments'=>$comments
         ]);
         
     }

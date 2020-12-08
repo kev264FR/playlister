@@ -40,14 +40,16 @@ class ProfileController extends AbstractController
     public function changePassword(Request $request, UserPasswordEncoderInterface $encoder){
         $form = $this->createForm(ChangePasswordType::class);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             if (password_verify($form->get('oldPassword')->getData(), $this->getUser()->getPassword())) {
                 $this->getDoctrine()
                         ->getRepository(User::class)
                         ->upgradePassword($this->getUser(), $encoder->encodePassword($this->getUser(), $form->get('newPassword')->getData() ));
 
-                return $this->redirectToRoute('app_logout');
+                $this->get('security.token_storage')->setToken(null);
+                $this->addFlash('success', 'Votre mot de passe a bien été changé, vous pouvez désormais vous ré-identifier');
+                return $this->redirectToRoute('app_login');
             }else{
                 $this->addFlash('error', 'Mauvais mot de passe');
                 return $this->redirectToRoute('change_password');

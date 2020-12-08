@@ -33,24 +33,36 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    {% if finder is not defined %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        {% set finder = path("playlists_admin") %}
+                        {% set placeholder = 'Recherche Admin' %}
+                    {% else %}
                         {% set finder = path("playlists") %}
+                        {% set placeholder = 'Recherche' %}
                     {% endif %}
                     <form action="{{finder}}" class="form-inline my-2 my-lg-0">
                         {% if search is defined %}
-                        <input class="form-control mr-sm-2" type="search" placeholder="Recherche" name="search" value="{{search}}">
+                        <input class="form-control mr-sm-2" type="search" placeholder="{{placeholder}}" name="search" value="{{search}}">
                         {% else %}
-                        <input class="form-control mr-sm-2" type="search" placeholder="Recherche" name="search" value="">
+                        <input class="form-control mr-sm-2" type="search" placeholder="{{placeholder}}" name="search" value="">
                         {% endif %}
                         
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                        {% else %}
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
                             <i class="fas fa-search"></i>
                         </button>
+                        {% endif %}
                     </form>
                 </li>
             </ul>
-
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#" title="Retour" class="nav-link text-info" onclick="goBack()"><i class="fas fa-chevron-left"></i> Retour</a>
+                </li>
                 {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item">
@@ -71,9 +83,7 @@
                     <a class="nav-link text-light" href="{{path("app_register")}}">S'inscrire</a>
                 </li>
                 {% endif %}
-
             </ul>
-
         </div>
     </nav>
     <div class="container">

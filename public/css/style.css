@@ -3,7 +3,7 @@
 }
 
 .card{
-    margin: 5px auto;
+    margin: 5px 0;
 }
 
 .user-form{
@@ -47,6 +47,13 @@
     background-color:rgba(166, 124, 0, 0.62);
 }
 
-.d-flex{
+.d-flex-center{
+    display: flex;
     justify-content: center;
+}
+
+.delete-button{
+    position: absolute;
+    top: 0;
+    right: 0;
 }

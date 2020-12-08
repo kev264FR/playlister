@@ -1,72 +1,122 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-<h1 class="text-center">{{playlist.title}}</h1>
+<h1 class="text-center h2">{{playlist.title}}</h1>
 
-{% if app.user != playlist.user %}
-<a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-lg btn-primary" onclick="handleLike(event)">
-    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-</a>
-<a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-lg btn-primary" onclick="handleFollowPlaylist(event)">
-    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-</a>
-{% endif %}
 
-{% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
 
-<a class="btn btn-success btn-lg" href="{{path("content_add", {id: playlist.id})}}" onclick="generateContentForm(event)">Ajouter du contenu</a>
 
-<a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-lg btn-warning">
-    <i class="fas fa-edit"></i>
-</a>
-<a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-lg btn-danger">
-    <i class="fas fa-trash-alt"></i>
-</a>
-
-{% if playlist.public %}
-        <a class="btn btn-primary btn-lg" href="{{path("playlist_make_private", {id: playlist.id})}}">Rendre privée</a>
-    {% else %}   
-        <a class="btn btn-primary btn-lg" href="{{path("playlist_make_public", {id: playlist.id})}}">Rendre public</a>
-{% endif %}
-
-{% endif %}
 
 <hr class="mt-1">
 <div id="content-form-holder" class="jumbotron bg-grey hide"></div>
+
+<div class="d-flex-center d-sm-none">
+    {% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
+    <p>
+        <a class="btn btn-success" href="{{path("content_add", {id: playlist.id})}}"
+            onclick="generateContentForm(event)"><i class="fas fa-plus-circle"></i></a>
+
+        <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+        </a>
+        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i>
+        </a>
+
+        {% if playlist.public %}
+        <a class="btn btn-success" href="{{path("playlist_make_private", {id: playlist.id})}}"><i class="fas fa-eye"></i></a>
+        {% else %}
+        <a class="btn btn-primary" href="{{path("playlist_make_public", {id: playlist.id})}}"><i class="fas fa-eye-slash"></i></a>
+        {% endif %}
+    </p>
+    {% endif %}
+</div>
 
 <div class="card player">
     <div class="card-header text-center">
         <h5 class="card-title">Lecteur</h5>
     </div>
     <div id="embed" class="embed-responsive embed-responsive-16by9 hide">
-        <iframe class="embed-responsive-item" src="" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write;
-            encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+        <iframe class="embed-responsive-item" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture;" allowfullscreen autoplay>
         </iframe>
     </div>
 </div>
+<div class="d-flex justify-content-between">
+    <p>
+        Créateur :
+        {% if playlist.user %}
+        <a class="font-italic" href="{{path("public_profile", {id: playlist.user.id})}}">
+            {{playlist.user.username}}
+        </a>
+        {% else %}
+        deleted user
+        {% endif %}
+    </p>
+    {% if app.user == playlist.user or is_granted("ROLE_ADMIN") %}
+    <p class="d-none d-sm-block">
+        <a class="btn btn-success" href="{{path("content_add", {id: playlist.id})}}"
+            onclick="generateContentForm(event)"><i class="fas fa-plus-circle"></i></a>
 
-<div id="content-part" class="d-flex flex-wrap">
+        <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-warning">
+            <i class="fas fa-edit"></i>
+        </a>
+        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i>
+        </a>
+
+        {% if playlist.public %}
+        <a class="btn btn-success" href="{{path("playlist_make_private", {id: playlist.id})}}"><i class="fas fa-eye"></i></a>
+        {% else %}
+        <a class="btn btn-primary" href="{{path("playlist_make_public", {id: playlist.id})}}"><i class="fas fa-eye-slash"></i></a>
+        {% endif %}
+    </p>
+    {% endif %}
+    {% if app.user != playlist.user %}
+    <p>
+        <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-primary" onclick="handleLike(event)">
+            <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+        </a>
+        <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-primary"
+            onclick="handleFollowPlaylist(event)">
+            <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+        </a>
+    </p>
+    {% else %}
+    <p>
+        <a href="#" class="btn btn-primary disabled">
+            <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+        </a>
+        <a href="#" class="btn btn-primary disabled">
+            <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+        </a>
+    </p>
+    {% endif %}
+</div>
+
+<div id="content-part" class="d-flex justify-content-between flex-wrap">
     {% for content in playlist.contents %}
-        <div class="card" style="width: 10rem;">
-            <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
-            <div class="card-body">
-                <h6>
-                    {{content.title}}
-                </h6>
-                <p class="card-text small text-muted">
-                    ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
-                </p>
-            </div>
-            <a class="btn selectors btn-lg btn-primary" href="#" data-url="{{content.platform.targetUrl ~ content.contentId}}" onclick="handleClick(event)">Lecteur</a>
-            {% if app.user %}
-                {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
-                    <a class="btn btn-lg btn-danger" href="{{path("delete_content", {id: content.id})}}">
-                        <i class="fas fa-trash-alt"></i>
-                    </a>
-                {% endif %}
-            {% endif %}
+    <div class="card position-relative" style="width: 15rem;">
+        <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
+        <div class="card-body">
+            <h6>
+                {{content.title}}
+            </h6>
+            <p class="card-text small text-muted">
+                ajouté le : {{content.createdAt | date("d/m/Y H:i")}}
+            </p>
         </div>
+        <a class="btn selectors btn-lg btn-primary" href="#"
+            data-url="{{content.platform.targetUrl | replace({"_content_": content.contentId})}}"
+            onclick="handleClick(event)">Lecteur</a>
+        {% if app.user %}
+        {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
+        <a class="btn btn-danger delete-button" href="{{path("delete_content", {id: content.id})}}">
+            <i class="fas fa-trash-alt"></i>
+        </a>
+        {% endif %}
+        {% endif %}
+    </div>
     {% endfor %}
 </div>
 {% if playlist.public %}
@@ -75,9 +125,10 @@
     <h3 class="text-center">
         Espace commentaire
     </h3>
-    
+
     {% if app.user %}
-    <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)" href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
+    <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)"
+        href="{{path("comment_playlist", {playlist_id: playlist.id})}}">
         <i class="fas fa-comment-dots"></i> Poster un commentaire <i class="fas fa-comment-dots"></i>
     </a>
     {% endif %}
@@ -85,7 +136,7 @@
 
     <div id="comment-part">
         <div id="comment-form-holder"></div>
-        {% for comment in playlist.comments %}
+        {% for comment in comments %}
         {% if comment.answerFor == null %}
         <hr class="bg-dark">
         <div id="collection-{{comment.id}}">
@@ -93,13 +144,13 @@
                 <div class="card-header small bg-info text-white">
                     <i class="fas fa-minus"></i>
                     {% if comment.user %}
-                       <a class="text-white font-italic" href="{{path("public_profile", {id: comment.user.id})}}">
-                           {{comment.user.username}}
-                        </a>
+                    <a class="text-white font-italic" href="{{path("public_profile", {id: comment.user.id})}}">
+                        {{comment.user.username}}
+                    </a>
                     {% else %}
-                        deleted user
+                    deleted user
                     {% endif %}
-                    
+
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
@@ -109,11 +160,13 @@
                         <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
                     {% if app.user %}
-                    <a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}" href="{{path("answer_comment", {comment_id: comment.id})}}">
-                        <i class="fas fa-comment-dots"></i> Participer a la discussion <i class="fas fa-comment-dots"></i>
+                    <a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}"
+                        href="{{path("answer_comment", {comment_id: comment.id})}}">
+                        <i class="fas fa-comment-dots"></i> Participer a la discussion <i
+                            class="fas fa-comment-dots"></i>
                     </a>
                     {% endif %}
-                    
+
                     {% if app.user and is_granted("ROLE_ADMIN") %}
                     <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger">
                         <i class="fas fa-trash-alt"></i>
@@ -122,42 +175,42 @@
                 </div>
             </div>
             {% for answer in comment.answers %}
-                <div id="{{answer.id}}" class="card mr-0" style="max-width: 65rem;">
-                    <div class="card-header small text-dark bg-answer">
-                        <i class="fas fa-minus"></i>
-                        <i class="fas fa-minus"></i>
-                        {% if answer.user %}
-                            <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
-                                {{answer.user.username}}
-                            </a>
-                        {% else %}
-                            deleted user
-                        {% endif %}
-                                           
-                    </div>
-                    <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p>
-                                {{answer.text}}
-                            </p>
-                            <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
-                        </blockquote>
-                        {% if app.user and is_granted("ROLE_ADMIN") %}
-                            <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
-                        {% endif %}
-                    </div>    
+            <div id="{{answer.id}}" class="card mr-0" style="max-width: 65rem;">
+                <div class="card-header small text-dark bg-answer">
+                    <i class="fas fa-minus"></i>
+                    <i class="fas fa-minus"></i>
+                    {% if answer.user %}
+                    <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
+                        {{answer.user.username}}
+                    </a>
+                    {% else %}
+                    deleted user
+                    {% endif %}
+
                 </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>
+                            {{answer.text}}
+                        </p>
+                        <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
+                    </blockquote>
+                    {% if app.user and is_granted("ROLE_ADMIN") %}
+                    <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
         </div>
-        <div id="comment-form-holder-{{comment.id}}"></div> 
+        <div id="comment-form-holder-{{comment.id}}"></div>
         {% endif %}
         {% endfor %}
     </div>
 </div>
 {% else %}
-    
+
 <div>
     <hr>
     <h3 class="text-center">
@@ -169,6 +222,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{parent()}}
-    <script src="{{asset("js/playlist_detail.js")}}"></script>
+{{parent()}}
+<script src="{{asset("js/playlist_detail.js")}}"></script>
 {% endblock %}

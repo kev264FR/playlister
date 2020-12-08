@@ -43,7 +43,6 @@ class AdminController extends AbstractController
                         
         return $this->render('admin/platforms_list.html.twig', [
             'platforms'=>$platforms,
-            'finder'=>$this->generateUrl('playlists_admin')
         ]);
     }
 
@@ -72,7 +71,6 @@ class AdminController extends AbstractController
         return $this->render('admin/platform_form.html.twig', [
             'form'=>$form->createView(),
             'edit'=>$edit,
-            'finder'=>$this->generateUrl('playlists_admin')
         ]);
     }
 
@@ -101,6 +99,9 @@ class AdminController extends AbstractController
      * @Route("/playlists", name="playlists_admin")
      */
     public function listAllPlaylists(Request $request){
+        $mostLiked = null;
+        $mostFollowed = null;
+
         $search = $request->get('search');
         if ($search) {
             $playlists = $this->getDoctrine()
@@ -110,12 +111,22 @@ class AdminController extends AbstractController
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAll();
+                
+            foreach ($playlists as $playlist) {
+                if ($playlist->getLikers()->count() >= (isset($mostLiked)? $mostLiked->getLikers()->count(): 0) ) {
+                    $mostLiked = $playlist;
+                }
+                if ($playlist->getFollowers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
+                    $mostFollowed = $playlist;
+                }
+            }
         }
         
         return $this->render('playlist/index.html.twig', [
             'playlists'=>$playlists,
             'search'=>$search,
-            'finder'=>$this->generateUrl('playlists_admin')
+            'mostLiked'=>$mostLiked,
+            'mostFollowed'=>$mostFollowed
         ]);
     }
 

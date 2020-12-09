@@ -6,10 +6,10 @@
 <div class="list-group list-group-horizontal text-center">
     <a href="{{path("change_password")}}" class="list-group-item list-group-item-action text-light bg-primary">Changer de mot de passe</a>
     <a href="{{path("delete_account", {id: app.user.id})}}" class="list-group-item list-group-item-action text-light bg-danger">Supprimer mon compte</a>
-    <a href="{{path("users_admin")}}" class="list-group-item list-group-item-action text-light bg-success"><i class="fas fa-plus-square"></i> Playliste</a>
+    <a href="{{path("playlist_new")}}" class="list-group-item list-group-item-action text-light bg-success"><i class="fas fa-plus-square"></i> Playliste</a>
 </div>
 
-<h1 class="text-center">
+<h1 class="text-center display-2">
     Bonjour {{app.user.username}}
 </h1>
 <hr>
@@ -21,41 +21,62 @@
         </h2>
         <hr>
         {% if app.user.followedPlaylists.count > 0 %}
-        {% for playlist in app.user.followedPlaylists %}
-        {% if playlist.public %}
-            <div id="followed-playlist-{{playlist.id}}" class="card mb-3">
+
+        <div class="d-flex-center">
+            {% for playlist in app.user.followedPlaylists %}
+            {% if playlist.public %}
+            <div class="card mb-3" style="width: 540px;">
                 <div class="row no-gutters">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         {% if playlist.contents.count > 0 %}
-                            {% set lastElement = playlist.contents.last %}
-                            <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img">
-                            {% else %}
-                            <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
+                        {% set lastElement = playlist.contents.last %}
+                        <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
+                            class="card-img">
+                        {% else %}
+                        <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                         {% endif %}
-                    </div>
-                    <div class="col-md-4 align-self-center">
-                        <div class="card-body">
-                            <h4 class="card-title text-center">
-                                <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
-                            </h4>
+                        <div class="row mt-1 mx-0 justify-evenly">
+                            <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
+                                onclick="handleLike(event)">
+                                <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+                            </a>
+                            <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary"
+                                onclick="handleFollowPlaylist(event)">
+                                <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-4 align-self-center">
+                    <div class="col-md-8">
                         <div class="card-body">
-                            <p class="card-text text-center">
-                                <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary" onclick="handleLike(event)">
-                                    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                                </a>
-                                <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary" onclick="handleFollowPlaylist(event)">
-                                    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                                </a>
+                            <h5 class="card-title">
+                                <a href="{{path('playlist_detail', {id: playlist.id})}}">{{playlist.title}}</a>
+                            </h5>
+                            <p class="card-text">
+                                Ajouté par :
+                                {% if playlist.user %}
+                                    <a class="font-italic" href="{{path("public_profile", {id: playlist.user.id})}}">
+                                        {{playlist.user.username}}
+                                    </a>
+                                {% else %}
+                                    Utilisateur supprimé
+                                {% endif %}
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    {% if playlist.lastUpdate %}
+                                    Dernière modification il y a {{dateDiff(playlist.lastUpdate)}}
+                                    {% else %}
+                                    Création il y a {{dateDiff(playlist.createdAt)}}
+                                    {% endif %}
+                                </small>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-        {% endif %}   
-        {% endfor %}
+            {% endif %}
+            {% endfor %}
+        </div>
         {% else %}
         <p class="text-center">
             Vous ne suivez aucune playliste.
@@ -106,63 +127,97 @@
         </h2>
         <hr>
         {% if app.user.myPlaylists.count > 0 %}
-        {% for playlist in app.user.myPlaylists %}
-        <div class="card mb-3">
-            <div class="row no-gutters">
-                <div class="col-md-3">
-                    {% if playlist.contents.count > 0 %}
+        <div class="d-flex flex-wrap justify-content-xl-between justify-content-md-center">
+            {% set counter = 0%}
+            {% for playlist in app.user.myplaylists %}
+            {% set counter = counter + 1 %}
+            {% if counter %2 == 0 %}
+            <div class="card mb-3" style="width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-8 order-2">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{path('playlist_detail', {id: playlist.id})}}">{{playlist.title}}</a>
+                            </h5>
+                            <p class="card-text">
+                                Créée le :
+                                {{playlist.createdAt | date('d/m/y à h:i')}}
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    {% if playlist.lastUpdate %}
+                                    Dernière modification il y a {{dateDiff(playlist.lastUpdate)}}
+                                    {% else %}
+                                    Création le {{dateDiff(playlist.createdAt)}}
+                                    {% endif %}
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 order-1 order-md-3">
+                        {% if playlist.contents.count > 0 %}
                         {% set lastElement = playlist.contents.last %}
-                        <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}" class="card-img">
+                        <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
+                            class="card-img">
                         {% else %}
                         <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
-                    {% endif %}
-                </div>
-                <div class="col-md-3 card-body p-3 align-self-center">
-                    <h4 class="card-title">
-                        <a href="{{path("playlist_detail", {id: playlist.id})}}">{{playlist.title}}</a>
-                    </h4>
-                </div>
-                <div class="col-md-3 card-body small p-3 align-self-center">
-                    <p class="card-text">
-                        Ajouté le : {{playlist.createdAt | date("d/m/Y H:i")}}
-                    </p>
-                    {% if playlist.lastUpdate != null %}
-                        <p class="card-text text-muted">Mise a jour le : {{playlist.lastUpdate | date("d/m/Y H:i")}}</p>
-                    {% endif %}
-                </div>
-                <div class="col-md-2 card-body d-flex">
-                    <div class="py-1">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a href="#" class="btn btn-sm btn-primary disabled">
-                                    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="#" class="btn btn-sm btn-primary disabled">
-                                    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="py-1">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
-                            </li>
-                        </ul>
+                        {% endif %}
+                        <div class="row mt-1 mx-0 justify-evenly">
+                            <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="card mb-3" style="width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        {% if playlist.contents.count > 0 %}
+                        {% set lastElement = playlist.contents.last %}
+                        <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
+                            class="card-img">
+                        {% else %}
+                        <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
+                        {% endif %}
+                        <div class="row mt-1 mx-0 justify-evenly">
+                            <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{path('playlist_detail', {id: playlist.id})}}">{{playlist.title}}</a>
+                            </h5>
+                            <p class="card-text">
+                                Créée le :
+                                {{playlist.createdAt | date('d/m/y à h:i')}}
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    {% if playlist.lastUpdate %}
+                                    Dernière modification il y a {{dateDiff(playlist.lastUpdate)}}
+                                    {% else %}
+                                    Création il y a {{dateDiff(playlist.createdAt)}}
+                                    {% endif %}
+                                </small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
         </div>
-        {% endfor %}
         {% else %}
         <p class="text-center">
             Vous n'avez aucune playliste.

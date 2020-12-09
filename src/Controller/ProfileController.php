@@ -25,7 +25,7 @@ class ProfileController extends AbstractController
      */
     public function index(User $user = null): Response
     {
-        if (!$user) {
+        if (!$user || $this->getUser() == $user) {
             return $this->render('profile/my_profile.html.twig');
         }
 

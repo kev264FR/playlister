@@ -36,12 +36,15 @@ class ContentController extends AbstractController
             ]);
         }
 
-        if ($this->getUser() != $playlist->getUser()) {
-            return $this->json([
-                'status'=>'error',
-                'data'=>'Cette playliste n\'est pas a vous'
-            ]);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if ($this->getUser() != $playlist->getUser()) {
+                return $this->json([
+                    'status'=>'error',
+                    'data'=>'Cette playliste n\'est pas a vous'
+                ]);
+            }
         }
+        
 
         $manager = $this->getDoctrine()->getManager();
 

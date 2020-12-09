@@ -84,7 +84,7 @@ class PlaylistRepository extends ServiceEntityRepository
     public function getLastCreated(){
         return $this->createQueryBuilder('p')
                     ->orderBy('p.createdAt', 'DESC')
-                    ->setMaxResults(4)
+                    ->setMaxResults(8)
                     ->getQuery()
                     ->getResult();
     }

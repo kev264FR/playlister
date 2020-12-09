@@ -2,8 +2,8 @@
     min-height: 90px;
 }
 
-.card{
-    margin: 5px 0;
+#embed{
+    background-color: black;
 }
 
 .user-form{
@@ -56,4 +56,8 @@
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.justify-evenly{
+    justify-content: space-evenly;
 }

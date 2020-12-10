@@ -69,20 +69,14 @@
     {% endif %}
     {% if app.user != playlist.user %}
     <p>
-        <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-primary" onclick="handleLike(event)">
-            <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-        </a>
-        <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-primary"
-            onclick="handleFollowPlaylist(event)">
-            <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-        </a>
+        {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
     </p>
     {% else %}
     <p>
-        <a href="#" class="btn btn-primary disabled">
+        <a href="#" class="btn btn-primary btn-sm disabled">
             <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
         </a>
-        <a href="#" class="btn btn-primary disabled">
+        <a href="#" class="btn btn-primary btn-sm disabled">
             <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
         </a>
     </p>

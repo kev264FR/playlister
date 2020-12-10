@@ -1,0 +1,40 @@
+{% if app.user %}
+{% if app.user in playlist.likers %}
+<a id="like-btn-{{playlist.id}}" href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-success"
+    onclick="handleLike(event)">
+    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+</a>
+{% else %}
+<a id="like-btn-{{playlist.id}}" href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
+    onclick="handleLike(event)">
+    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+</a>
+{% endif %}
+
+{% else %}
+<a id="like-btn-{{playlist.id}}" href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
+    onclick="handleLike(event)">
+    <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
+</a>
+{% endif %}
+
+
+{% if app.user %}
+{% if app.user in playlist.followers %}
+<a id="follow-btn-{{playlist.id}}" href="{{path("user_follow_playlist", {id: playlist.id})}}"
+    class="btn btn-sm btn-success" onclick="handleFollowPlaylist(event)">
+    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+</a>
+{% else %}
+<a id="follow-btn-{{playlist.id}}" href="{{path("user_follow_playlist", {id: playlist.id})}}"
+    class="btn btn-sm btn-primary" onclick="handleFollowPlaylist(event)">
+    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+</a>
+{% endif %}
+
+{% else %}
+<a id="follow-btn-{{playlist.id}}" href="{{path("user_follow_playlist", {id: playlist.id})}}"
+    class="btn btn-sm btn-primary" onclick="handleFollowPlaylist(event)">
+    <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
+</a>
+{% endif %}

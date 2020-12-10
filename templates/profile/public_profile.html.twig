@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<div class="list-group list-group-horizontal text-center">
+<div class="list-group list-group-horizontal text-center justify-content-center">
     {% if app.user and is_granted("ROLE_ADMIN") and app.user != user %}
         {% if 'ROLE_ADMIN' in user.roles %}
             <a id="remove-admin" href="{{path("admin_switch", {id: user.id})}}" class="list-group-item list-group-item-action text-dark bg-warning">
@@ -29,12 +29,12 @@
     {% endif %}
 
     {% if user in app.user.followedUsers %}
-        <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" onclick="handleFollowUser(event)">
+        <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" style="max-width: 278px;" onclick="handleFollowUser(event)">
             Ne plus suivre
         </a>
     {% else %}
-        <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" onclick="handleFollowUser(event)">
-            Follow user
+        <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" style="max-width: 278px;" onclick="handleFollowUser(event)">
+            Suivre
         </a>
     {% endif %}
 
@@ -82,14 +82,7 @@
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                    </a>
+                    {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
                 </div>
             </div>
         </div>
@@ -106,14 +99,7 @@
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                    </a>
+                    {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
                 </div>
             </div>
             <div class="col-md-8">

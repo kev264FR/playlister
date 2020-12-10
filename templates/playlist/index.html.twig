@@ -61,14 +61,7 @@
                     </p>
                 </div>
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: mostLiked.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{mostLiked.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: mostLiked.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{mostLiked.followers.count}}</span>
-                    </a>
+                    {{ include("interaction/btn_group.html.twig", {playlist: mostLiked})  }}
                 </div>
             </div>
         </div>
@@ -112,14 +105,7 @@
                     </p>
                 </div>
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: mostFollowed.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{mostFollowed.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: mostFollowed.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{mostFollowed.followers.count}}</span>
-                    </a>
+                    {{ include("interaction/btn_group.html.twig", {playlist: mostFollowed})  }}
                 </div>
             </div>
         </div>
@@ -170,14 +156,7 @@
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                    </a>
+                    {% include "interaction/btn_group.html.twig" %}
                 </div>
             </div>
         </div>
@@ -194,14 +173,7 @@
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}
                 <div class="row mt-1 mx-0 justify-evenly">
-                    <a href="{{path("user_like", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleLike(event)">
-                        <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
-                    </a>
-                    <a href="{{path("user_follow_playlist", {id: playlist.id})}}" class="btn btn-sm btn-primary"
-                        onclick="handleFollowPlaylist(event)">
-                        <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
-                    </a>
+                    {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
                 </div>
             </div>
             <div class="col-md-8">

@@ -88,4 +88,47 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult();
     }
+
+    public function getMostLikedPublic(){
+        return $this->createQueryBuilder('p')
+                    ->select('p, SIZE(p.likers) as likers')
+                    ->where("p.public = 1")
+                    ->groupBy('p.id')
+                    ->orderBy('likers', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    public function getMostFollowedPublic(){
+        return $this->createQueryBuilder('p')
+                    ->select('p, SIZE(p.followers) as followers')
+                    ->where("p.public = 1")
+                    ->groupBy('p.id')
+                    ->orderBy('followers', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    public function getMostLiked(){
+        return $this->createQueryBuilder('p')
+                    ->select('p, SIZE(p.likers) as likers')
+                    ->groupBy('p.id')
+                    ->orderBy('likers', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+
+    public function getMostFollowed(){
+        return $this->createQueryBuilder('p')
+                    ->select('p, SIZE(p.followers) as followers')
+                    ->groupBy('p.id')
+                    ->orderBy('followers', 'DESC')
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+    }
+    
 }

@@ -105,21 +105,20 @@ class AdminController extends AbstractController
         $search = $request->get('search');
         if ($search) {
             $playlists = $this->getDoctrine()
-                            ->getRepository(Playlist::class)
-                            ->getAllNamed($search);
+                        ->getRepository(Playlist::class)
+                        ->getAllNamed($search);
         }else{
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAll();
-                
-            foreach ($playlists as $playlist) {
-                if ($playlist->getLikers()->count() >= (isset($mostLiked)? $mostLiked->getLikers()->count(): 0) ) {
-                    $mostLiked = $playlist;
-                }
-                if ($playlist->getFollowers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
-                    $mostFollowed = $playlist;
-                }
-            }
+
+            $mostLiked = $this->getDoctrine()
+                        ->getRepository(Playlist::class)
+                        ->getMostLiked()[0];
+
+            $mostFollowed = $this->getDoctrine()
+                            ->getRepository(Playlist::class)
+                            ->getMostFollowed()[0];
         }
         
         return $this->render('playlist/index.html.twig', [
@@ -146,11 +145,20 @@ class AdminController extends AbstractController
     /**
      * @Route("/toggle/admin/{id}", name="admin_switch")
      */
-    public function adminSwitch(User $user = null){
+    public function adminSwitch(Request $request, User $user = null){
         if (!$user) {
             $this->addFlash('error', 'User not found');
             return $this->redirectToRoute('users_admin');
         }
+
+        if ($request->headers->get('referer')) {
+            $redirect = $request->headers->get('referer');
+        }else{
+            $redirect = $this->generateUrl('public_profile', [
+                'id'=>$user->getId()
+            ]);
+        }
+
         $manager = $this->getDoctrine()->getManager();
 
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
@@ -160,19 +168,26 @@ class AdminController extends AbstractController
         }
         $manager->flush();
 
-        return $this->redirectToRoute('public_profile', [
-            'id'=>$user->getId()
-        ]);
+        return $this->redirect($redirect);
     }
 
     /**
      * @Route("/toggle/ban/{id}", name="ban_switch")
      */
-    public function banSwitch(User $user = null){
+    public function banSwitch(Request $request, User $user = null){
         if (!$user) {
             $this->addFlash('error', 'User not found');
             return $this->redirectToRoute('users_admin');
         }
+
+        if ($request->headers->get('referer')) {
+            $redirect = $request->headers->get('referer');
+        }else{
+            $redirect = $this->generateUrl('public_profile', [
+                'id'=>$user->getId()
+            ]);
+        }
+
         $manager = $this->getDoctrine()->getManager();
 
         if (in_array('ROLE_BANNED', $user->getRoles())) {
@@ -182,8 +197,6 @@ class AdminController extends AbstractController
         }
         $manager->flush();
 
-        return $this->redirectToRoute('public_profile', [
-            'id'=>$user->getId()
-        ]);
+        return $this->redirect($redirect);
     }
 }

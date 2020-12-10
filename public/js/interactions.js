@@ -34,7 +34,7 @@ function handleLike(e) {
 function handleFollowPlaylist(e) {
     e.preventDefault()
     let counter = $(e.currentTarget).children("span")
-    
+    let followedPlaylistsCount;
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
@@ -45,6 +45,12 @@ function handleFollowPlaylist(e) {
                                 }else{
                                     $(counter).html(+counter.html()-1)
                                     $('#followed-playlist-'+res.id).hide()
+                                    $('#followed-playlist-'+res.id).removeClass('show-playlist')
+
+                                    followedPlaylistsCount =  $('#followed-playlist-part').children('.show-playlist').length
+                                    if (followedPlaylistsCount == 0) {
+                                        $('#followed-playlist-part').replaceWith('<p class="text-center"> Vous ne suivez aucune playliste.</p>')
+                                    }
                                 }
                     break;
                     
@@ -67,6 +73,7 @@ function handleFollowPlaylist(e) {
 
 function handleFollowUser(e) {
     e.preventDefault()
+    let followedUsersCount;
     
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
@@ -75,11 +82,16 @@ function handleFollowUser(e) {
                 case 'success': 
                         if (res.data == "follow") {
                             $(e.target).text('Ne plus suivre')
-                            console.log(res.id)
                         }else{
                             $(e.target).text('Follow user')
                             $('#followed-user-'+res.id).hide()
-                        }        
+                            $('#followed-user-'+res.id).removeClass('show-playlist')
+
+                            followedUsersCount =  $('#followed-user-part').children('.show-playlist').length
+                            if (followedUsersCount == 0) {
+                                $('#followed-user-part').replaceWith('<p class="text-center">Vous ne suivez personne.</p>')
+                            }
+                        }     
                     break;
                     
                 case 'error': 
@@ -104,3 +116,4 @@ function goBack(e) {
     e.preventDefault()
     window.history.back()
 }
+

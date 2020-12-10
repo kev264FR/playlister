@@ -18,6 +18,7 @@ class PlaylistController extends AbstractController
      */
     public function index(Request $request): Response
     {
+
         $mostLiked = null;
         $mostFollowed = null;
 
@@ -30,16 +31,19 @@ class PlaylistController extends AbstractController
             $playlists = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAllPublic();
-            
-            foreach ($playlists as $playlist) {
-                if ($playlist->getLikers()->count() >= (isset($mostLiked)? $mostLiked->getLikers()->count(): 0) ) {
-                    $mostLiked = $playlist;
-                }
-                if ($playlist->getFollowers()->count() >= (isset($mostFollowed)? $mostFollowed->getFollowers()->count(): 0) ) {
-                    $mostFollowed = $playlist;
-                }
-            }
+
+           $mostLiked = $this->getDoctrine()
+                        ->getRepository(Playlist::class)
+                        ->getMostLikedPublic()[0];
+
+            $mostFollowed = $this->getDoctrine()
+                            ->getRepository(Playlist::class)
+                            ->getMostFollowedPublic()[0]; 
+
         }
+
+        
+
 
         return $this->render('playlist/index.html.twig', [
             'playlists'=>$playlists,

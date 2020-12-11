@@ -61,3 +61,17 @@
 .justify-evenly{
     justify-content: space-evenly;
 }
+
+.follows {
+    max-height: 500px;
+}
+
+@media (max-width: 600px){
+    .follows{
+        background-color: rgb(189, 189, 189);
+        max-height: 400px;
+        border: 2px solid black;
+        border-radius: 0.25rem;
+        padding: 10px;
+    }
+}

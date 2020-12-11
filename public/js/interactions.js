@@ -6,6 +6,7 @@ function handleLike(e) {
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
+            // console.log(err)
             switch (res.status) {
                 case 'success': 
                                 if (res.data == 'like') {
@@ -32,7 +33,7 @@ function handleLike(e) {
             }
         })
         .catch(function (err) {
-            console.log(err)
+            // console.log(err)
         })
 }
 // {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
@@ -46,6 +47,7 @@ function handleFollowPlaylist(e) {
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
+            // console.log(err)
             switch (res.status) {
                 case 'success': 
                                 if (res.data == 'follow') {
@@ -79,7 +81,7 @@ function handleFollowPlaylist(e) {
             }
         })
         .catch(function (err) {
-            console.log(err)
+            // console.log(err)
         })
 }
 
@@ -90,6 +92,7 @@ function handleFollowUser(e) {
     fetch($(e.currentTarget).attr("href"))
         .then(res => res.json())
         .then(res => {
+            // console.log(err)
             switch (res.status) {
                 case 'success': 
                         if (res.data == "follow") {
@@ -119,7 +122,7 @@ function handleFollowUser(e) {
             }
         })
         .catch(function (err) {
-            console.log(err)
+            // console.log(err)
         })
 }
 

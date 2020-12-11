@@ -4,6 +4,7 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
@@ -13,11 +14,22 @@ class SecurityType extends AbstractType
     {
         $builder
 
-            ->add('email')
+            ->add('email', null, [
+                'constraints' => [
+                    new NotBlank([
+                        'message'=> 'Ce champ est obligatoire'
+                    ])
+                ]
+            ])
             
             ->add('password', PasswordType::class, [
                 'mapped'=>false,
-                'label'=>'Mot de passe actuel :'
+                'label'=>'Mot de passe actuel :',
+                'constraints' => [
+                    new NotBlank([
+                        'message'=> 'Ce champ est obligatoire'
+                    ])
+                ]
             ])
         ;
     }

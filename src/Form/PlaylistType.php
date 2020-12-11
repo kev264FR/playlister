@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class PlaylistType extends AbstractType
 {
@@ -17,11 +18,13 @@ class PlaylistType extends AbstractType
                 'label'=> 'Titre de la playlist :' ,
                 'constraints'=>[
                     new Length([
-                        'min' => 1,
-                        'maxMessage' => 'Le titre de la playlist peux contenir au maximum {{ limit }} characters',
+                        'maxMessage' => 'Le titre de la playlist peux contenir au maximum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 20,
                     ]),
+                    new NotBlank([
+                        'message'=> 'Ce champ est obligatoire'
+                    ])
                 ]
             ])
         ;

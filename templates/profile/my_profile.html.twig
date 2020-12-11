@@ -22,7 +22,7 @@
         <hr>
         {% if app.user.followedPlaylists.count > 0 %}
 
-        <div id="followed-playlist-part" class="d-flex-center flex-wrap">
+        <div id="followed-playlist-part" class="d-flex-center flex-wrap overflow-auto follows">
             {% for playlist in app.user.followedPlaylists %}
             {% if playlist.public %}
             <div id="followed-playlist-{{playlist.id}}" class="card show-playlist mb-3" style="width: 540px;">
@@ -82,7 +82,7 @@
         </h2>
         <hr>
         {% if app.user.followedUsers.count > 0 %}
-        <div id="followed-user-part" class="d-flex-center">
+        <div id="followed-user-part" class="d-flex-center overflow-auto follows">
             {% for user in app.user.followedUsers %}
             <div id="followed-user-{{user.id}}" class="card mb-3" style="width: 340px;">
                 <div class="row no-gutters">

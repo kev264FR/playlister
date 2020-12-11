@@ -18,7 +18,12 @@ class ChangePasswordType extends AbstractType
         $builder
             ->add('oldPassword', PasswordType::class, [
                 'mapped'=>false,
-                'label'=>'Mot de passe actuel :'
+                'label'=>'Mot de passe actuel :',
+                'constraints' => [
+                    new NotBlank([
+                        'message'=> 'Ce champ est obligatoire'
+                    ])
+                ]
             ])
 
             ->add('newPassword', RepeatedType::class, [
@@ -34,9 +39,10 @@ class ChangePasswordType extends AbstractType
                     ]),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} characteres',
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+                        'maxMessage' => 'Votre mot de passe peut contenir au maximum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 32,
                     ]),
                 ],
             ])

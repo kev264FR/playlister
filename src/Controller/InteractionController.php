@@ -226,7 +226,7 @@ class InteractionController extends AbstractController
         }
         
         return $this->json([
-            'status'=>'success',
+            'status'=>'success-form',
             'data'=>$this->renderView('interaction/comment_form.html.twig', [
                 'form'=>$form->createView()
             ])

@@ -130,7 +130,7 @@ class ContentController extends AbstractController
         }
 
         return $this->json([
-            'status'=>'success',
+            'status'=>'success-form',
             'data'=> $this->renderView('content/content_form.html.twig', [
                         'form'=>$form->createView()
             ])

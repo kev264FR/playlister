@@ -36,14 +36,14 @@ class InteractionController extends AbstractController
         if ($playlist == null || !$playlist->getPublic()) {
             return $this->json([
                 "status"=>'error',
-                "data"=>'Playliste privée ou non existente'
+                "data"=>'playlist privée ou non existente'
             ]);
         }
 
         if ($this->getUser() == $playlist->getUser()) {
             return $this->json([
                 "status"=>'error',
-                "data"=>'Vous ne pouvez pas liker votre propre playliste'
+                "data"=>'Vous ne pouvez pas liker votre propre playlist'
             ]);
         }
 
@@ -86,14 +86,14 @@ class InteractionController extends AbstractController
         if ($playlist == null || !$playlist->getPublic()) {
             return $this->json([
                 "status"=>'error',
-                "data"=>'Playliste privée ou non existante'
+                "data"=>'playlist privée ou non existante'
             ]);
         }
 
         if ($user == $playlist->getUser()) {
             return $this->json([
                 "status"=>'error',
-                "data"=>'Vous ne pouvez pas follow votre propre playliste'
+                "data"=>'Vous ne pouvez pas follow votre propre playlist'
             ]);
         }
 
@@ -209,7 +209,7 @@ class InteractionController extends AbstractController
             if (!$playlist->getPublic()) {
                 return $this->json([
                     "status"=>'error',
-                    "data"=>'Playliste privée'
+                    "data"=>'playlist privée'
                 ]);
             }
 

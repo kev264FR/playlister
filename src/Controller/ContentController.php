@@ -40,7 +40,7 @@ class ContentController extends AbstractController
             if ($this->getUser() != $playlist->getUser()) {
                 return $this->json([
                     'status'=>'error',
-                    'data'=>'Cette playliste n\'est pas a vous'
+                    'data'=>'Cette playlist n\'est pas a vous'
                 ]);
             }
         }

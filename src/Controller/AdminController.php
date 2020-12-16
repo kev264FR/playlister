@@ -71,6 +71,7 @@ class AdminController extends AbstractController
         return $this->render('admin/platform_form.html.twig', [
             'form'=>$form->createView(),
             'edit'=>$edit,
+            'platform'=>$platform
         ]);
     }
 
@@ -125,7 +126,8 @@ class AdminController extends AbstractController
             'playlists'=>$playlists,
             'search'=>$search,
             'mostLiked'=>$mostLiked,
-            'mostFollowed'=>$mostFollowed
+            'mostFollowed'=>$mostFollowed,
+            'admin'=>true
         ]);
     }
 

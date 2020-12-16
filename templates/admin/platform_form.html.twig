@@ -1,6 +1,34 @@
-{% extends "base.html.twig" %}
+{% extends 'base_admin.html.twig' %}
+
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("admin_home")}}">
+            Espace Admin
+        </a>            
+    </li>
+    {% if edit %}
+    <li class="breadcrumb-item">
+        <a href="{{path("platform_edit", {id: platform.id})}}">
+            {{platform.name}}
+        </a>            
+    </li>
+    {% else %}
+    <li class="breadcrumb-item">
+        <a href="{{path("platform_add")}}">
+            Nouvelle plateforme
+        </a>            
+    </li>
+    {% endif %}
+{% endblock %}
 
 {% block body %}
+{% if edit %}
+<h1 class="text-center display-2">Modification de {{platform.name}}</h1>
+{% else %}
+<h1 class="text-center display-2">Ajouter une plateforme</h1>
+{% endif %}
+
 
 {{form_start(form)}}
 

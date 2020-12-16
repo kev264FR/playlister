@@ -1,9 +1,31 @@
 {% extends "base.html.twig" %}
 
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("my_profile")}}">
+            {{app.user.username}}
+        </a>            
+    </li>
+    {% if edit %}
+    <li class="breadcrumb-item">
+        <a href="{{path("playlist_edit", {id: playlist.id})}}">
+            {{playlist.title}}
+        </a>            
+    </li>
+    {% else %}
+    <li class="breadcrumb-item">
+        <a href="{{path("playlist_new")}}">
+            Nouvelle playlist
+        </a>            
+    </li>
+    {% endif %}
+{% endblock %}
+
 {% block body %}
 {% if edit %}
 <h1 class="text-center">
-    Modification du titre de la playliste {{playlist.title}}
+    Modification du titre de la playlist {{playlist.title}}
 </h1>
 {% else %}
 <h1 class="text-center">

@@ -1,8 +1,22 @@
-{% extends "base.html.twig" %}
+{% extends 'base_admin.html.twig' %}
 
 {% block stylesheets %}
     {{parent()}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("admin_home")}}">
+            Espace Admin
+        </a>            
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{path("users_admin")}}">
+            Les utilisateurs
+        </a>            
+    </li>
 {% endblock %}
 
 {% block body %}

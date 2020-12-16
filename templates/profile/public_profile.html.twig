@@ -1,5 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("public_profile", {id: user.id})}}">
+            {{user.username}}
+        </a>            
+    </li>
+{% endblock %}
+
 {% block body %}
 
 <div class="list-group list-group-horizontal text-center justify-content-center">

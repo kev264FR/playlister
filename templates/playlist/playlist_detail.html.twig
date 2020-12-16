@@ -1,5 +1,25 @@
 {% extends "base.html.twig" %}
 
+{% block breadcrumb %}
+    {{parent()}}
+    {% if playlist.user %}
+    <li class="breadcrumb-item">
+        <a href="{{path("public_profile", {id: playlist.user.id})}}">
+            {{playlist.user.username}}
+        </a>            
+    </li>
+    {% else %}
+    <li class="breadcrumb-item">
+        Utilisateur supprimé            
+    </li>
+    {% endif %}
+    <li class="breadcrumb-item">
+        <a href="{{path("playlist_detail", {id: playlist.id})}}">
+            {{playlist.title}}
+        </a>            
+    </li>
+{% endblock %}
+
 {% block body %}
 <h1 class="text-center text-break display-3 mb-5">{{playlist.title}}</h1>
 

@@ -1,5 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_admin.html.twig' %}
 
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("admin_home")}}">
+            Espace Admin
+        </a>            
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{path("platforms_list")}}">
+            Les plateformes
+        </a>            
+    </li>
+{% endblock %}
 
 {% block body %}
 <h1 class="text-center">

@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 
-{% block body %}
+{% block breadcrumb %}
+{% if admin is defined and admin == true %}
+<li class="breadcrumb-item">
+    <a href="{{path("admin_home")}}">
+        Espace Admin
+    </a>            
+</li>
+{% endif %}
+{% endblock %}
 
+{% block body %}
 <h1 class="text-center display-1">Playlister</h1>
 
 {% if search != null %}

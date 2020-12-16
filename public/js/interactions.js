@@ -1,6 +1,5 @@
 function handleLike(e) {
     e.preventDefault()
-    let counter = $(e.currentTarget).children("span")
     let btnId = '#' + $(e.currentTarget).attr('id')
 
     fetch($(e.currentTarget).attr("href"))
@@ -10,13 +9,11 @@ function handleLike(e) {
             switch (res.status) {
                 case 'success':
                     if (res.data == 'like') {
-                        $(counter).html(+counter.html() + 1)
-                        $(btnId).removeClass('btn-primary')
-                        $(btnId).addClass('btn-success')
+                        $(btnId).removeClass('btn-outline-dark')
+                        $(btnId).addClass('btn-dark')
                     } else {
-                        $(counter).html(+counter.html() - 1)
-                        $(btnId).removeClass('btn-success')
-                        $(btnId).addClass('btn-primary')
+                        $(btnId).removeClass('btn-dark')
+                        $(btnId).addClass('btn-outline-dark')
                     }
                     break;
 
@@ -39,7 +36,6 @@ function handleLike(e) {
 // {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
 function handleFollowPlaylist(e) {
     e.preventDefault()
-    let counter = $(e.currentTarget).children("span")
     let btnId = '#' + $(e.currentTarget).attr('id')
     let followedPlaylistsCount;
 
@@ -51,15 +47,13 @@ function handleFollowPlaylist(e) {
             switch (res.status) {
                 case 'success':
                     if (res.data == 'follow') {
-                        $(counter).html(+counter.html() + 1)
-                        $(btnId).removeClass('btn-primary')
-                        $(btnId).addClass('btn-success')
+                        $(btnId).removeClass('btn-outline-dark')
+                        $(btnId).addClass('btn-dark')
                     } else {
-                        $(counter).html(+counter.html() - 1)
                         $('#followed-playlist-' + res.id).hide()
                         $('#followed-playlist-' + res.id).removeClass('show-playlist')
-                        $(btnId).removeClass('btn-success')
-                        $(btnId).addClass('btn-primary')
+                        $(btnId).removeClass('btn-dark')
+                        $(btnId).addClass('btn-outline-dark')
 
                         followedPlaylistsCount = $('#followed-playlist-part').children('.show-playlist').length
                         if (followedPlaylistsCount == 0) {
@@ -124,11 +118,5 @@ function handleFollowUser(e) {
         .catch(function (err) {
             // console.log(err)
         })
-}
-
-
-function goBack(e) {
-    e.preventDefault()
-    window.history.back()
 }
 

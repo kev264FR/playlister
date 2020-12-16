@@ -11,6 +11,10 @@
     margin: auto;
 }
 
+.search{
+    width: initial;
+}
+
 .hide{
     display: none;
 }

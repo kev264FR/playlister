@@ -82,7 +82,7 @@ class PlaylistController extends AbstractController
             $manager->persist($playlist);
             $manager->flush();
 
-            $this->addFlash('success', 'Playlist ajouté');
+            $this->addFlash('success', 'Enregistrement réussi');
             return $this->redirectToRoute('playlist_detail', [
                 'id'=>$playlist->getId()
             ]);

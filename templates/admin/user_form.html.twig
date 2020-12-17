@@ -1,0 +1,21 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block body %}
+
+<h1 class="text-center display-2">Ajouter un utilisateur</h1>
+
+{{form_start(form, {attr: {class: "user-form"}})}}
+
+    {{form_row(form.username)}}
+
+    {{form_row(form.email)}}
+
+    {{form_row(form.password)}}
+
+    {{form_row(form.admin)}}
+
+    <input type="submit" class="btn btn-success" value="Ajouter">
+
+{{form_end(form)}}
+
+{% endblock %}

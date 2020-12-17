@@ -96,30 +96,60 @@
                                 Espace Admin
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{path("platforms_list")}}" class="nav-link">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 Gestion des plateformes
                             </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{path("platforms_list")}}">Voir les plateformes</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{path("platform_add")}}">Ajouter une plateforme</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a href="{{path("playlists_admin")}}" class="nav-link">
                                 Toutes les playlists
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{path("users_admin")}}" class="nav-link">
-                                Gestion des
-                                utilisateurs
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                Gestion des utilisateurs
                             </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{path("users_admin")}}">Voir les utilisateurs</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{path("user_add")}}">Ajouter un utilisateur</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
             </nav>
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                <div class="container">
+                    <div id="alert-container">
+                        {% for message in app.flashes("error") %}
+                        <div id="error-alert" class="alert alert-danger alert-dismissible fade show text-center " role="alert">
+                            {{message | raw }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+            
+                        {% for message in app.flashes("success") %}
+                        <div id="success-alert" class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                            {{message | raw }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </div>
                 {% block body %}
 
                 {% endblock %}
+                </div>
             </main>
         </div>
     </div>

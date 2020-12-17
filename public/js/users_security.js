@@ -1,4 +1,4 @@
-$("#delete-account").confirm({
+$(".delete-account").confirm({
     title: 'Confirmation',
     content: 'Etes vous sûr de vouloir supprimer le compte, cette action ne peut être inversé !!',
     theme: 'supervan',
@@ -19,7 +19,7 @@ $("#delete-account").confirm({
     }
     })
 
-    $("#ban").confirm({
+    $(".ban").confirm({
     title: 'Confirmation',
     content: 'Etes vous sûr de vouloir bannir ce compte !!',
     theme: 'supervan',
@@ -40,7 +40,7 @@ $("#delete-account").confirm({
     }
     })
 
-    $("#unban").confirm({
+    $(".unban").confirm({
     title: 'Confirmation',
     content: 'Etes vous sûr de vouloir dé-bannir ce compte !',
     theme: 'supervan',
@@ -61,7 +61,7 @@ $("#delete-account").confirm({
     }
     })
 
-    $("#remove-admin").confirm({
+    $(".remove-admin").confirm({
     title: 'Confirmation',
     content: 'Etes vous sûr de vouloir retirer le role admin !',
     theme: 'supervan',
@@ -82,7 +82,7 @@ $("#delete-account").confirm({
     }
     })
 
-    $("#add-admin").confirm({
+    $(".add-admin").confirm({
     title: 'Confirmation',
     content: 'Etes vous sûr de vouloir ajouter le role admin !',
     theme: 'supervan',

@@ -98,16 +98,17 @@
                     <td>
                         {% if user != app.user %}
                             {% if 'ROLE_ADMIN' in user.roles %}
-                                <a id="remove-admin" class="btn btn-sm btn-warning" href="{{path("admin_switch", {id: user.id})}}">Retirer Admin</a>
+                                <a class="btn btn-sm btn-warning remove-admin" href="{{path("admin_switch", {id: user.id})}}">Admin -</a>
                             {% else %}
-                                <a id="add-admin" class="btn btn-sm btn-warning" href="{{path("admin_switch", {id: user.id})}}">Ajouter Admin</a>
+                                <a class="btn btn-sm btn-warning add-admin" href="{{path("admin_switch", {id: user.id})}}">Admin +</a>
                             {% endif %}
 
                             {% if 'ROLE_BANNED' in user.roles %}
-                                <a id="unban" class="btn btn-sm btn-danger" href="{{path("ban_switch", {id: user.id})}}">Unban</a>
+                                <a class="btn btn-sm btn-danger unban" href="{{path("ban_switch", {id: user.id})}}">Unban</a>
                             {% else %}
-                                <a id="ban" class="btn btn-sm btn-success" href="{{path("ban_switch", {id: user.id})}}">Ban</a>
+                                <a class="btn btn-sm btn-success ban" href="{{path("ban_switch", {id: user.id})}}">Ban</a>
                             {% endif %}
+                                <a class="btn btn-sm btn-danger delete-account" href="{{path("delete_account", {id: user.id})}}">Supprimer</a>
                             
                         {% endif %}
                     </td>
@@ -124,6 +125,8 @@
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="{{asset('js/users_security.js')}}"></script>
 
     <script>
     $(document).ready(function(){
@@ -163,5 +166,4 @@
     })
     </script>
 
-    <script src="{{asset('js/users_security.js')}}"></script>
 {% endblock %}

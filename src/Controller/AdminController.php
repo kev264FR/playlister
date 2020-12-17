@@ -6,11 +6,13 @@ use App\Entity\Platform;
 use App\Entity\Playlist;
 use App\Entity\User;
 use App\Form\PlatformType;
+use App\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/admin")
@@ -26,7 +28,6 @@ class AdminController extends AbstractController
         $playlists = $this->getDoctrine()
                             ->getRepository(Playlist::class)
                             ->getLastCreated();
-
 
         return $this->render('admin/index.html.twig', [
             'playlists'=>$playlists
@@ -201,4 +202,36 @@ class AdminController extends AbstractController
 
         return $this->redirect($redirect);
     }
+
+
+    /**
+     * @Route("/user/new", name="user_add")
+     */
+    public function addUser(Request $request, UserPasswordEncoderInterface $encoder){
+        $manager = $this->getDoctrine()->getManager();
+
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('admin')->getData()) {
+                $user->setRoles(["ROLE_ADMIN"]);
+            }
+
+            $this->getDoctrine()
+                ->getRepository(User::class)
+                ->upgradePassword($user, $encoder->encodePassword($user, $form->get('password')->getData()));
+
+            $manager->persist($user);
+            $manager->flush();
+
+            return $this->redirectToRoute('users_admin');
+        }
+
+        return $this->render('admin/user_form.html.twig', [
+            'form'=>$form->createView()
+        ]);
+    }
+
 }

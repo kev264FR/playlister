@@ -23,6 +23,7 @@ function generateCommentForm(e) {
             "</button>" +
             "</div>"
         )
+        $('html').animate({ scrollTop: 0 }, 'slow');
         return;
     }
 
@@ -48,6 +49,7 @@ function generateCommentForm(e) {
                         "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
 
@@ -87,6 +89,7 @@ function submitComment(e) {
                         "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })
@@ -129,6 +132,7 @@ function generateContentForm(e) {
                         "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })
@@ -168,6 +172,7 @@ function submitContent(e) {
                         "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })
@@ -178,7 +183,9 @@ function submitContent(e) {
 
 function cancelContentForm(e) {
     e.preventDefault()
-    contentFormHolder.html("")
+    $(contentFormHolder).slideUp("slow", function () {
+        $(contentFormHolder).html("")
+    })
 }
 
 

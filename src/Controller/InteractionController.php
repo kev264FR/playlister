@@ -219,7 +219,7 @@ class InteractionController extends AbstractController
             return $this->json([
                 "status"=>'success',
                 "data"=>$this->renderView('interaction/playlist_comment_part.html.twig', [
-                    'playlist'=>$playlist
+                    'comments'=>$playlist->getComments()
                 ])
             ]);
 

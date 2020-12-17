@@ -14,27 +14,27 @@
 <div class="list-group list-group-horizontal text-center justify-content-center">
     {% if app.user and is_granted("ROLE_ADMIN") and app.user != user %}
         {% if 'ROLE_ADMIN' in user.roles %}
-            <a id="remove-admin" href="{{path("admin_switch", {id: user.id})}}" class="list-group-item list-group-item-action text-dark bg-warning">
+            <a href="{{path("admin_switch", {id: user.id})}}" class="remove-admin list-group-item list-group-item-action text-dark bg-warning">
                 Retirer les droits admin
             </a>
         {% else %}
-            <a id="add-admin" href="{{path("admin_switch", {id: user.id})}}" class="list-group-item list-group-item-action text-dark bg-warning">
+            <a href="{{path("admin_switch", {id: user.id})}}" class="add-admin list-group-item list-group-item-action text-dark bg-warning">
                 Ajouter les droits admin
             </a>
         {% endif %}
 
         {% if 'ROLE_BANNED' in user.roles %}
-            <a id="unban" href="{{path("ban_switch", {id: user.id})}}"
-                class="list-group-item list-group-item-action bg-danger text-light">Unban
+            <a href="{{path("ban_switch", {id: user.id})}}"
+                class="unban list-group-item list-group-item-action bg-danger text-light">Unban
             </a>
         {% else %}
-            <a id="ban" href="{{path("ban_switch", {id: user.id})}}"
-                class="list-group-item list-group-item-action bg-success text-light">Ban
+            <a href="{{path("ban_switch", {id: user.id})}}"
+                class="ban list-group-item list-group-item-action bg-success text-light">Ban
             </a>
         {% endif %}
 
-        <a id="delete-account" href="{{path('delete_account', {id: user.id})}}"
-            class="list-group-item list-group-item-action text-light bg-danger">Supprimer le compte</a>
+        <a href="{{path('delete_account', {id: user.id})}}"
+            class="delete-account list-group-item list-group-item-action text-light bg-danger">Supprimer le compte</a>
     {% endif %}
 
     {% if user in app.user.followedUsers %}

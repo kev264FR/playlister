@@ -21,9 +21,14 @@ class InteractionController extends AbstractController
     /**
      * @Route("/playlist/like/{id}", name="user_like")
      */
-    public function likePlaylist(Playlist $playlist = null){
+    public function likePlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
 
+        if (!$request->isXmlHttpRequest()) {
+            $this->addFlash('error', 'Action impossible');
+            return $this->redirectToRoute("playlists");
+        }
+        
         if ($this->getUser()) {
             $user = $this->getUser();
         }else{
@@ -71,8 +76,13 @@ class InteractionController extends AbstractController
     /**
      * @Route("/playlist/follow/{id}", name="user_follow_playlist")
      */
-    public function followPlaylist(Playlist $playlist = null){
+    public function followPlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
+
+        if (!$request->isXmlHttpRequest()) {
+            $this->addFlash('error', 'Action impossible');
+            return $this->redirectToRoute("playlists");
+        }
         
         if ($this->getUser()) {
             $user = $this->getUser();
@@ -122,8 +132,13 @@ class InteractionController extends AbstractController
     /**
      * @Route("/user/follow/{id}", name="user_follow_user")
      */
-    public function followUser(User $target = null){
+    public function followUser(Request $request, User $target = null){
         $manager = $this->getDoctrine()->getManager();
+
+        if (!$request->isXmlHttpRequest()) {
+            $this->addFlash('error', 'Action impossible');
+            return $this->redirectToRoute("playlists");
+        }
         
         if ($this->getUser()) {
             $user = $this->getUser();
@@ -170,6 +185,11 @@ class InteractionController extends AbstractController
      * @ParamConverter("parentComment", options={"id" = "comment_id"})
      */
     public function postComment(Request $request, Playlist $playlist = null , Comment $parentComment = null){
+
+        if (!$request->isXmlHttpRequest()) {
+            $this->addFlash('error', 'Action impossible');
+            return $this->redirectToRoute("playlists");
+        }
         
         if (!$playlist && !$parentComment) {
             return $this->json([
@@ -253,7 +273,7 @@ class InteractionController extends AbstractController
         $manager->flush();
 
         return $this->redirectToRoute('playlist_detail', [
-                    'id'=>$comment->getPlaylist()->getId()
+            'id'=>$comment->getPlaylist()->getId()
         ]);
     }
 }

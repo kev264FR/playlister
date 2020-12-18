@@ -2,10 +2,14 @@ function handleLike(e) {
     e.preventDefault()
     let btnId = '#' + $(e.currentTarget).attr('id')
 
-    fetch($(e.currentTarget).attr("href"))
+    fetch($(e.currentTarget).attr("href"), {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+        }  
+    })
         .then(res => res.json())
         .then(res => {
-            // console.log(err)
+            // console.log(res)
             switch (res.status) {
                 case 'success':
                     if (res.data == 'like') {
@@ -40,7 +44,11 @@ function handleFollowPlaylist(e) {
     let followedPlaylistsCount;
 
 
-    fetch($(e.currentTarget).attr("href"))
+    fetch($(e.currentTarget).attr("href"), {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+        }  
+    })
         .then(res => res.json())
         .then(res => {
             // console.log(err)
@@ -83,7 +91,11 @@ function handleFollowUser(e) {
     e.preventDefault()
     let followedUsersCount;
 
-    fetch($(e.currentTarget).attr("href"))
+    fetch($(e.currentTarget).attr("href"), {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+        }  
+    })
         .then(res => res.json())
         .then(res => {
             // console.log(err)

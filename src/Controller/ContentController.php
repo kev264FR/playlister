@@ -22,6 +22,12 @@ class ContentController extends AbstractController
      */
     public function contentForm(Request $request, Playlist $playlist = null): Response
     {
+        
+        if (!$request->isXmlHttpRequest()) {
+            $this->addFlash('error', 'Action impossible');
+            return $this->redirectToRoute("playlists");
+        }
+
         if (!$this->getUser()) {
             return $this->json([
                 'status'=>'error',

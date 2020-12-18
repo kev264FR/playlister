@@ -29,7 +29,11 @@ function generateCommentForm(e) {
 
     commentUrl = $(e.currentTarget).attr("href")
 
-    fetch(commentUrl)
+    fetch(commentUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }  
+    })
         .then(res => res.json())
         .then(res => {
             // console.log(res)
@@ -64,6 +68,9 @@ function submitComment(e) {
     e.preventDefault()
 
     fetch(commentUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
         method: "POST",
         body: new FormData(document.getElementById("comment_form"))
     })
@@ -113,7 +120,11 @@ let contentUrl;
 function generateContentForm(e) {
     e.preventDefault()
     contentUrl = $(e.currentTarget).attr("href")
-    fetch(contentUrl)
+    fetch(contentUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }  
+    })
         .then(res => res.json())
         .then(res => {
             // console.log(err)
@@ -145,6 +156,9 @@ function submitContent(e) {
     e.preventDefault()
 
     fetch(contentUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        },
         method: "POST",
         body: new FormData(document.getElementById("content_form"))
     })

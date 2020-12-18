@@ -1,5 +1,5 @@
 <div id="comment-form-holder"></div>
-{% for comment in comments %}
+{% for comment in playlist.comments %}
 {% if comment.answerFor == null %}
 <hr class="bg-dark">
 <div id="collection-{{comment.id}}">

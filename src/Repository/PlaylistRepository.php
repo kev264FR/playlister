@@ -51,8 +51,7 @@ class PlaylistRepository extends ServiceEntityRepository
     public function getAll(){
         return $this->createQueryBuilder('p')
                     ->orderBy('p.createdAt', 'DESC')
-                    ->getQuery()
-                    ->getResult();
+                    ->getQuery();
     }
 
 
@@ -60,8 +59,7 @@ class PlaylistRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
                     ->andWhere('p.public = 1')
                     ->orderBy('p.createdAt', 'DESC')
-                    ->getQuery()
-                    ->getResult();
+                    ->getQuery();               
     }
 
     public function getAllPublicNamed($titre){
@@ -69,16 +67,14 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->andWhere('p.public = 1')
                     ->andWhere('p.title LIKE :titre')
                     ->setParameter('titre', "%$titre%")
-                    ->getQuery()
-                    ->getResult();
+                    ->getQuery();
     }
 
     public function getAllNamed($titre){
         return $this->createQueryBuilder('p')
                     ->andWhere('p.title LIKE :titre')
                     ->setParameter('titre', "%$titre%")
-                    ->getQuery()
-                    ->getResult();
+                    ->getQuery();
     }
 
     public function getLastCreated(){

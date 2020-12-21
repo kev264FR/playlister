@@ -7,6 +7,7 @@ use App\Entity\Playlist;
 use App\Entity\User;
 use App\Form\PlatformType;
 use App\Form\UserType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -100,19 +101,30 @@ class AdminController extends AbstractController
     /**
      * @Route("/playlists", name="playlists_admin")
      */
-    public function listAllPlaylists(Request $request){
+    public function listAllPlaylists(Request $request, PaginatorInterface $paginator){
         $mostLiked = null;
         $mostFollowed = null;
 
         $search = $request->get('search');
         if ($search) {
-            $playlists = $this->getDoctrine()
+            $query = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAllNamed($search);
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                10 /*limit per page*/
+            );
         }else{
-            $playlists = $this->getDoctrine()
+            $query = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAll();
+
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                10 /*limit per page*/
+            );
 
             $mostLiked = $this->getDoctrine()
                         ->getRepository(Playlist::class)

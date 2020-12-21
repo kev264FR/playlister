@@ -10,13 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PlaylistController extends AbstractController
 {
     /**
      * @Route("/", name="playlists")
      */
-    public function index(Request $request): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
 
         $mostLiked = null;
@@ -24,13 +25,24 @@ class PlaylistController extends AbstractController
 
         $search = $request->get('search');
         if ($search) {
-            $playlists = $this->getDoctrine()
+            $query = $this->getDoctrine()
                             ->getRepository(Playlist::class)
                             ->getAllPublicNamed($search);
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                10 /*limit per page*/
+            );
+                        
         }else{
-            $playlists = $this->getDoctrine()
+            $query = $this->getDoctrine()
                         ->getRepository(Playlist::class)
                         ->getAllPublic();
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                10 /*limit per page*/
+            );
 
            $mostLiked = $this->getDoctrine()
                         ->getRepository(Playlist::class)
@@ -41,9 +53,6 @@ class PlaylistController extends AbstractController
                             ->getMostFollowedPublic()[0]; 
 
         }
-
-        
-
 
         return $this->render('playlist/index.html.twig', [
             'playlists'=>$playlists,

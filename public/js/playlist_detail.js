@@ -127,7 +127,7 @@ function generateContentForm(e) {
     })
         .then(res => res.json())
         .then(res => {
-            // console.log(err)
+            // console.log(res)
             switch (res.status) {
                 case 'success-form':
                     $(contentFormHolder).html(res.data)
@@ -164,7 +164,7 @@ function submitContent(e) {
     })
         .then(res => res.json())
         .then(res => {
-            // console.log(res)
+            console.log(res)
             switch (res.status) {
                 case 'success':
 

@@ -61,7 +61,7 @@ class Playlist
     private $comments;
 
     /**
-     * @ORM\OneToMany(targetEntity=Content::class, mappedBy="playlist")
+     * @ORM\OneToMany(targetEntity=Content::class, mappedBy="playlist", cascade={"persist"})
      */
     private $contents;
 

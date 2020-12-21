@@ -1,3 +1,4 @@
+
 {% for content in playlist.contents %}
 <div class="card position-relative" style="width: 15rem;">
     <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
@@ -22,6 +23,7 @@
 </div>
 {% endfor %}
 
+{% if ajax is defined and ajax == true %}
 <script>
     $(".btn-danger").confirm({
         title: 'Confirmation',
@@ -44,3 +46,4 @@
         }
     })
 </script>
+{% endif %}

@@ -100,25 +100,42 @@ class ContentController extends AbstractController
                 }
                 
                 
-                
                 if ($title) {
+                    foreach ($playlist->getContents() as $oldContent) {
+                        if ($oldContent->getTitle() == $title and $oldContent->getContentId() == $videoId) {
+                            return $this->json([
+                                'status'=>'error',
+                                'data'=>'Cette vidéo est déjà présente'
+                            ]);
+                        }
+                    }
+
                     $content->setContentId($videoId);
                     $content->setTitle($title);
                     $content->setPlatform($platform);
-                    $content->setPlaylist($playlist);
                     $content->setCreatedAt(new \DateTime());
+
+                    $playlist->addContent($content);
                     $playlist->setLastUpdate($content->getCreatedAt());
 
 
-                    $manager->persist($content);
+                   // $manager->persist($content);
                     $manager->flush();
                     
+                    // return $this->json(
+                    //     $this->renderView('content/content_part.html.twig', [
+                    //     'playlist'=>$playlist,
+                    //     'ajax'=>true
+                    //     ])
+                    // );
+                    $html = $this->renderView('content/content_part.html.twig', [
+                        'playlist'=>$playlist,
+                        'ajax'=>true
+                    ]);
 
                     return $this->json([
                         'status'=>'success',
-                        'data'=> $this->renderView('content/content_part.html.twig', [
-                                'playlist'=>$playlist
-                        ])
+                        'data'=> $html
                     ]);
                 }else{
                     return $this->json([
@@ -138,7 +155,8 @@ class ContentController extends AbstractController
         return $this->json([
             'status'=>'success-form',
             'data'=> $this->renderView('content/content_form.html.twig', [
-                        'form'=>$form->createView()
+                        'form'=>$form->createView(),
+                        'playlist'=>$playlist
             ])
         ]);
     }

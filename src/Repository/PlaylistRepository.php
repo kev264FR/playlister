@@ -77,14 +77,6 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->getQuery();
     }
 
-    public function getLastCreated(){
-        return $this->createQueryBuilder('p')
-                    ->orderBy('p.createdAt', 'DESC')
-                    ->setMaxResults(8)
-                    ->getQuery()
-                    ->getResult();
-    }
-
     public function getMostLikedPublic(){
         return $this->createQueryBuilder('p')
                     ->select('p, SIZE(p.likers) as likers')
@@ -125,6 +117,23 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult();
+    }
+
+    public function getAllMyPlaylists($user){
+        return $this->createQueryBuilder('p')
+                    ->andWhere('p.user = :user')
+                    ->setParameter('user', $user)
+                    ->orderBy('p.createdAt', 'DESC')
+                    ->getQuery();
+    }
+
+    public function getUsersPublicPlaylists($user){
+        return $this->createQueryBuilder('p')
+                    ->andWhere('p.public = 1')
+                    ->andWhere('p.user = :user')
+                    ->setParameter('user', $user)
+                    ->orderBy('p.createdAt', 'DESC')
+                    ->getQuery();
     }
     
 }

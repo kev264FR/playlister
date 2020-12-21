@@ -6,6 +6,7 @@ use App\Entity\Playlist;
 use App\Entity\User;
 use App\Form\ChangePasswordType;
 use App\Form\SecurityType;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,27 +16,48 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("/profile")
- * @IsGranted("ROLE_USER")
  */
 class ProfileController extends AbstractController
 {
     /**
      * @Route("/{id}", name="public_profile")
-     * @Route("/", name="my_profile")
      */
-    public function index(User $user = null): Response
+    public function index(User $user = null, Request $request, PaginatorInterface $paginator): Response
     {
-        if (!$user || $this->getUser() == $user) {
-            return $this->render('profile/my_profile.html.twig');
-        }
+        if ($this->getUser() == $user) {
+            $query = $this->getDoctrine()
+                            ->getRepository(Playlist::class)
+                            ->getAllMyPlaylists($this->getUser());
 
-        return $this->render('profile/public_profile.html.twig', [
-            'user'=>$user
-        ]);
+            $myPlaylists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                8 /*limit per page*/
+            );
+            return $this->render('profile/my_profile.html.twig', [
+                'myPlaylists'=>$myPlaylists
+            ]);
+        }else{
+            $query = $this->getDoctrine()
+                    ->getRepository(Playlist::class)
+                    ->getUsersPublicPlaylists($user);
+                            
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                8 /*limit per page*/
+            );
+
+            return $this->render('profile/public_profile.html.twig', [
+                'user'=>$user,
+                'playlists'=>$playlists
+            ]);
+        }
     }
 
     /**
      * @Route("/password/change", name="change_password")
+     * @IsGranted("ROLE_USER")
      */
     public function changePassword(Request $request, UserPasswordEncoderInterface $encoder){
         $form = $this->createForm(ChangePasswordType::class);
@@ -63,6 +85,7 @@ class ProfileController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="delete_account")
+     * @IsGranted("ROLE_USER")
      */
     public function deleteAccount(Request $request, User $user = null){
         $manager = $this->getDoctrine()->getManager();

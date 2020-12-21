@@ -24,11 +24,17 @@ class AdminController extends AbstractController
     /**
      * @Route("/", name="admin_home")
      */
-    public function index(): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        $playlists = $this->getDoctrine()
-                            ->getRepository(Playlist::class)
-                            ->getLastCreated();
+        $query = $this->getDoctrine()
+                        ->getRepository(Playlist::class)
+                        ->getAll();
+
+        $playlists = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            8 /*limit per page*/
+        );
 
         return $this->render('admin/index.html.twig', [
             'playlists'=>$playlists
@@ -96,52 +102,6 @@ class AdminController extends AbstractController
 
         $this->addFlash('error', 'Suppression impossible');
         return $this->redirectToRoute('platforms_list');
-    }
-
-    /**
-     * @Route("/playlists", name="playlists_admin")
-     */
-    public function listAllPlaylists(Request $request, PaginatorInterface $paginator){
-        $mostLiked = null;
-        $mostFollowed = null;
-
-        $search = $request->get('search');
-        if ($search) {
-            $query = $this->getDoctrine()
-                        ->getRepository(Playlist::class)
-                        ->getAllNamed($search);
-            $playlists = $paginator->paginate(
-                $query, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                10 /*limit per page*/
-            );
-        }else{
-            $query = $this->getDoctrine()
-                        ->getRepository(Playlist::class)
-                        ->getAll();
-
-            $playlists = $paginator->paginate(
-                $query, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                10 /*limit per page*/
-            );
-
-            $mostLiked = $this->getDoctrine()
-                        ->getRepository(Playlist::class)
-                        ->getMostLiked()[0];
-
-            $mostFollowed = $this->getDoctrine()
-                            ->getRepository(Playlist::class)
-                            ->getMostFollowed()[0];
-        }
-        
-        return $this->render('playlist/index.html.twig', [
-            'playlists'=>$playlists,
-            'search'=>$search,
-            'mostLiked'=>$mostLiked,
-            'mostFollowed'=>$mostFollowed,
-            'admin'=>true
-        ]);
     }
 
     /**

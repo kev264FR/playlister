@@ -118,16 +118,8 @@ class ContentController extends AbstractController
                     $playlist->addContent($content);
                     $playlist->setLastUpdate($content->getCreatedAt());
 
-
-                   // $manager->persist($content);
                     $manager->flush();
                     
-                    // return $this->json(
-                    //     $this->renderView('content/content_part.html.twig', [
-                    //     'playlist'=>$playlist,
-                    //     'ajax'=>true
-                    //     ])
-                    // );
                     $html = $this->renderView('content/content_part.html.twig', [
                         'playlist'=>$playlist,
                         'ajax'=>true

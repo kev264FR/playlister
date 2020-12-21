@@ -84,7 +84,11 @@ class UserAuthenticator extends AbstractFormLoginAuthenticator implements Passwo
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        $check = $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+        if (!$check) {
+            throw new CustomUserMessageAuthenticationException('invalide');
+        }
+        return $check;
     }
 
     /**

@@ -33,7 +33,7 @@ class DateDiffExtension extends AbstractExtension
         if ($int->format('%y') != 0) {
             return $int->format('%y an(s)');
         }elseif ($int->format('%m') != 0) {
-            return $int->format('% mois');
+            return $int->format('%m mois');
         }elseif ($int->format('%d') != 0) {
             return $int->format('%d jour(s)');
         }elseif ($int->format('%h') != 0) {
@@ -43,7 +43,7 @@ class DateDiffExtension extends AbstractExtension
         }elseif ($int->format('%s') != 0) {
             return $int->format('%s seconde(s)');
         }else{
-            return '1 seconde';
+            return '1 seconde(s)';
         }
     }
 }

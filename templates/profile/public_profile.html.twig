@@ -37,7 +37,7 @@
             class="delete-account list-group-item list-group-item-action text-light bg-danger">Supprimer le compte</a>
     {% endif %}
 
-    {% if user in app.user.followedUsers %}
+    {% if app.user and user in app.user.followedUsers %}
         <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" style="max-width: 278px;" onclick="handleFollowUser(event)">
             Ne plus suivre
         </a>

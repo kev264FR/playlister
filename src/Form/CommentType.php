@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -19,7 +20,11 @@ class CommentType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message'=> 'Ce champ est obligatoire'
-                    ])
+                    ]),
+                    new Length([
+                        'max' => 300,
+                        'maxMessage' => 'Votre commentaire peut contenir au maximum {{ limit }} caractères',
+                    ]),
                 ]
             ])
         ;

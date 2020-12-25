@@ -213,6 +213,26 @@ function handleClick(e) {
 }
 // -------------- GESTION MODAL IFRAME --------------
 
+// -------------- GESTION AFFICHAGE REPONSES --------------
+let lastClicked = 0
+
+function showAnswers(commentId) {
+    let delay = 600
+    if(Date.now() - lastClicked < delay) return;
+
+    if ($("#answers-"+commentId).hasClass('open-answers')) {
+        $("#answers-"+commentId).slideUp(delay)
+        $("#answers-"+commentId).removeClass('open-answers')
+    }else{
+        $('.open-answers').slideUp(delay)
+        $('.open-answers').removeClass('open-answers')
+        $("#answers-"+commentId).addClass('open-answers')
+        $("#answers-"+commentId).slideDown(delay)
+    }
+    lastClicked = Date.now()
+}
+// -------------- GESTION AFFICHAGE REPONSES --------------
+
 // -------------- GESTION CONFIRM --------------
 $(".btn-danger").confirm({
     title: 'Confirmation',

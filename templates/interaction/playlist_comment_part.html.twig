@@ -13,7 +13,6 @@
             {% else %}
             Utilisateur supprimé
             {% endif %}
-
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
@@ -29,45 +28,54 @@
             {% endif %}
         </div>
     </div>
-    {% for answer in comment.answers %}
-    <div id="{{answer.id}}" class="card my-2 ml-5">
-        <div class="card-header small text-dark bg-answer">
-            <i class="fas fa-minus"></i>
-            <i class="fas fa-minus"></i>
-            {% if answer.user %}
-            <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
-                {{answer.user.username}}
-            </a>
-            {% else %}
-            Utilisateur supprimé
-            {% endif %}
-
+    {% if app.user %}
+    <a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}" href="{{path("answer_comment", {comment_id: comment.id})}}">
+        <i class="fas fa-comment-dots"></i> Répondre ici
+    </a>
+    {% endif %}
+    {% if comment.answers.count > 0 %}
+    <button class="btn btn-primary" onclick="showAnswers('{{comment.id}}')">Voir les réponses</button>
+    {% if parentComment is defined and parentComment.id == comment.id %}
+        <div id="answers-{{comment.id}}" class="open-answers">
+    {% else %}
+        <div id="answers-{{comment.id}}" class="hide">
+    {% endif %}
+            {% for answer in comment.answers %}
+            <div id="{{answer.id}}" class="card my-2 ml-5">
+                <div class="card-header small text-dark bg-answer">
+                    <i class="fas fa-minus"></i>
+                    <i class="fas fa-minus"></i>
+                    {% if answer.user %}
+                    <a class="text-dark font-italic" href="{{path("public_profile", {id: answer.user.id})}}">
+                        {{answer.user.username}}
+                    </a>
+                    {% else %}
+                    Utilisateur supprimé
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>
+                            {{answer.text}}
+                        </p>
+                        <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
+                    </blockquote>
+                    {% if app.user and is_granted("ROLE_ADMIN") %}
+                    <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        <div class="card-body">
-            <blockquote class="blockquote mb-0">
-                <p>
-                    {{answer.text}}
-                </p>
-                <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
-            </blockquote>
-            {% if app.user and is_granted("ROLE_ADMIN") %}
-            <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
-                <i class="fas fa-trash-alt"></i>
-            </a>
-            {% endif %}
-        </div>
-    </div>
-    {% endfor %}
+    {% endif %}
 </div>
-{% if app.user %}
-<a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}" href="{{path("answer_comment", {comment_id: comment.id})}}">
-    <i class="fas fa-comment-dots"></i> Répondre ici
-</a>
-{% endif %}
+
 <div id="comment-form-holder-{{comment.id}}"></div>
 {% endif %}
 {% endfor %}
-</div>
+
 
 <script>
     $(".btn-danger").confirm({

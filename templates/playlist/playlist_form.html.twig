@@ -3,7 +3,7 @@
 {% block breadcrumb %}
     {{parent()}}
     <li class="breadcrumb-item">
-        <a href="{{path("my_profile")}}">
+        <a href="{{path("public_profile", {id: app.user.id})}}">
             {{app.user.username}}
         </a>            
     </li>

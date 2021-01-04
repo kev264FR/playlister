@@ -87,7 +87,7 @@
         {% endif %}
     </p>
     {% endif %}
-    {% if app.user != playlist.user %}
+    {% if not app.user or app.user != playlist.user %}
     <p>
         {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
     </p>

@@ -30,6 +30,7 @@ function handleLike(e) {
                             "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })
@@ -79,6 +80,7 @@ function handleFollowPlaylist(e) {
                             "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })
@@ -124,6 +126,7 @@ function handleFollowUser(e) {
                             "</button>" +
                         "</div>"
                     )
+                    $('html').animate({ scrollTop: 0 }, 'slow');
                     break;
             }
         })

@@ -34,7 +34,7 @@ class InteractionController extends AbstractController
         }else{
             return $this->json([
                 "status"=>'error',
-                "data"=>'Vous devez ètre connecté'
+                "data"=>'Vous devez ètre connecté <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
             ]);
         }
 
@@ -89,7 +89,7 @@ class InteractionController extends AbstractController
         }else{
             return $this->json([
                 "status"=>'error',
-                "data"=>'Vous devez ètre connecté'
+                "data"=>'Vous devez ètre connecté <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
             ]);
         }
         

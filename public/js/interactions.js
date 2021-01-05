@@ -92,7 +92,7 @@ function handleFollowPlaylist(e) {
 function handleFollowUser(e) {
     e.preventDefault()
     let followedUsersCount;
-
+    
     fetch($(e.currentTarget).attr("href"), {
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -100,7 +100,7 @@ function handleFollowUser(e) {
     })
         .then(res => res.json())
         .then(res => {
-            // console.log(err)
+            // console.log(res)
             switch (res.status) {
                 case 'success':
                     if (res.data == "follow") {

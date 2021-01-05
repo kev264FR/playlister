@@ -38,7 +38,7 @@ function handleLike(e) {
             // console.log(err)
         })
 }
-// {{ include("interaction/btn_group.html.twig", {playlist: playlist}) }}
+
 function handleFollowPlaylist(e) {
     e.preventDefault()
     let btnId = '#' + $(e.currentTarget).attr('id')

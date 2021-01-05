@@ -12,7 +12,7 @@
 {% block body %}
 <div class="list-group list-group-horizontal text-center">
     <a href="{{path("change_password")}}" class="list-group-item list-group-item-action text-light bg-primary">Changer de mot de passe</a>
-    <a href="{{path("delete_account", {id: app.user.id})}}" class="list-group-item list-group-item-action text-light bg-danger">Supprimer mon compte</a>
+    <a href="{{path("delete_account", {id: app.user.id})}}" class="list-group-item list-group-item-action text-light bg-danger delete-account">Supprimer mon compte</a>
     <a href="{{path("playlist_new")}}" class="list-group-item list-group-item-action text-light bg-success"><i class="fas fa-plus-square"></i> Playliste</a>
 </div>
 
@@ -188,7 +188,7 @@
                             <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                            <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger delete-playlist">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         </div>
@@ -230,4 +230,53 @@
         {% endif %}
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+
+<script>
+    $(".delete-account").confirm({
+        title: 'Confirmation',
+        content: 'Etes vous sûr de vouloir supprimer votre compte ?',
+        theme: 'supervan',
+        type: 'green',
+        buttons: {
+            ok: {
+                text: "Continuer",
+                action: function () {
+                    location.href = this.$target.attr('href');
+                }
+            },
+            cancel: {
+                text: "Retour",
+                action: function () {
+                    console.log('the user clicked cancel');
+                }
+            }
+        }
+    }) 
+
+    $(".delete-playlist").confirm({
+        title: 'Confirmation',
+        content: 'Etes vous sûr de vouloir supprimer cette playlist ?',
+        theme: 'supervan',
+        type: 'green',
+        buttons: {
+            ok: {
+                text: "Continuer",
+                action: function () {
+                    location.href = this.$target.attr('href');
+                }
+            },
+            cancel: {
+                text: "Retour",
+                action: function () {
+                    console.log('the user clicked cancel');
+                }
+            }
+        }
+    }) 
+</script>
+
 {% endblock %}

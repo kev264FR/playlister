@@ -83,3 +83,23 @@
 .breadcrumb{
     margin-bottom: 0;
 }
+
+#separator{
+    display: initial;
+    width: 100%;
+    margin: 20px 0;
+}
+
+@media(min-width: 768px){
+    #separator{
+        display: none;
+    }
+}
+
+.custom-title{
+    text-decoration: underline;
+    font-size: 1.90rem;
+    font-weight: 100;
+    color:#343a40;
+    margin-bottom: 20px;
+}

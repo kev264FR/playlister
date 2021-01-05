@@ -34,9 +34,9 @@
 {% if mostLiked is not null and mostFollowed is not null %}
 <div class="row jumbotron gold">
     <div class="col-md">
-        <h2 class="text-center">
+        <h3 class="text-center custom-title">
             La plus likée
-        </h2>
+        </h3>
         <div class="card m-auto" style="max-width: 17rem;">
             {% if mostLiked.contents.count > 0 %}
             {% set lastElement = mostLiked.contents.last %}
@@ -76,11 +76,11 @@
             </div>
         </div>
     </div>
-
+    <hr id="separator">
     <div class="col">
-        <h2 class="text-center">
+        <h3 class="text-center custom-title">
             La plus suivie
-        </h2>
+        </h3>
         <div class="card m-auto" style="max-width: 17rem;">
             {% if mostFollowed.contents.count > 0 %}
             {% set lastElement = mostFollowed.contents.last %}

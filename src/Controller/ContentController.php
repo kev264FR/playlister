@@ -23,27 +23,27 @@ class ContentController extends AbstractController
     public function contentForm(Request $request, Playlist $playlist = null): Response
     {
         
-        if (!$request->isXmlHttpRequest()) {
+        if (!$request->isXmlHttpRequest()) {  // Verification si la requete est bien de l'AJAX
             $this->addFlash('error', 'Action impossible');
             return $this->redirectToRoute("playlists");
         }
 
-        if (!$this->getUser()) {
+        if (!$this->getUser()) { // Verification si un utilisateur est en session
             return $this->json([
                 'status'=>'error',
                 'data'=>'Vous devez ètre connecté <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
             ]);
         }
 
-        if (!$playlist) {
+        if (!$playlist) { // Verification si la playliste existe
             return $this->json([
                 'status'=>'error',
                 'data'=>'Playlist non existante'
             ]);
         }
 
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            if ($this->getUser() != $playlist->getUser()) {
+        if (!$this->isGranted('ROLE_ADMIN')) { // Si pas de ROLE_ADMIN 
+            if ($this->getUser() != $playlist->getUser()) { // verfication si l'utilisateur est propriétaire de la playliste
                 return $this->json([
                     'status'=>'error',
                     'data'=>'Cette playlist n\'est pas a vous'
@@ -73,18 +73,23 @@ class ContentController extends AbstractController
 
             if ($platform) {
 
-                $videoId = str_replace($platform->getBaseUrl(), '', $url);
-                $curl = curl_init(str_replace('_content_', $videoId, $platform->getApi()));
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); //Return data instead printing directly in Browser
-                    $result = curl_exec($curl);
-                curl_close($curl);
-                $result = json_decode($result, true);
+                $videoId = str_replace($platform->getBaseUrl(), '', $url); 
+                // En fonction de la plateforme on cherche l'ID de la vidéo
+
+                $curl = curl_init(str_replace('_content_', $videoId, $platform->getApi())); // Préparation de l'appel api
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // Les données sont mise en variables et non affiché
+                    $result = curl_exec($curl); // Execution de l'appel
+                curl_close($curl); // Fermeture de la session cURL ( obsolète avec PHP 8 )
+                $result = json_decode($result, true); // Résultat json transformé en tableau associatif ( second param )
                 
-                switch ($platform->getName()) {
+                switch ($platform->getName()) { // recherche du titre en fonction de la plateforme 
                     case 'youtube':
                             if (array_key_exists(0, $result['items'])) {
-                                $title = $result['items'][0]['snippet']['title'];
+                                // Si l'entré items existe dans le tableau on recupère le titre
+                                $title = $result['items'][0]['snippet']['title']; 
+
                             }else $title = null;
+                            // Sinon le titre est null
                         break;
 
                     case 'dailymotion':
@@ -94,7 +99,7 @@ class ContentController extends AbstractController
                             }else $title = null;
                         break;
 
-                    default:
+                    default: // Par défaut $title vaut null
                             $title = null;
                         break;
                 }

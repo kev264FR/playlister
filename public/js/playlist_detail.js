@@ -114,36 +114,36 @@ function cancelComment(e) {
 // ----------- GESTION POST NOUVEAU COMMENTAIRE ------------------
 
 // ----------- GESTION AJOUT CONTENT -------------------------
-let contentFormHolder = $("#content-form-holder")
-let contentUrl;
+let contentFormHolder = $("#content-form-holder")  // conteneur du formulaire
+let contentUrl; // URL utilisé pour dialoguer avec le serveur
 
 function generateContentForm(e) {
-    e.preventDefault()
-    contentUrl = $(e.currentTarget).attr("href")
+    e.preventDefault() // Prevention du comportement natif
+    contentUrl = $(e.currentTarget).attr("href") // On definit la variable d'URL qui sera appelé
     fetch(contentUrl, {
         headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest' // Sécurité pour verification si la requète viens de JS
         }  
     })
-        .then(res => res.json())
+        .then(res => res.json()) // On indique à JS de traiter la réponse en JSON
         .then(res => {
             // console.log(res)
             switch (res.status) {
-                case 'success-form':
-                    $(contentFormHolder).html(res.data)
-                    $(contentFormHolder).slideDown("slow")
+                case 'success-form': // arrivé du formulaire
+                    $(contentFormHolder).html(res.data) // On place le contenu data de la réponse dans le conteneur
+                    $(contentFormHolder).slideDown("slow") // On ouvre le conteneur avec un annimation
                     break;
 
-                case 'error':
-                    $("#alert-container").html(
+                case 'error':   // erreur de la génération du formulaire
+                    $("#alert-container").html( 
                         "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>" +
-                        res.data +
+                        res.data + // Le message data est placé dans une boite d'erreur
                         "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
                         "<span aria-hidden='true'>&times;</span>" +
                         "</button>" +
                         "</div>"
                     )
-                    $('html').animate({ scrollTop: 0 }, 'slow');
+                    $('html').animate({ scrollTop: 0 }, 'slow'); // On défile la page pour que l'utilisateur puisse voir l'erreur
                     break;
             }
         })
@@ -155,26 +155,27 @@ function generateContentForm(e) {
 function submitContent(e) {
     e.preventDefault()
 
-    fetch(contentUrl, {
+    fetch(contentUrl, { // On utilise la variable définit au-dessus pour envoyer le formulaire
         headers: {
             'X-Requested-With': 'XMLHttpRequest'
         },
-        method: "POST",
-        body: new FormData(document.getElementById("content_form"))
+        method: "POST", 
+        body: new FormData(document.getElementById("content_form")) 
+        // on met les données du formulaire dans un objet FormData
     })
         .then(res => res.json())
         .then(res => {
             console.log(res)
             switch (res.status) {
                 case 'success':
-
                     $("#content-part").html(res.data)
-                    $(contentFormHolder).slideUp("slow", function () {
-                        $(contentFormHolder).html("")
+                    $(contentFormHolder).slideUp("slow", function () { // on repli le conteneur du formulaire
+                        $(contentFormHolder).html("") // On vide le conteneur du formulaire
                     })
                     break;
+
                 case 'success-form':
-                    $(contentFormHolder).html(res.data)
+                    $(contentFormHolder).html(res.data) // une erreur de validation, le formulaire est renvoyé
                     break;
 
                 case 'error':

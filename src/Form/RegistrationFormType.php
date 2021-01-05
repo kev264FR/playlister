@@ -60,7 +60,7 @@ class RegistrationFormType extends AbstractType
             
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label'=>'Je conscend a ce que mes données soit stocké.',
+                'label'=>'J\'accepte la politique de confidentialité disponible %link%.',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez cocher cette case.',

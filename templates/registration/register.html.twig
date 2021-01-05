@@ -11,7 +11,7 @@
         {{ form_row(registrationForm.username) }}
         {{ form_row(registrationForm.email) }}
         {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_row(registrationForm.agreeTerms) |replace({"%link%": '<a href="#">ici</a>'})|raw }}
 
         <button type="submit" class="btn btn-primary">Inscription</button>
     {{ form_end(registrationForm) }}

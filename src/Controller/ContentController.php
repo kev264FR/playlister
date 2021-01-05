@@ -43,7 +43,7 @@ class ContentController extends AbstractController
         }
 
         if (!$this->isGranted('ROLE_ADMIN')) { // Si pas de ROLE_ADMIN 
-            if ($this->getUser() != $playlist->getUser()) { // verfication si l'utilisateur est propriétaire de la playliste
+            if ($this->getUser() != $playlist->getUser()) { // verfication si l'utilisateur est propriétaire de la playlist
                 return $this->json([
                     'status'=>'error',
                     'data'=>'Cette playlist n\'est pas a vous'
@@ -108,7 +108,8 @@ class ContentController extends AbstractController
                 if ($title) {
                     foreach ($playlist->getContents() as $oldContent) {
                         if ($oldContent->getTitle() == $title and $oldContent->getContentId() == $videoId) {
-                            return $this->json([
+                            // Verification si la vidéo n'est pas déjà présente
+                            return $this->json([ 
                                 'status'=>'error',
                                 'data'=>'Cette vidéo est déjà présente'
                             ]);
@@ -122,6 +123,7 @@ class ContentController extends AbstractController
 
                     $playlist->addContent($content);
                     $playlist->setLastUpdate($content->getCreatedAt());
+                    //  Pour avoir exactement la meme date 
 
                     $manager->flush();
                     
@@ -129,7 +131,7 @@ class ContentController extends AbstractController
                         'playlist'=>$playlist,
                         'ajax'=>true
                     ]);
-
+                    
                     return $this->json([
                         'status'=>'success',
                         'data'=> $html

@@ -52,15 +52,16 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
+                        'maxMessage' => 'Votre mot de passe peut contenir au maximum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
-                        'max' => 4096,
+                        'max' => 32,
                     ]),
                 ],
             ])
             
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label'=>'J\'accepte la politique de confidentialité disponible %link%.',
+                'label'=>'J\'accepte la %link%.',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez cocher cette case.',

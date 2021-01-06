@@ -1,5 +1,19 @@
 {% extends "base.html.twig" %}
 
+{% block breadcrumb %}
+    {{parent()}}
+    <li class="breadcrumb-item">
+        <a href="{{path("public_profile", {id: app.user.id})}}">
+            {{app.user.username}}
+        </a>            
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{{path("delete_account", {id: app.user.id})}}">
+            Supprimer mon compte
+        </a>            
+    </li>
+{% endblock %}
+
 {% block body %}
 
 <h1 class="text-center">Verification de vote compte</h1>
@@ -9,6 +23,8 @@
         {{form_row(form.email)}}
 
         {{form_row(form.password)}}
+
+        {{form_row(form.validation)}}
 
 
         <input class="btn btn-danger" type="submit" value="Supprimer mon compte">

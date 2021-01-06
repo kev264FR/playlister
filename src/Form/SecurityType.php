@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class SecurityType extends AbstractType
@@ -30,6 +31,12 @@ class SecurityType extends AbstractType
                         'message'=> 'Ce champ est obligatoire'
                     ])
                 ]
+            ])
+
+            ->add('validation', CheckboxType::class, [
+                'label'=>'Continuer et supprimer mon compte',
+                'required'=>true,
+                'mapped' => false,
             ])
         ;
     }

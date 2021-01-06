@@ -61,7 +61,7 @@
                         <footer class="blockquote-footer">{{answer.createdAt | date("d.m.Y H:i")}}</footer>
                     </blockquote>
                     {% if app.user and is_granted("ROLE_ADMIN") %}
-                    <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger">
+                    <a href="{{path("comment_delete", {id: answer.id})}}" class="btn btn-danger delete-comment">
                         <i class="fas fa-trash-alt"></i>
                     </a>
                     {% endif %}
@@ -76,11 +76,11 @@
 {% endif %}
 {% endfor %}
 
-
+{% if ajax is defined and ajax == true %}
 <script>
-    $(".btn-danger").confirm({
+    $(".delete-comment").confirm({
     title: 'Confirmation',
-    content: 'Etes vous sûr de vouloir supprimer ?',
+    content: 'Etes vous sûr de vouloir supprimer ce commentaire ?',
     theme: 'supervan',
     type: 'green',
     buttons: {
@@ -99,3 +99,4 @@
     }
     })
 </script>
+{% endif %}

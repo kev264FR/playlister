@@ -15,7 +15,7 @@
         onclick="handleClick(event)">Lecteur</a>
     {% if app.user %}
     {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
-    <a class="btn btn-danger delete-button" href="{{path("delete_content", {id: content.id})}}">
+    <a class="btn btn-danger delete-button content-delete" href="{{path("delete_content", {id: content.id})}}">
         <i class="fas fa-trash-alt"></i>
     </a>
     {% endif %}
@@ -25,9 +25,9 @@
 
 {% if ajax is defined and ajax == true %}
 <script>
-    $(".btn-danger").confirm({
+    $(".content-delete").confirm({
         title: 'Confirmation',
-        content: 'Etes vous sûr de vouloir supprimer ?',
+        content: 'Etes vous sûr de vouloir supprimer ce contenu ?',
         theme: 'supervan',
         type: 'green',
         buttons: {

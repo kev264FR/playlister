@@ -235,9 +235,9 @@ function showAnswers(commentId) {
 // -------------- GESTION AFFICHAGE REPONSES --------------
 
 // -------------- GESTION CONFIRM --------------
-$(".btn-danger").confirm({
+$(".playlist-delete").confirm({
     title: 'Confirmation',
-    content: 'Etes vous sûr de vouloir supprimer ?',
+    content: 'Etes vous sûr de vouloir supprimer cette playlist ?',
     theme: 'supervan',
     type: 'green',
     buttons: {
@@ -255,4 +255,46 @@ $(".btn-danger").confirm({
         }
     }
 })
+
+$(".content-delete").confirm({
+    title: 'Confirmation',
+    content: 'Etes vous sûr de vouloir supprimer ce contenu ?',
+    theme: 'supervan',
+    type: 'green',
+    buttons: {
+        ok: {
+            text: "Continuer",
+            action: function () {
+                location.href = this.$target.attr('href');
+            }
+        },
+        cancel: {
+            text: "Retour",
+            action: function () {
+                console.log('the user clicked cancel');
+            }
+        }
+    }
+})
+
+$(".delete-comment").confirm({
+    title: 'Confirmation',
+    content: 'Etes vous sûr de vouloir supprimer ce commentaire ?',
+    theme: 'supervan',
+    type: 'green',
+    buttons: {
+        ok: {
+            text: "Continuer",
+            action: function () {
+                location.href = this.$target.attr('href');
+            }
+        },
+        cancel: {
+            text: "Retour",
+            action: function () {
+                console.log('the user clicked cancel');
+            }
+        }
+    }
+    })
 // -------------- GESTION CONFIRM --------------

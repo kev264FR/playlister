@@ -240,7 +240,8 @@ class InteractionController extends AbstractController
                 "status"=>'success',
                 "data"=>$this->renderView('interaction/playlist_comment_part.html.twig', [
                     'playlist'=>$playlist,
-                    'parentComment'=>$parentComment
+                    'parentComment'=>$parentComment,
+                    'ajax'=>true
                 ])
             ]);
 

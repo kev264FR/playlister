@@ -1,6 +1,6 @@
 
 {% for content in playlist.contents %}
-<div class="card position-relative" style="width: 15rem;">
+<div class="card position-relative mb-5" style="width: 15rem;">
     <img src="{{content.platform.imgUrl | replace({"_content_": content.contentId})}}" class="card-img-top">
     <div class="card-body">
         <h6>
@@ -12,7 +12,7 @@
     </div>
     <a class="btn selectors btn-lg btn-primary" href="#"
         data-url="{{content.platform.targetUrl | replace({"_content_": content.contentId})}}"
-        onclick="handleClick(event)">Lecteur</a>
+        onclick="handleClick(event)">Lecture</a>
     {% if app.user %}
     {% if is_granted("ROLE_ADMIN") or app.user == playlist.user %}
     <a class="btn btn-danger delete-button content-delete" href="{{path("delete_content", {id: content.id})}}">

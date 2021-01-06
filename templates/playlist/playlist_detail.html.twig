@@ -76,7 +76,7 @@
         <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-warning">
             <i class="fas fa-edit"></i>
         </a>
-        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-danger">
+        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-danger playlist-delete">
             <i class="fas fa-trash-alt"></i>
         </a>
 
@@ -93,10 +93,10 @@
     </p>
     {% else %}
     <p>
-        <a href="#" class="btn btn-primary btn-sm disabled">
+        <a href="#" class="btn btn-outline-dark btn-sm disabled">
             <i class="fas fa-thumbs-up"></i> <span>{{playlist.likers.count}}</span>
         </a>
-        <a href="#" class="btn btn-primary btn-sm disabled">
+        <a href="#" class="btn btn-outline-dark btn-sm disabled">
             <i class="fas fa-user"></i> <span>{{playlist.followers.count}}</span>
         </a>
     </p>

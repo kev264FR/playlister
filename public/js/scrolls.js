@@ -3,8 +3,8 @@
 var scroller = {
 	config: {
 		hoverColor: "#0069d9",
-		bgColor: "#1f2b31",
-		opacity: 0.6
+		bgColor: "#343a40",
+		opacity: 1
 	},
 	init: function(){
 		var anchor = document.createElement("a");

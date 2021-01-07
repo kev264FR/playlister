@@ -23,7 +23,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark py-4">
         <a class="navbar-brand" href="{{path("playlists")}}">Playlister</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,6 +106,23 @@
 
         {% endblock %}
     </div>
+
+    <footer class="footer bg-light py-5">
+        <div class="container d-flex flex-wrap">
+            <div class="left">
+                <h6>Les plateformes</h6>
+                <a href="https://www.youtube.com/" target="_blank">Youtube</a>
+                <br>
+                <a href="https://www.dailymotion.com" target="_blank">Dailymotion</a>
+            </div>
+            <div class="right">
+                <h6>Liens utiles</h6>
+                <a href="{{path("legal_notice")}}" target="_blank">Mentions Légales</a>
+                <br>
+                <a href="mailto:contact@playlister.com">Nous contacter</a>
+            </div>
+        </div>
+    </footer>
 
 
     {% block javascripts %}

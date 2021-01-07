@@ -14,13 +14,16 @@
 {% block body %}
 <h1 class="text-center display-1">Playlister</h1>
 
+<hr class="blue-separator">
+
+<h2 class="text-center my-5 font-weight-light">
+    Rejoignez la comunauté et partagez vos <strong>playlists</strong>
+</h2>
+
 {% if search != null %}
 <h4 class="text-center">
     Résultats de la recherche : <strong>{{search}}</strong>
 </h4>
-
-<hr>
-
 
 {% if playlists is empty %}
 <p class="text-center">
@@ -32,7 +35,7 @@
 
 
 {% if mostLiked is not null and mostFollowed is not null %}
-<div class="row jumbotron gold">
+<div class="row jumbotron forwarded">
     <div class="col-md">
         <h3 class="text-center custom-title">
             La plus likée
@@ -76,7 +79,9 @@
             </div>
         </div>
     </div>
+
     <hr id="separator">
+    
     <div class="col">
         <h3 class="text-center custom-title">
             La plus suivie
@@ -122,6 +127,11 @@
     </div>
 </div>
 {% endif %}
+
+<h2 class="text-center font-weight-light my-5">
+    <strong>Playlists</strong> créé par la comunauté
+</h2>
+
 
 <div class="d-flex flex-wrap justify-content-xl-between justify-content-md-center">
     {% set counter = 0%}

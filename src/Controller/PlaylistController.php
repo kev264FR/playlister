@@ -213,4 +213,11 @@ class PlaylistController extends AbstractController
             'id'=>$playlist->getId()
         ]);
     }
+
+    /**
+     * @Route("/mention-legales", name="legal_notice")
+     */
+    public function legalNotice(){
+        return $this->render('home/legal_notice.html.twig');
+    }
 }

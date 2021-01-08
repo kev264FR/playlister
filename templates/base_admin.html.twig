@@ -114,7 +114,7 @@
                 </div>
             </nav>
 
-            <main role="main" class="col-md col-lg">
+            <div class="col">
                 <div class="container">
                     <div id="alert-container">
                         {% for message in app.flashes("error") %}
@@ -135,11 +135,13 @@
                         </div>
                         {% endfor %}
                     </div>
-                {% block body %}
+                    <main>
+                        {% block body %}
 
-                {% endblock %}
+                        {% endblock %}
+                    </main>
                 </div>
-            </main>
+            </div>
         </div>
     </div>
 

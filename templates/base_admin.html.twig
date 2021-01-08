@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark py-4">
         <a class="navbar-brand" href="{{path("playlists")}}">Playlister</a>
         <div class="d-md-block">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".fullMenu"
@@ -37,10 +37,10 @@
         </div>
         
 
-        <div class="collapse navbar-collapse fullMenu" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse fullMenu text-center" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <form action="{{path("playlists")}}" class="form-inline my-2 my-lg-0">
+                    <form action="{{path("playlists")}}" class="form-inline my-2 my-lg-0 justify-content-center">
                         {% if search is defined %}
                         <input class="form-control mr-2 search" type="search" placeholder="Recherche" name="search" value="{{search}}">
                         {% else %}

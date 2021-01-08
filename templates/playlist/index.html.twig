@@ -16,14 +16,14 @@
 
 <hr class="blue-separator">
 
-<h2 class="text-center my-5 font-weight-light">
+<h2 class="text-center mt-3 mb-5 font-weight-light">
     Rejoignez la comunauté et partagez vos <strong>playlists</strong>
 </h2>
 
 {% if search != null %}
-<h4 class="text-center">
-    Résultats de la recherche : <strong>{{search}}</strong>
-</h4>
+<h3 class="text-center font-weight-light mb-5">
+    Résultats de la recherche : <b>{{search}}</b>
+</h3>
 
 {% if playlists is empty %}
 <p class="text-center">
@@ -128,9 +128,13 @@
 </div>
 {% endif %}
 
-<h2 class="text-center font-weight-light my-5">
+{% if search == null %}
+<h2 class="text-center font-weight-light mt-5">
     <strong>Playlists</strong> créé par la comunauté
 </h2>
+<hr class="blue-separator mb-5">
+{% endif %}
+
 
 
 <div class="d-flex flex-wrap justify-content-xl-between justify-content-md-center">

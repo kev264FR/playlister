@@ -36,8 +36,12 @@
     margin-top: 30px;
 }
 
+.bg-comment{
+    background-color: #03e07198;
+}
+
 .bg-answer{
-    background-color: #17a2b89c;
+    background-color: #007bff54;
 }
 
 .margin-left{

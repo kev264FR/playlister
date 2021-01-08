@@ -21,7 +21,8 @@
 {% endblock %}
 
 {% block body %}
-<h1 class="text-center text-break display-3 mb-5">{{playlist.title}}</h1>
+<h1 class="text-center text-break display-3">{{playlist.title}}</h1>
+<hr class="blue-separator mb-5">
 
 <div id="content-form-holder" class="jumbotron bg-grey hide"></div>
 
@@ -103,15 +104,15 @@
     {% endif %}
 </div>
 
-<div id="content-part" class="d-flex justify-evenly flex-wrap">
+<div id="content-part" class="d-flex justify-evenly flex-wrap mt-5">
     {{ include("content/content_part.html.twig")  }}
 </div>
 {% if playlist.public %}
 <div>
-    <hr>
-    <h2 class="text-center">
+    <h2 class="text-center font-weight-light mt-5">
         Espace commentaire
     </h2>
+    <hr class="blue-separator mb-5">
 
     {% if app.user %}
     <a class="btn btn-primary btn-lg" onclick="generateCommentForm(event)"
@@ -129,9 +130,10 @@
 
 <div>
     <hr>
-    <h3 class="text-center">
+    <h2 class="text-center font-weight-light mt-5">
         Espace commentaire désactivé
-    </h3>
+    </h2>
+    <hr class="blue-separator mb-5">
 </div>
 {% endif %}
 

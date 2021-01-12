@@ -1,3 +1,27 @@
+.righteous{
+    font-family: 'Righteous', cursive;
+}
+
+.adaptive-font-size{
+    font-size: 4rem;
+}
+
+@media(min-width: 375px){
+    .adaptive-font-size{
+        font-size: 5rem;
+    }
+}
+
+@media(min-width: 450px){
+    .adaptive-font-size{
+        font-size: 6rem;
+    }
+}
+
+.fsc-1-5{
+    font-size: 1.5rem;
+}
+
 #embed{
     background-color: black;
 }

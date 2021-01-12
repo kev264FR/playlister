@@ -1,23 +1,12 @@
 {% extends 'base.html.twig' %}
 
-
-{% block breadcrumb %}
-{% if admin is defined and admin == true %}
-<li class="breadcrumb-item">
-    <a href="{{path("admin_home")}}">
-        Espace Admin
-    </a>            
-</li>
-{% endif %}
-{% endblock %}
-
 {% block body %}
-<h1 class="text-center display-1">Playlister</h1>
+<h1 class="text-center display-1 righteous adaptive-font-size">Playlister</h1>
 
 <hr class="blue-separator">
 
 <h2 class="text-center mt-3 mb-5 font-weight-light">
-    Rejoignez la comunauté et partagez vos <strong>playlists</strong>
+    Rejoignez la communauté et partagez vos <strong>playlists</strong>
 </h2>
 
 {% if search != null %}
@@ -44,7 +33,7 @@
             {% if mostLiked.contents.count > 0 %}
             {% set lastElement = mostLiked.contents.last %}
             <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
-                class="card-img-top">
+                class="card-img-top" alt="image de la playlist la plus likée">
             {% else %}
             <img src="{{asset("img/no-image-available.png")}}" class="card-img-top" alt="Pas d'image disponible">
             {% endif %}
@@ -90,7 +79,7 @@
             {% if mostFollowed.contents.count > 0 %}
             {% set lastElement = mostFollowed.contents.last %}
             <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
-                class="card-img-top">
+                class="card-img-top" alt="image de la playlist la plus suivie">
             {% else %}
             <img src="{{asset("img/no-image-available.png")}}" class="card-img-top" alt="Pas d'image disponible">
             {% endif %}
@@ -130,7 +119,7 @@
 
 {% if search == null %}
 <h2 class="text-center font-weight-light mt-5">
-    <strong>Playlists</strong> créé par la comunauté
+    <strong>Playlists</strong> créées par la communauté
 </h2>
 <hr class="blue-separator mb-5">
 {% endif %}
@@ -175,7 +164,7 @@
                 {% if playlist.contents.count > 0 %}
                 {% set lastElement = playlist.contents.last %}
                 <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
-                    class="card-img">
+                    class="card-img" alt="image de la playlist : {{playlist.title}}">
                 {% else %}
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}
@@ -192,7 +181,7 @@
                 {% if playlist.contents.count > 0 %}
                 {% set lastElement = playlist.contents.last %}
                 <img src="{{lastElement.platform.imgUrl | replace({"_content_": lastElement.contentId})}}"
-                    class="card-img">
+                    class="card-img" alt="image de la playlist : {{playlist.title}}">
                 {% else %}
                 <img src="{{asset("img/no-image-available.png")}}" class="card-img" alt="Pas d'image disponible">
                 {% endif %}

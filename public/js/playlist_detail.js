@@ -215,22 +215,22 @@ function handleClick(e) {
 // -------------- GESTION MODAL IFRAME --------------
 
 // -------------- GESTION AFFICHAGE REPONSES --------------
-let lastClicked = 0
+let lastClicked = 0 // initialisation de la variable 
 
 function showAnswers(commentId) {
-    let delay = 600
-    if(Date.now() - lastClicked < delay) return;
+    let delay = 600 // définition du délai entre 2 clicks en ms
+    if(Date.now() - lastClicked < delay) return; // Si cliques trop rapide on ne fait rien 
 
-    if ($("#answers-"+commentId).hasClass('open-answers')) {
-        $("#answers-"+commentId).slideUp(delay)
-        $("#answers-"+commentId).removeClass('open-answers')
+    if ($("#answers-"+commentId).hasClass('open-answers')) {  // verification si groupe ouvert 
+        $("#answers-"+commentId).slideUp(delay)    // fermeture du groupe et définition de la vitesse 
+        $("#answers-"+commentId).removeClass('open-answers') // On retire la classe 
     }else{
-        $('.open-answers').slideUp(delay)
-        $('.open-answers').removeClass('open-answers')
-        $("#answers-"+commentId).addClass('open-answers')
-        $("#answers-"+commentId).slideDown(delay)
+        $('.open-answers').slideUp(delay)   // Fermeture de tous les groupes ouverts
+        $('.open-answers').removeClass('open-answers')  // Retrait de la classe de tous les groupes
+        $("#answers-"+commentId).addClass('open-answers') // Ajout de la classe au groupe visé 
+        $("#answers-"+commentId).slideDown(delay)   // Ouverture du groupe 
     }
-    lastClicked = Date.now()
+    lastClicked = Date.now()    // on récupère la date pour le prochain appel 
 }
 // -------------- GESTION AFFICHAGE REPONSES --------------
 

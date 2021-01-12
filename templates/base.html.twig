@@ -53,21 +53,21 @@
                 {% if app.user %}
                 {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{path("admin_home")}}">Espace Admin</a>
+                    <a class="nav-link text-light" href="{{path("admin_home")}}"><i class="fas fa-toolbox"></i> Espace Admin</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{path("public_profile", {id: app.user.id})}}">{{app.user.username}}</a>
+                    <a class="nav-link text-light" href="{{path("public_profile", {id: app.user.id})}}"><i class="far fa-user"></i> {{app.user.username}}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{path("app_logout")}}">Se déconnecter</a>
+                    <a class="nav-link text-light" href="{{path("app_logout")}}"><i class="fas fa-sign-out-alt"></i> Se déconnecter</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{path("app_login")}}">Se connecter</a>
+                    <a class="nav-link text-light" href="{{path("app_login")}}"><i class="fas fa-sign-in-alt"></i> Se connecter</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{path("app_register")}}">S'inscrire</a>
+                    <a class="nav-link text-light" href="{{path("app_register")}}"><i class="fas fa-user-plus"></i> S'inscrire</a>
                 </li>
                 {% endif %}
             </ul>

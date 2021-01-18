@@ -31,7 +31,7 @@ class ContentController extends AbstractController
         if (!$this->getUser()) { // Verification si un utilisateur est en session
             return $this->json([
                 'status'=>'error',
-                'data'=>'Vous devez ètre connecté <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
+                'data'=>'Vous devez être connecté. <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
             ]);
         }
 

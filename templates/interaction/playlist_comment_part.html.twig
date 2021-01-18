@@ -34,7 +34,7 @@
     </a>
     {% endif %}
     {% if comment.answers.count > 0 %}
-    <button class="btn btn-primary" onclick="showAnswers('{{comment.id}}')">Voir les réponses</button>
+    <button class="btn btn-primary" onclick="showAnswers('{{comment.id}}')">Les réponses</button>
     {% if parentComment is defined and parentComment.id == comment.id %}
         <div id="answers-{{comment.id}}" class="open-answers">
     {% else %}

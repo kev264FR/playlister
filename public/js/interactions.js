@@ -66,7 +66,7 @@ function handleFollowPlaylist(e) {
 
                         followedPlaylistsCount = $('#followed-playlist-part').children('.show-playlist').length
                         if (followedPlaylistsCount == 0) {
-                            $('#followed-playlist-part').replaceWith('<p class="text-center"> Vous ne suivez aucune playliste.</p>')
+                            $('#followed-playlist-part').replaceWith('<p class="text-center"> Vous ne suivez aucune playlist.</p>')
                         }
                     }
                     break;

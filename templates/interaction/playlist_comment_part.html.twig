@@ -22,7 +22,7 @@
                 <footer class="blockquote-footer">{{comment.createdAt | date("d.m.Y H:i")}}</footer>
             </blockquote>
             {% if app.user and is_granted("ROLE_ADMIN") %}
-            <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger">
+            <a href="{{path("comment_delete", {id: comment.id})}}" class="btn btn-danger delete-comment">
                 <i class="fas fa-trash-alt"></i>
             </a>
             {% endif %}

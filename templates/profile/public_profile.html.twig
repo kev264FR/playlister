@@ -12,30 +12,6 @@
 {% block body %}
 
 <div class="list-group list-group-horizontal text-center justify-content-center">
-    {% if app.user and is_granted("ROLE_ADMIN") and app.user != user %}
-        {% if 'ROLE_ADMIN' in user.roles %}
-            <a href="{{path("admin_switch", {id: user.id})}}" class="remove-admin list-group-item list-group-item-action text-dark bg-warning">
-                Retirer les droits admin
-            </a>
-        {% else %}
-            <a href="{{path("admin_switch", {id: user.id})}}" class="add-admin list-group-item list-group-item-action text-dark bg-warning">
-                Ajouter les droits admin
-            </a>
-        {% endif %}
-
-        {% if 'ROLE_BANNED' in user.roles %}
-            <a href="{{path("ban_switch", {id: user.id})}}"
-                class="unban list-group-item list-group-item-action bg-danger text-light">Unban
-            </a>
-        {% else %}
-            <a href="{{path("ban_switch", {id: user.id})}}"
-                class="ban list-group-item list-group-item-action bg-success text-light">Ban
-            </a>
-        {% endif %}
-
-        <a href="{{path('delete_account', {id: user.id})}}"
-            class="delete-account list-group-item list-group-item-action text-light bg-danger">Supprimer le compte</a>
-    {% endif %}
 
     {% if app.user and user in app.user.followedUsers %}
         <a href="{{path("user_follow_user", {id: user.id})}}" class="list-group-item list-group-item-action text-light bg-primary" style="max-width: 278px;" onclick="handleFollowUser(event)">
@@ -133,6 +109,10 @@
         </div>
     </div>
     {% endif %}
+    {% else %}
+        <p class="mx-auto">
+            L'utilisateur n'a pas de playlists publiques 
+        </p>
     {% endfor %}
 </div>
 
@@ -140,12 +120,4 @@
     {{ knp_pagination_render(playlists, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
 </div>
 
-{% endblock %}
-
-
-{% block javascripts %}
-{{parent()}}
-
-<script src="{{asset('js/users_security.js')}}"></script>
-    
 {% endblock %}

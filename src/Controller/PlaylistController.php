@@ -46,11 +46,15 @@ class PlaylistController extends AbstractController
 
            $mostLiked = $this->getDoctrine()
                         ->getRepository(Playlist::class)
-                        ->getMostLikedPublic()[0];
+                        ->getMostLikedPublic();
+
+            $mostLiked = is_array($mostLiked)? $mostLiked[0] : null;
 
             $mostFollowed = $this->getDoctrine()
                             ->getRepository(Playlist::class)
-                            ->getMostFollowedPublic()[0]; 
+                            ->getMostFollowedPublic(); 
+            
+            $mostFollowed = is_array($mostFollowed)? $mostFollowed[0] : null;
 
         }
 
@@ -152,6 +156,16 @@ class PlaylistController extends AbstractController
         $manager->flush();
 
         $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
+
+        if ($this->isGranted('ROLE_ADMIN')) {
+            if (!mb_strpos($request->headers->get('referer'), 'admin') === false) {
+                return $this->redirectToRoute('admin_home');
+            }
+        }elseif ($this->isGranted('ROLE_USER')) {
+            if (!mb_strpos($request->headers->get('referer'), 'profile') === false) {
+                return $this->redirectToRoute('public_profile', ['id'=> $this->getUser()->getId()]);
+            }
+        }
         return $this->redirectToRoute('playlists');
 
     }

@@ -170,10 +170,13 @@ class ContentController extends AbstractController
             return $this->redirectToRoute('playlists');
         }
         $playlist = $content->getPlaylist();
-        if ($playlist->getUser() != $this->getUser()) {
-            $this->addFlash('error', 'Vous ne pouvez pas modifier cette playlist');
-            return $this->redirectToRoute('playlists');
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if ($playlist->getUser() != $this->getUser()) {
+                $this->addFlash('error', 'Vous ne pouvez pas modifier cette playlist');
+                return $this->redirectToRoute('playlists');
+            } 
         }
+        
 
         
         if ($playlist->getContents()->count() == 1) {

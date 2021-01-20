@@ -67,7 +67,7 @@
                         <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger playlist-delete">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -89,7 +89,7 @@
                         <a href="{{path("playlist_edit", {id: playlist.id})}}" class="btn btn-sm btn-warning">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger">
+                        <a href="{{path("playlist_delete", {id: playlist.id})}}" class="btn btn-sm btn-danger playlist-delete">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                     </div>
@@ -132,4 +132,30 @@
 </div>
 
 
+{% endblock %}
+
+{% block javascripts %}
+{{parent()}}
+<script>
+    $(".playlist-delete").confirm({
+        title: 'Confirmation',
+        content: 'Etes vous sûr de vouloir supprimer cette playlist ?',
+        theme: 'supervan',
+        type: 'green',
+        buttons: {
+            ok: {
+                text: "Continuer",
+                action: function () {
+                    location.href = this.$target.attr('href');
+                }
+            },
+            cancel: {
+                text: "Retour",
+                action: function () {
+                    console.log('the user clicked cancel');
+                }
+            }
+        }
+    })
+</script>
 {% endblock %}

@@ -165,7 +165,7 @@ function submitContent(e) {
     })
         .then(res => res.json())
         .then(res => {
-            console.log(res)
+            // console.log(res)
             switch (res.status) {
                 case 'success':
                     $("#content-part").html(res.data)
@@ -296,5 +296,5 @@ $(".delete-comment").confirm({
             }
         }
     }
-    })
+})
 // -------------- GESTION CONFIRM --------------

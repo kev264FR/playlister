@@ -18,7 +18,6 @@
 @media(min-width: 768px){
     .sidebar-sticky {
         height: 100%;
-        margin-bottom: 20px;
     }
 }
 

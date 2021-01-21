@@ -83,6 +83,7 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->where("p.public = 1")
                     ->groupBy('p.id')
                     ->orderBy('likers', 'DESC')
+                    ->addOrderBy('p.lastUpdate', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult();
@@ -94,6 +95,7 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->where("p.public = 1")
                     ->groupBy('p.id')
                     ->orderBy('followers', 'DESC')
+                    ->addOrderBy('p.lastUpdate', 'DESC')
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult();

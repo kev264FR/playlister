@@ -130,10 +130,9 @@ class PlaylistController extends AbstractController
                 return $this->redirect($redirect);
             }
         }
-        
-        if ($playlist->getContents()->count() != 0) {
-            $this->addFlash('error', 'Suppression impossible, videz la playliste avant de la supprimer');
-            return $this->redirect($redirect);
+
+        foreach ($playlist->getContents() as $content) {
+            $manager->remove($content);
         }
 
         foreach ($playlist->getLikers() as $liker) {

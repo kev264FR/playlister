@@ -114,7 +114,7 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->andWhere('p.public = 1')
                     ->andWhere('p.user = :user')
                     ->setParameter('user', $user)
-                    ->orderBy('p.createdAt', 'DESC')
+                    ->orderBy('p.lastUpdate', 'DESC')
                     ->getQuery();
     }
     

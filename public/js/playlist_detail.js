@@ -131,7 +131,7 @@ function generateContentForm(e) {
             switch (res.status) {
                 case 'success-form': // arrivé du formulaire
                     $(contentFormHolder).html(res.data) // On place le contenu data de la réponse dans le conteneur
-                    $(contentFormHolder).slideDown("slow") // On ouvre le conteneur avec un annimation
+                    $(contentFormHolder).slideDown("slow") // On ouvre le conteneur avec une animation
                     break;
 
                 case 'error':   // erreur de la génération du formulaire

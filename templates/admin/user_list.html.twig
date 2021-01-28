@@ -23,16 +23,10 @@
 <h1 class="text-center font-weight-light">Liste des <b>utilisateurs</b></h1>
 <hr class="blue-separator mb-5">
 
-<div class="jumbotron">
-    <table id="table"  class="table table-responsive-xl table-bordered text-center">
+<div class="table-responsive">
+    <table id="table"  class="table table-bordered">
         <thead>
             <tr>
-                <th>
-                    ID
-                </th>
-                <th>
-                    Email
-                </th>
                 <th>
                     Username
                 </th>
@@ -42,10 +36,7 @@
                     Commentaires
                 </th>
                 <th>
-                    Admin
-                </th>
-                <th>
-                    Banned
+                    Status
                 </th>
                 <th>
                     Raccourcis
@@ -65,18 +56,6 @@
                     <td>
                         
                         <a href="{{path("public_profile", {id:user.id})}}">
-                            {{user.id}}  
-                        </a>
-                    </td>
-                    <td>
-                        
-                        <a href="{{path("public_profile", {id:user.id})}}">
-                            {{user.email}}
-                        </a>
-                    </td>
-                    <td>
-                        
-                        <a href="{{path("public_profile", {id:user.id})}}">
                             {{user.username}}
                         </a>
                     </td>
@@ -87,29 +66,36 @@
                         {{user.comments.count}}
                     </td>
                     <td>
-                        {% if "ROLE_ADMIN" in user.roles %}
-                            <i class="fas fa-check text-success"></i>
-                        {% endif %}
-                    </td>
-                    <td>
                         {% if "ROLE_BANNED" in user.roles %}
-                            <i class="fas fa-check text-danger"></i>
+                                <i class="fas fa-check text-danger"></i>
+                        {% elseif "ROLE_ADMIN" in user.roles %}
+                            <i class="fas fa-check text-success"></i> 
                         {% endif %}
                     </td>
                     <td>
                         {% if user != app.user %}
                             {% if 'ROLE_ADMIN' in user.roles %}
-                                <a class="btn btn-sm btn-warning remove-admin" href="{{path("admin_switch", {id: user.id})}}">Admin -</a>
+                                <a class="btn btn-sm btn-warning remove-admin" href="{{path("admin_switch", {id: user.id})}}">
+                                    <i class="fas fa-user-minus"></i>
+                                </a>
                             {% else %}
-                                <a class="btn btn-sm btn-warning add-admin" href="{{path("admin_switch", {id: user.id})}}">Admin +</a>
+                                <a class="btn btn-sm btn-warning add-admin" href="{{path("admin_switch", {id: user.id})}}">  
+                                    <i class="fas fa-user-check"></i>
+                                </a>
                             {% endif %}
 
                             {% if 'ROLE_BANNED' in user.roles %}
-                                <a class="btn btn-sm btn-danger unban" href="{{path("ban_switch", {id: user.id})}}">Unban</a>
+                                <a class="btn btn-sm btn-danger unban" href="{{path("ban_switch", {id: user.id})}}">
+                                    <i class="fas fa-lock"></i>
+                                </a>
                             {% else %}
-                                <a class="btn btn-sm btn-success ban" href="{{path("ban_switch", {id: user.id})}}">Ban</a>
+                                <a class="btn btn-sm btn-success ban" href="{{path("ban_switch", {id: user.id})}}">
+                                    <i class="fas fa-unlock"></i>
+                                </a>
                             {% endif %}
-                                <a class="btn btn-sm btn-danger delete-account" href="{{path("delete_account", {id: user.id})}}">Supprimer</a>
+                                <a class="btn btn-sm btn-danger delete-account" href="{{path("delete_account", {id: user.id})}}">
+                                    <i class="far fa-trash-alt"></i>
+                                </a>
                             
                         {% endif %}
                     </td>
@@ -131,7 +117,7 @@
 
     <script>
     $(document).ready(function(){
-        $("#table").DataTable({
+        let table = $("#table").DataTable({
             "language": {
                 // "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/French.json"
                 "sEmptyTable":     "Aucune donnée disponible dans le tableau",

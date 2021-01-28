@@ -18,6 +18,10 @@
     }
 }
 
+.list-group-horizontal > .list-group-item:last-child{
+    border-bottom-left-radius: inherit;
+}
+
 .fsc-1-5{
     font-size: 1.5rem;
 }
@@ -42,10 +46,6 @@
 
 .hide{
     display: none;
-}
-
-.table-bordered, .table-bordered td, .table-bordered th{
-    border: 2px solid black;
 }
 
 .table thead th{

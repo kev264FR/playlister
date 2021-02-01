@@ -74,7 +74,7 @@
                     </td>
                     <td>
                         {% if user != app.user %}
-                            {% if 'ROLE_ADMIN' in user.roles %}
+                            {# {% if 'ROLE_ADMIN' in user.roles %}
                                 <a class="btn btn-sm btn-warning remove-admin" href="{{path("admin_switch", {id: user.id})}}">
                                     <i class="fas fa-user-minus"></i>
                                 </a>
@@ -82,7 +82,7 @@
                                 <a class="btn btn-sm btn-warning add-admin" href="{{path("admin_switch", {id: user.id})}}">  
                                     <i class="fas fa-user-check"></i>
                                 </a>
-                            {% endif %}
+                            {% endif %} #}
 
                             {% if 'ROLE_BANNED' in user.roles %}
                                 <a class="btn btn-sm btn-danger unban" href="{{path("ban_switch", {id: user.id})}}">

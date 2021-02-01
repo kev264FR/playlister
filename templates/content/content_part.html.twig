@@ -22,28 +22,3 @@
     {% endif %}
 </div>
 {% endfor %}
-
-{% if ajax is defined and ajax == true %}
-    <script>
-        $(".content-delete").confirm({
-            title: 'Confirmation',
-            content: 'Etes vous sûr de vouloir supprimer ce contenu ?',
-            theme: 'supervan',
-            type: 'green',
-            buttons: {
-                ok: {
-                    text: "Continuer",
-                    action: function () {
-                        location.href = this.$target.attr('href');
-                    }
-                },
-                cancel: {
-                    text: "Retour",
-                    action: function () {
-                        console.log('the user clicked cancel');
-                    }
-                }
-            }
-        })
-    </script>
-{% endif %}

@@ -18,11 +18,6 @@ class ContentType extends AbstractType
             ->add('url', UrlType::class, [
                 'mapped'=>false,
                 'label'=>'Entrez l\'URL du contenu :',
-                'constraints' => [
-                    new NotBlank([ // Le champ est obligatoire, il ne doit pas être vide
-                        'message'=> 'Ce champ est obligatoire'
-                    ]),
-                ]
             ])
         ;
     }

@@ -22,8 +22,8 @@ class ContentController extends AbstractController
      */
     public function contentForm(Request $request, Playlist $playlist = null): Response
     {
-        
-        if (!$request->isXmlHttpRequest()) {  // Verification si la requete est bien de l'AJAX
+        // Verification si la requete AJAX et methode POST
+        if ($request->getMethod() != 'POST' && !$request->isXmlHttpRequest()) {  
             $this->addFlash('error', 'Action impossible');
             return $this->redirectToRoute("playlists");
         }
@@ -31,7 +31,7 @@ class ContentController extends AbstractController
         if (!$this->getUser()) { // Verification si un utilisateur est en session
             return $this->json([
                 'status'=>'error',
-                'data'=>'Vous devez être connecté. <a href="'.$this->generateUrl('app_login').'">Vers la connexion</a>'
+                'data'=>'Vous devez être connecté.'
             ]);
         }
 
@@ -52,19 +52,20 @@ class ContentController extends AbstractController
         }
         
 
-        $manager = $this->getDoctrine()->getManager();
+        
 
         $content = new Content();
-        $form = $this->createForm(ContentType::class, $content);
+        $form = $this->createForm(ContentType::class, $content, [
+            'action'=>$this->generateUrl('content_add', ['id'=>$playlist->getId()])
+        ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $url = $form->get('url')->getData();
             if (!$url) {
-                return $this->json([
-                    'status'=>'error',
-                    'data'=>'Formulaire non complet'
-                ]);
+                $this->addFlash('error', 'URL non valide');
+                return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
             }            
             
             $platform = $this->getDoctrine()
@@ -82,26 +83,21 @@ class ContentController extends AbstractController
                 curl_close($curl); // Fermeture de la session cURL ( obsolète avec PHP 8 )
                 $result = json_decode($result, true); // Résultat json transformé en tableau associatif ( second param )
                 
+                $title = null; // $title valeur a null
                 switch ($platform->getName()) { // recherche du titre en fonction de la plateforme 
                     case 'youtube':
                             if (array_key_exists(0, $result['items'])) {
                                 // Si l'entré items existe dans le tableau on recupère le titre
                                 $title = $result['items'][0]['snippet']['title']; 
-
-                            }else $title = null;
-                            // Sinon le titre est null
+                            }
                         break;
 
                     case 'dailymotion':
                             if (array_key_exists('title', $result)) {
                                 $title = $result['title'];
-                                
-                            }else $title = null;
+                            }
                         break;
 
-                    default: // Par défaut $title vaut null
-                            $title = null;
-                        break;
                 }
                 
                 
@@ -109,10 +105,8 @@ class ContentController extends AbstractController
                     foreach ($playlist->getContents() as $oldContent) {
                         if ($oldContent->getTitle() == $title and $oldContent->getContentId() == $videoId) {
                             // Verification si la vidéo n'est pas déjà présente
-                            return $this->json([ 
-                                'status'=>'error',
-                                'data'=>'Cette vidéo est déjà présente'
-                            ]);
+                            $this->addFlash('error', 'Cette vidéo est déjà présente');
+                            return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
                         }
                     }
 
@@ -124,29 +118,19 @@ class ContentController extends AbstractController
                     $playlist->addContent($content);
                     $playlist->setLastUpdate($content->getCreatedAt());
                     //  Pour avoir exactement la meme date 
-
+                    $manager = $this->getDoctrine()->getManager();
                     $manager->flush();
                     
-                    $html = $this->renderView('content/content_part.html.twig', [
-                        'playlist'=>$playlist,
-                        'ajax'=>true
-                    ]);
-                    
-                    return $this->json([
-                        'status'=>'success',
-                        'data'=> $html
-                    ]);
+                    return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
                 }else{
-                    return $this->json([
-                        'status'=>'error',
-                        'data'=>'Vidéo non trouvé'
-                    ]);
+
+                    $this->addFlash('error', 'Vidéo non trouvé');
+                    return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
                 }
             }else{
-                return $this->json([
-                    'status'=>'error',
-                    'data'=>'Plateforme non prise en charge'
-                ]);
+
+                $this->addFlash('error', 'Plateforme non prise en charge');
+                return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
             }
             
         }
@@ -178,7 +162,6 @@ class ContentController extends AbstractController
         }
         
 
-        
         if ($playlist->getContents()->count() == 1) {
             $playlist->setPublic(false);
         }

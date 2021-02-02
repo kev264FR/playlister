@@ -24,6 +24,11 @@ class ProfileController extends AbstractController
      */
     public function index(User $user = null, Request $request, PaginatorInterface $paginator): Response
     {
+        if (!$user) {
+            $this->addFlash('error', 'Utilisateur inconnu');
+            return $this->redirectToRoute('playlists');
+        }
+
         if ($this->getUser() == $user) {
             $query = $this->getDoctrine()
                             ->getRepository(Playlist::class)
@@ -89,7 +94,11 @@ class ProfileController extends AbstractController
      */
     public function deleteAccount(Request $request, User $user = null){
         $manager = $this->getDoctrine()->getManager();
-        if ($this->isGranted('ROLE_ADMIN')) {
+        if (!$user) {
+            $this->addFlash('error', 'Utilisateur inconnu');
+            return $this->redirectToRoute('public_profile', ['id'=>$this->getUser()->getId()]);
+        }
+        if ($this->isGranted('ROLE_ADMIN') && $this->getUser() != $user) {
             
             foreach ($user->getFollowedUsers() as $followedUser) {
                 $user->removeFollowedUser($followedUser);

@@ -31,14 +31,14 @@ class ContentController extends AbstractController
         if (!$this->getUser()) { // Verification si un utilisateur est en session
             return $this->json([
                 'status'=>'error',
-                'data'=>'Vous devez être connecté.'
+                'data'=>'Vous devez être connecté'
             ]);
         }
 
-        if (!$playlist) { // Verification si la playliste existe
+        if (!$playlist) { // Verification si la playlist existe
             return $this->json([
                 'status'=>'error',
-                'data'=>'Playlist non existante'
+                'data'=>'Playlist non-existante'
             ]);
         }
 
@@ -46,7 +46,7 @@ class ContentController extends AbstractController
             if ($this->getUser() != $playlist->getUser()) { // verfication si l'utilisateur est propriétaire de la playlist
                 return $this->json([
                     'status'=>'error',
-                    'data'=>'Cette playlist n\'est pas a vous'
+                    'data'=>'Cette playlist n\'est pas à vous'
                 ]);
             }
         }
@@ -124,7 +124,7 @@ class ContentController extends AbstractController
                     return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
                 }else{
 
-                    $this->addFlash('error', 'Vidéo non trouvé');
+                    $this->addFlash('error', 'Vidéo non trouvée');
                     return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
                 }
             }else{

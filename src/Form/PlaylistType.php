@@ -18,7 +18,7 @@ class PlaylistType extends AbstractType
                 'label'=> 'Titre de la playlist :' ,
                 'constraints'=>[
                     new Length([
-                        'maxMessage' => 'Le titre de la playlist peux contenir au maximum {{ limit }} caractères',
+                        'maxMessage' => 'Le titre de la playlist peut contenir au maximum {{ limit }} caractères',
                         // max length allowed by Symfony for security reasons
                         'max' => 20,
                     ]),

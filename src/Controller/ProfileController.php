@@ -98,7 +98,31 @@ class ProfileController extends AbstractController
                 $user->removeFollower($follower);
             }
             foreach ($user->getMyPlaylists() as $myPlaylist) {
-                $myPlaylist->setUser(null);
+                if ($myPlaylist->getPublic()) {
+                    $myPlaylist->setUser(null);
+                }else {
+
+                    foreach ($myPlaylist->getContents() as $content) {
+                        $manager->remove($content);
+                    }
+                    
+                    foreach ($myPlaylist->getLikers() as $liker) {
+                        $liker->removeLikedPlaylist($myPlaylist);
+                    }
+            
+                    foreach ($myPlaylist->getFollowers() as $follower) {
+                        $follower->removeFollowedPlaylist($myPlaylist);
+                    }
+            
+                    foreach ($myPlaylist->getComments() as $comment) {
+                        foreach ($comment->getAnswers() as $answer) {
+                            $manager->remove($answer);
+                        }
+                        $manager->remove($comment);
+                    }
+                    
+                    $manager->remove($myPlaylist);
+                }
             }
             foreach ($user->getFollowedPlaylists() as $followedPlaylist) {
                 $user->removeFollowedPlaylist($followedPlaylist);
@@ -109,6 +133,7 @@ class ProfileController extends AbstractController
             foreach ($user->getComments() as $comment) {
                 $comment->setUser(null);
             }
+            
             $manager->remove($user);
             $manager->flush();
 

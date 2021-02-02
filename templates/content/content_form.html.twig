@@ -2,10 +2,10 @@
 <h1 class="text-center">Ajouter du contenu</h1>
 <hr>
 
-{{form_start(form, {attr: {id: "content_form"}})}}
+{{form_start(form, {attr: {id: "content_form"}}) }}
 
     {{form_row(form.url)}}
 
-<input type="submit" class="btn btn-success" onclick="submitContent(event)" value="OK">
-<a href="#" class="btn btn-danger" onclick="cancelContentForm(event)">Fermer</a>
+    <input type="submit" class="btn btn-success" value="Ajouter">
+    <a href="#" class="btn btn-danger" onclick="cancelContentForm(event)">Fermer</a>
 {{form_end(form)}}

@@ -115,11 +115,10 @@ function cancelComment(e) {
 
 // ----------- GESTION AJOUT CONTENT -------------------------
 let contentFormHolder = $("#content-form-holder")  // conteneur du formulaire
-let contentUrl; // URL utilisé pour dialoguer avec le serveur
 
 function generateContentForm(e) {
     e.preventDefault() // Prevention du comportement natif
-    contentUrl = $(e.currentTarget).attr("href") // On definit la variable d'URL qui sera appelé
+    let contentUrl = $(e.currentTarget).attr("href") // On definit la variable d'URL qui sera appelé
     fetch(contentUrl, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest' // Sécurité pour verification si la requète viens de JS
@@ -152,49 +151,6 @@ function generateContentForm(e) {
         })
 }
 
-function submitContent(e) {
-    e.preventDefault()
-
-    fetch(contentUrl, { // On utilise la variable définit au-dessus pour envoyer le formulaire
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        method: "POST", 
-        body: new FormData(document.getElementById("content_form")) 
-        // on met les données du formulaire dans un objet FormData
-    })
-        .then(res => res.json())
-        .then(res => {
-            // console.log(res)
-            switch (res.status) {
-                case 'success':
-                    $("#content-part").html(res.data)
-                    $(contentFormHolder).slideUp("slow", function () { // on repli le conteneur du formulaire
-                        $(contentFormHolder).html("") // On vide le conteneur du formulaire
-                    })
-                    break;
-
-                case 'success-form':
-                    $(contentFormHolder).html(res.data) // une erreur de validation, le formulaire est renvoyé
-                    break;
-
-                case 'error':
-                    $("#alert-container").html(
-                        "<div id='error-alert' class='alert alert-danger alert-dismissible fade show text-center' role='alert'>" +
-                        res.data +
-                        "<button type='button' class='close' data-dismiss='alert' aria-label='Close'>" +
-                        "<span aria-hidden='true'>&times;</span>" +
-                        "</button>" +
-                        "</div>"
-                    )
-                    $('html').animate({ scrollTop: 0 }, 'slow');
-                    break;
-            }
-        })
-        .catch(function (err) {
-            // console.log(err)
-        })
-}
 
 function cancelContentForm(e) {
     e.preventDefault()

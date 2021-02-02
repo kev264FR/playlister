@@ -6,11 +6,12 @@ use App\Entity\Comment;
 use App\Entity\Playlist;
 use App\Form\CommentType;
 use App\Form\PlaylistType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PlaylistController extends AbstractController
 {
@@ -69,6 +70,7 @@ class PlaylistController extends AbstractController
     /**
      * @Route("/playlist/new", name="playlist_new")
      * @Route("/playlist/edit/{id}", name="playlist_edit")
+     * @IsGranted("ROLE_USER")
      */
     public function playlistForm(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
@@ -80,6 +82,14 @@ class PlaylistController extends AbstractController
             $playlist = new Playlist();
         }
 
+        if ($edit == true) {
+            if (!$this->isGranted('ROLE_ADMIN')) {
+                if ($this->getUser() != $playlist->getUser()) {
+                    $this->addFlash('error', 'Action impossible, cette playlist ne vous appartient pas');
+                    return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
+                }
+            }
+        }
         $form = $this->createForm(PlaylistType::class, $playlist);
 
         $form->handleRequest($request);
@@ -110,6 +120,7 @@ class PlaylistController extends AbstractController
 
     /**
      * @Route("/playlist/delete/{id}", name="playlist_delete")
+     * @IsGranted("ROLE_USER")
      */
     public function deletePlaylist(Request $request, Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
@@ -121,12 +132,12 @@ class PlaylistController extends AbstractController
         }
 
         if (!$playlist) {
-            $this->addFlash('error', 'Cette playliste n\'existe pas');
+            $this->addFlash('error', 'Cette playlist n\'existe pas');
             return $this->redirect($redirect);
         }
         if (!$this->isGranted('ROLE_ADMIN')) {
             if ($this->getUser() != $playlist->getUser()) {
-                $this->addFlash('error', 'Suppression impossible, c\'ette playliste ne vous appartient pas');
+                $this->addFlash('error', 'Suppression impossible, cette playlist ne vous appartient pas');
                 return $this->redirect($redirect);
             }
         }
@@ -154,7 +165,7 @@ class PlaylistController extends AbstractController
         $manager->remove($playlist);
         $manager->flush();
 
-        $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimé');
+        $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été supprimée');
 
         if ($this->isGranted('ROLE_ADMIN')) {
             if (!mb_strpos($request->headers->get('referer'), 'admin') === false) {
@@ -202,20 +213,29 @@ class PlaylistController extends AbstractController
     /**
      * @Route("/playlist/public/{id}", name="playlist_make_public")
      * @Route("/playlist/private/{id}", name="playlist_make_private")
+     * @IsGranted("ROLE_USER")
      */
     public function switchPublicPrivate(Playlist $playlist = null){
         $manager = $this->getDoctrine()->getManager();
         if ($playlist == null) {
-            $this->addFlash('error', 'Cette playlist n\'existe pas');
+            $this->addFlash('error', 'Cette playlist est privée ou n\'existe pas');
             return $this->redirectToRoute('playlists');
         }
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            if ($this->getUser() != $playlist->getUser()) {
+                $this->addFlash('error', 'Action impossible, cette playlist ne vous appartient pas');
+                return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
+            }
+        }
+
         if ($playlist->getContents()->count() == 0) {
             $this->addFlash('error', 'Cette playlist est vide, vous ne pouvez pas changer sa visibilité');
             return $this->redirectToRoute('playlist_detail', ['id'=>$playlist->getId()]);
         }
         if ($playlist->getPublic()) {
             $playlist->setPublic(false);
-            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été mise en privée');
+            $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été mise en privé');
         }else{
             $playlist->setPublic(true);
             $this->addFlash('success', 'La playlist <strong>'.$playlist->getTitle().'</strong> a été mise en public');

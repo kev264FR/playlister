@@ -30,7 +30,7 @@
     </div>
     {% if app.user %}
     <a class="btn btn-primary" onclick="generateCommentForm(event)" data-collection="{{comment.id}}" href="{{path("answer_comment", {comment_id: comment.id})}}">
-        <i class="fas fa-comment-dots"></i> Répondre ici
+        <i class="fas fa-comment-dots"></i> Répondre
     </a>
     {% endif %}
     {% if comment.answers.count > 0 %}

@@ -118,40 +118,11 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/toggle/admin/{id}", name="admin_switch")
-     */
-    public function adminSwitch(Request $request, User $user = null){
-        if (!$user) {
-            $this->addFlash('error', 'User not found');
-            return $this->redirectToRoute('users_admin');
-        }
-
-        if ($request->headers->get('referer')) {
-            $redirect = $request->headers->get('referer');
-        }else{
-            $redirect = $this->generateUrl('public_profile', [
-                'id'=>$user->getId()
-            ]);
-        }
-
-        $manager = $this->getDoctrine()->getManager();
-
-        if (in_array('ROLE_ADMIN', $user->getRoles())) {
-            $user->setRoles([]);
-        }else{
-            $user->setRoles(['ROLE_ADMIN']);
-        }
-        $manager->flush();
-
-        return $this->redirect($redirect);
-    }
-
-    /**
      * @Route("/toggle/ban/{id}", name="ban_switch")
      */
     public function banSwitch(Request $request, User $user = null){
         if (!$user) {
-            $this->addFlash('error', 'User not found');
+            $this->addFlash('error', 'Utilisateur non-existant');
             return $this->redirectToRoute('users_admin');
         }
 

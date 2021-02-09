@@ -161,7 +161,7 @@ class ProfileController extends AbstractController
                 ) 
                 {
                     $this->addFlash('error', 'Email ou mot de passe invalide');
-                    return $this->redirectToRoute('my_profile');
+                    return $this->redirectToRoute('public_profile', ['id'=>$this->getUser()->getId()]);
                 }
                 
                 

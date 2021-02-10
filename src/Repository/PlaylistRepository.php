@@ -55,9 +55,13 @@ class PlaylistRepository extends ServiceEntityRepository
     }
 
 
-    public function getAllPublic(){
+    public function getAllPublic($mostLiked, $mostFollowed){
         return $this->createQueryBuilder('p')
                     ->andWhere('p.public = 1')
+                    ->andWhere("p.id != :like")
+                    ->setParameter('like', $mostLiked)
+                    ->andWhere("p.id != :follow")
+                    ->setParameter('follow', $mostFollowed)
                     ->orderBy('p.createdAt', 'DESC')
                     ->getQuery();               
     }
@@ -89,10 +93,12 @@ class PlaylistRepository extends ServiceEntityRepository
                     ->getOneOrNullResult();
     }
 
-    public function getMostFollowedPublic(){
+    public function getMostFollowedPublic($exclusion){
         return $this->createQueryBuilder('p')
                     ->select('p, SIZE(p.followers) as followers')
                     ->where("p.public = 1")
+                    ->andWhere("p.id != :exclusion")
+                    ->setParameter('exclusion', $exclusion)
                     ->groupBy('p.id')
                     ->orderBy('followers', 'DESC')
                     ->addOrderBy('p.lastUpdate', 'DESC')

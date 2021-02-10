@@ -36,26 +36,28 @@ class PlaylistController extends AbstractController
             );
                         
         }else{
-            $query = $this->getDoctrine()
-                        ->getRepository(Playlist::class)
-                        ->getAllPublic();
-            $playlists = $paginator->paginate(
-                $query, /* query NOT result */
-                $request->query->getInt('page', 1), /*page number*/
-                9 /*limit per page*/
-            );
-
-           $mostLiked = $this->getDoctrine()
-                        ->getRepository(Playlist::class)
-                        ->getMostLikedPublic();
+            $mostLiked = $this->getDoctrine()
+                                    ->getRepository(Playlist::class)
+                                    ->getMostLikedPublic();
 
             $mostLiked = is_array($mostLiked)? $mostLiked[0] : null;
 
             $mostFollowed = $this->getDoctrine()
                             ->getRepository(Playlist::class)
-                            ->getMostFollowedPublic(); 
+                            ->getMostFollowedPublic($mostLiked->getId()); 
             
             $mostFollowed = is_array($mostFollowed)? $mostFollowed[0] : null;
+
+            $query = $this->getDoctrine()
+                        ->getRepository(Playlist::class)
+                        ->getAllPublic($mostLiked->getId(), $mostFollowed->getId());
+            $playlists = $paginator->paginate(
+                $query, /* query NOT result */
+                $request->query->getInt('page', 1), /*page number*/
+                8 /*limit per page*/
+            );
+
+           
 
         }
 
